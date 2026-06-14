@@ -63,17 +63,17 @@
                         android:textStyle="bold" />
                 </LinearLayout>
 
-                <TextView
+                <ImageView
                     android:id="@+id/btnNotification"
                     android:layout_width="42dp"
                     android:layout_height="42dp"
                     android:background="@drawable/bg_home_icon_button"
-                    android:gravity="center"
-                    android:includeFontPadding="false"
-                    android:text="알림"
-                    android:textColor="@color/pickday_purple"
-                    android:textSize="11sp"
-                    android:textStyle="bold" />
+                    android:clickable="true"
+                    android:contentDescription="알림"
+                    android:focusable="true"
+                    android:padding="10dp"
+                    android:scaleType="fitCenter"
+                    android:src="@drawable/icon_notification" />
             </LinearLayout>
 
             <LinearLayout
@@ -165,67 +165,89 @@
                         android:textStyle="bold" />
                 </LinearLayout>
 
-                <LinearLayout
+                <FrameLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="142dp"
                     android:layout_marginTop="18dp"
-                    android:background="@drawable/bg_home_inner_card"
-                    android:gravity="center_vertical"
-                    android:orientation="horizontal"
-                    android:paddingStart="18dp"
-                    android:paddingTop="16dp"
-                    android:paddingEnd="16dp"
-                    android:paddingBottom="16dp">
+                    android:clipChildren="false"
+                    android:clipToPadding="false">
 
                     <LinearLayout
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:orientation="vertical">
+                        android:layout_width="match_parent"
+                        android:layout_height="116dp"
+                        android:layout_gravity="bottom"
+                        android:background="@drawable/bg_home_inner_card"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal"
+                        android:paddingStart="18dp"
+                        android:paddingTop="16dp"
+                        android:paddingEnd="16dp"
+                        android:paddingBottom="16dp">
 
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="24dp"
-                            android:background="@drawable/bg_home_best_pill"
-                            android:gravity="center"
-                            android:includeFontPadding="false"
-                            android:paddingStart="10dp"
-                            android:paddingEnd="10dp"
-                            android:text="1순위 날짜"
-                            android:textColor="@color/pickday_purple"
-                            android:textSize="12sp"
-                            android:textStyle="bold" />
-
-                        <TextView
-                            android:id="@+id/tvBestDate"
-                            android:layout_width="match_parent"
+                        <LinearLayout
+                            android:layout_width="0dp"
                             android:layout_height="wrap_content"
-                            android:layout_marginTop="10dp"
-                            android:ellipsize="end"
-                            android:includeFontPadding="false"
-                            android:maxLines="2"
-                            android:text="5월 25일 (일) 오후 2시"
-                            android:textColor="@color/pickday_text_primary"
-                            android:textSize="18sp"
-                            android:textStyle="bold" />
+                            android:layout_weight="1"
+                            android:orientation="vertical"
+                            android:paddingEnd="92dp">
 
-                        <TextView
-                            android:id="@+id/tvBestCount"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="7dp"
-                            android:includeFontPadding="false"
-                            android:text="5명 가능"
-                            android:textColor="@color/pickday_purple"
-                            android:textSize="13sp"
-                            android:textStyle="bold" />
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="24dp"
+                                android:background="@drawable/bg_home_best_pill"
+                                android:gravity="center"
+                                android:includeFontPadding="false"
+                                android:paddingStart="10dp"
+                                android:paddingEnd="10dp"
+                                android:text="1순위 날짜"
+                                android:textColor="@color/pickday_purple"
+                                android:textSize="12sp"
+                                android:textStyle="bold" />
+
+                            <TextView
+                                android:id="@+id/tvBestDate"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="10dp"
+                                android:ellipsize="end"
+                                android:includeFontPadding="false"
+                                android:maxLines="2"
+                                android:text="5월 25일 (일) 오후 2시"
+                                android:textColor="@color/pickday_text_primary"
+                                android:textSize="18sp"
+                                android:textStyle="bold" />
+
+                            <TextView
+                                android:id="@+id/tvBestCount"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="7dp"
+                                android:includeFontPadding="false"
+                                android:text="5명 가능"
+                                android:textColor="@color/pickday_purple"
+                                android:textSize="13sp"
+                                android:textStyle="bold" />
+                        </LinearLayout>
                     </LinearLayout>
+
+                    <ImageView
+                        android:id="@+id/imgHomeCharacter"
+                        android:layout_width="126dp"
+                        android:layout_height="112dp"
+                        android:layout_gravity="end|bottom"
+                        android:layout_marginEnd="72dp"
+                        android:layout_marginBottom="2dp"
+                        android:contentDescription="@null"
+                        android:scaleType="fitCenter"
+                        android:src="@drawable/splash_character" />
 
                     <androidx.appcompat.widget.AppCompatButton
                         android:id="@+id/btnDetail"
                         android:layout_width="92dp"
                         android:layout_height="44dp"
-                        android:layout_marginStart="12dp"
+                        android:layout_gravity="end|bottom"
+                        android:layout_marginBottom="18dp"
+                        android:layout_marginEnd="14dp"
                         android:background="@drawable/bg_home_secondary_button"
                         android:gravity="center"
                         android:includeFontPadding="false"
@@ -237,38 +259,54 @@
                         android:textColor="@color/pickday_purple"
                         android:textSize="13sp"
                         android:textStyle="bold" />
-                </LinearLayout>
+                </FrameLayout>
             </LinearLayout>
 
-            <LinearLayout
+            <FrameLayout
                 android:id="@+id/cardEmptyMeetup"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="122dp"
                 android:layout_marginTop="24dp"
                 android:background="@drawable/bg_home_main_card"
-                android:orientation="vertical"
-                android:padding="22dp"
+                android:paddingStart="22dp"
+                android:paddingEnd="18dp"
                 android:visibility="gone">
 
-                <TextView
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:includeFontPadding="false"
-                    android:text="아직 진행 중인 약속이 없어요"
-                    android:textColor="@color/pickday_text_primary"
-                    android:textSize="20sp"
-                    android:textStyle="bold" />
+                    android:layout_gravity="center_vertical"
+                    android:orientation="vertical"
+                    android:paddingEnd="120dp">
 
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp"
-                    android:includeFontPadding="false"
-                    android:lineSpacingExtra="2dp"
-                    android:text="첫 약속 방을 만들면 가능한 날짜와 응답률이 이곳에 표시됩니다."
-                    android:textColor="@color/pickday_text_secondary"
-                    android:textSize="14sp" />
-            </LinearLayout>
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:includeFontPadding="false"
+                        android:text="아직 진행 중인 약속이 없어요"
+                        android:textColor="@color/pickday_text_primary"
+                        android:textSize="20sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:includeFontPadding="false"
+                        android:lineSpacingExtra="2dp"
+                        android:text="첫 약속 방을 만들면 가능한 날짜와 응답률이 이곳에 표시됩니다."
+                        android:textColor="@color/pickday_text_secondary"
+                        android:textSize="14sp" />
+                </LinearLayout>
+
+                <ImageView
+                    android:layout_width="110dp"
+                    android:layout_height="86dp"
+                    android:layout_gravity="end|center_vertical"
+                    android:contentDescription="@null"
+                    android:scaleType="fitCenter"
+                    android:src="@drawable/home_character" />
+            </FrameLayout>
 
             <LinearLayout
                 android:id="@+id/sectionAvailableDates"
@@ -424,8 +462,16 @@
                 android:background="@drawable/bg_home_create_card"
                 android:gravity="center_vertical"
                 android:orientation="horizontal"
-                android:paddingStart="18dp"
+                android:paddingStart="8dp"
                 android:paddingEnd="16dp">
+
+                <ImageView
+                    android:layout_width="72dp"
+                    android:layout_height="64dp"
+                    android:layout_marginEnd="8dp"
+                    android:contentDescription="@null"
+                    android:scaleType="fitCenter"
+                    android:src="@drawable/home_character" />
 
                 <LinearLayout
                     android:layout_width="0dp"
