@@ -5,6 +5,7 @@ import android.content.Context;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.GridLayout;
 import android.widget.TextView;
 
@@ -275,6 +276,14 @@ public class PickDayDatePicker {
     }
 
     private static void resetDayView(TextView dayView) {
+        ViewGroup.LayoutParams params = dayView.getLayoutParams();
+
+        if (params instanceof ViewGroup.MarginLayoutParams) {
+            int margin = (int) (4 * dayView.getResources().getDisplayMetrics().density + 0.5f);
+            ((ViewGroup.MarginLayoutParams) params).setMargins(margin, margin, margin, margin);
+            dayView.setLayoutParams(params);
+        }
+
         dayView.setBackgroundColor(Color.TRANSPARENT);
         dayView.setTextColor(DARK_TEXT);
         dayView.setTypeface(null, Typeface.BOLD);
