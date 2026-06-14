@@ -82,6 +82,8 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="24dp"
                 android:background="@drawable/bg_home_main_card"
+                android:clipChildren="false"
+                android:clipToPadding="false"
                 android:orientation="vertical"
                 android:padding="22dp">
 
@@ -189,7 +191,7 @@
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
                             android:orientation="vertical"
-                            android:paddingEnd="92dp">
+                            android:paddingEnd="112dp">
 
                             <TextView
                                 android:layout_width="wrap_content"
@@ -232,13 +234,15 @@
 
                     <ImageView
                         android:id="@+id/imgHomeCharacter"
-                        android:layout_width="126dp"
-                        android:layout_height="112dp"
+                        android:layout_width="170dp"
+                        android:layout_height="150dp"
                         android:layout_gravity="end|bottom"
-                        android:layout_marginEnd="72dp"
-                        android:layout_marginBottom="2dp"
+                        android:layout_marginEnd="34dp"
+                        android:layout_marginBottom="-4dp"
                         android:contentDescription="@null"
                         android:scaleType="fitCenter"
+                        android:scaleX="1.55"
+                        android:scaleY="1.55"
                         android:src="@drawable/splash_character" />
 
                     <androidx.appcompat.widget.AppCompatButton
@@ -460,17 +464,23 @@
                 android:layout_height="78dp"
                 android:layout_marginTop="16dp"
                 android:background="@drawable/bg_home_create_card"
+                android:clipChildren="false"
+                android:clipToPadding="false"
                 android:gravity="center_vertical"
                 android:orientation="horizontal"
                 android:paddingStart="8dp"
                 android:paddingEnd="16dp">
 
                 <ImageView
-                    android:layout_width="72dp"
-                    android:layout_height="64dp"
-                    android:layout_marginEnd="8dp"
+                    android:layout_width="94dp"
+                    android:layout_height="94dp"
+                    android:layout_marginStart="4dp"
+                    android:layout_marginEnd="4dp"
+                    android:layout_marginBottom="-14dp"
                     android:contentDescription="@null"
                     android:scaleType="fitCenter"
+                    android:scaleX="1.85"
+                    android:scaleY="1.85"
                     android:src="@drawable/home_character" />
 
                 <LinearLayout
@@ -485,7 +495,7 @@
                         android:ellipsize="end"
                         android:includeFontPadding="false"
                         android:maxLines="1"
-                        android:text="새로운 약속 방 만들기"
+                        android:text="새로운 약속 방을 만들어보세요"
                         android:textColor="@color/pickday_text_primary"
                         android:textSize="16sp"
                         android:textStyle="bold" />
@@ -497,7 +507,7 @@
                         android:ellipsize="end"
                         android:includeFontPadding="false"
                         android:maxLines="1"
-                        android:text="여러 사람의 일정을 한 번에 정리해요"
+                        android:text="여러 사람의 일정을 한 번에 픽!"
                         android:textColor="@color/pickday_text_secondary"
                         android:textSize="12sp" />
                 </LinearLayout>
