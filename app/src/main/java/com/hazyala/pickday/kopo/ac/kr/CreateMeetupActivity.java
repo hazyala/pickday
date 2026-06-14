@@ -96,7 +96,7 @@ public class CreateMeetupActivity extends AppCompatActivity {
                 return;
             }
 
-            DummyDataSource.addCreatedMeetupRoom(
+            String roomId = DummyDataSource.addCreatedMeetupRoom(
                     meetupTitle,
                     peopleCount,
                     getDeadlineDDay(),
@@ -105,6 +105,7 @@ public class CreateMeetupActivity extends AppCompatActivity {
             );
 
             Intent intent = new Intent(CreateMeetupActivity.this, SelectionActivity.class);
+            intent.putExtra(SelectionActivity.EXTRA_ROOM_ID, roomId);
             startActivity(intent);
         });
     }

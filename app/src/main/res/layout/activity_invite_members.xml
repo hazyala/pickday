@@ -5,6 +5,11 @@
     android:layout_height="match_parent"
     android:background="#F8F7FF">
 
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:clipToPadding="false">
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -122,10 +127,11 @@
                         android:orientation="horizontal">
 
                         <TextView
+                            android:id="@+id/tvInviteRoomTitle"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:includeFontPadding="false"
-                            android:text="동아리 MT"
+                            android:text="-"
                             android:textColor="#232336"
                             android:textSize="17sp"
                             android:textStyle="bold" />
@@ -146,21 +152,23 @@
                     </LinearLayout>
 
                     <TextView
+                        android:id="@+id/tvInviteDeadline"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="10dp"
                         android:includeFontPadding="false"
-                        android:text="▣  마감일 5.27 (화) 오후 11:59"
+                        android:text="마감일 -"
                         android:textColor="#77748E"
                         android:textSize="11sp"
                         android:textStyle="bold" />
 
                     <TextView
+                        android:id="@+id/tvInviteParticipants"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="5dp"
                         android:includeFontPadding="false"
-                        android:text="♧  인원 2~20명"
+                        android:text="인원 -"
                         android:textColor="#77748E"
                         android:textSize="11sp"
                         android:textStyle="bold" />
@@ -263,7 +271,7 @@
                                 android:includeFontPadding="false"
                                 android:paddingStart="10dp"
                                 android:singleLine="true"
-                                android:text="https://pickday.app/room/Abc123"
+                                android:text="-"
                                 android:textColor="#6A4DFF"
                                 android:textSize="11sp"
                                 android:textStyle="bold" />
@@ -503,5 +511,6 @@
             </LinearLayout>
 
         </LinearLayout>
+    </ScrollView>
 
 </FrameLayout>

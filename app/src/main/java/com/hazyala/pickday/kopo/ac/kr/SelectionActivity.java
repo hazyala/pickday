@@ -25,9 +25,12 @@ import java.util.Set;
 
 public class SelectionActivity extends AppCompatActivity {
 
+    public static final String EXTRA_ROOM_ID = "extra_room_id";
+
     private View btnBack;
     private TextView btnNext;
     private View selectionCalendar;
+    private String roomId;
 
     private TextView tvDateCount, tvExcludeCount;
     private LinearLayout layoutCandidateDates;
@@ -60,6 +63,11 @@ public class SelectionActivity extends AppCompatActivity {
     private void initViews() {
         btnBack = findViewById(R.id.btnBack);
         btnNext = findViewById(R.id.btnNext);
+        roomId = getIntent().getStringExtra(EXTRA_ROOM_ID);
+
+        if (roomId == null || roomId.isEmpty()) {
+            roomId = DummyDataSource.getCurrentDraftRoomId();
+        }
 
         selectionCalendar = findViewById(R.id.selectionCalendar);
         layoutCandidateDates = findViewById(R.id.layoutCandidateDates);
@@ -87,8 +95,10 @@ public class SelectionActivity extends AppCompatActivity {
             }
 
             DummyDataSource.setCurrentDraftCandidateDates(getSortedSelectedDates());
+            DummyDataSource.updateCreatedRoomCandidateDates(roomId, getSortedSelectedDates());
 
             Intent intent = new Intent(SelectionActivity.this, InviteMembersActivity.class);
+            intent.putExtra(InviteMembersActivity.EXTRA_ROOM_ID, roomId);
             startActivity(intent);
         });
 

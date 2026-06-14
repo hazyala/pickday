@@ -5,6 +5,12 @@
     android:layout_height="match_parent"
     android:background="#F8F7FF">
 
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:clipToPadding="false"
+        android:paddingBottom="96dp">
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -65,7 +71,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="80dp"
-                    android:text="동아리 MT"
+                    android:text="-"
                     android:textColor="#202033"
                     android:textSize="25sp"
                     android:textStyle="bold"
@@ -411,7 +417,7 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:text="참여자 (6/12)"
+                        android:text="참여자 (-)"
                         android:textColor="#5B4CDB"
                         android:textSize="15sp"
                         android:textStyle="bold" />
@@ -431,22 +437,15 @@
                     android:scrollbars="none">
 
                     <LinearLayout
+                        android:id="@+id/layoutParticipantContainer"
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
-                        android:orientation="horizontal">
-
-                        <TextView android:layout_width="60dp" android:layout_height="match_parent" android:gravity="center" android:text="나\n나 \n미응답" android:textSize="12sp" android:textStyle="bold" android:textColor="#77748E"/>
-                        <TextView android:layout_width="60dp" android:layout_height="match_parent" android:gravity="center" android:text="지\n지우\n응답 완료" android:textSize="12sp" android:textStyle="bold" android:textColor="#77748E"/>
-                        <TextView android:layout_width="60dp" android:layout_height="match_parent" android:gravity="center" android:text="현\n현우\n응답 완료" android:textSize="12sp" android:textStyle="bold" android:textColor="#77748E"/>
-                        <TextView android:layout_width="60dp" android:layout_height="match_parent" android:gravity="center" android:text="수\n수빈\n응답 완료" android:textSize="12sp" android:textStyle="bold" android:textColor="#77748E"/>
-                        <TextView android:layout_width="60dp" android:layout_height="match_parent" android:gravity="center" android:text="민\n민재\n응답 대기" android:textSize="12sp" android:textStyle="bold" android:textColor="#77748E"/>
-                        <TextView android:layout_width="60dp" android:layout_height="match_parent" android:gravity="center" android:text="서\n서연\n응답 대기" android:textSize="12sp" android:textStyle="bold" android:textColor="#77748E"/>
-
-                    </LinearLayout>
+                        android:orientation="horizontal" />
                 </HorizontalScrollView>
             </LinearLayout>
 
         </LinearLayout>
+    </ScrollView>
 
     <!-- 하단 고정 버튼 -->
     <TextView

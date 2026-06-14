@@ -15,6 +15,7 @@ public class DummyDataSource {
 
     private static final List<MyMeetupRoom> createdMeetupRooms = new ArrayList<>();
     private static final List<String> currentDraftCandidateDates = new ArrayList<>();
+    private static String currentDraftRoomId = DEFAULT_ROOM_ID;
 
     public static User getCurrentUser() {
         return new User(
@@ -183,6 +184,10 @@ public class DummyDataSource {
         return new ArrayList<>(currentDraftCandidateDates);
     }
 
+    public static String getCurrentDraftRoomId() {
+        return currentDraftRoomId;
+    }
+
     public static List<String> getResponseCandidateDates() {
         return getResponseCandidateDates(DEFAULT_ROOM_ID);
     }
@@ -206,7 +211,7 @@ public class DummyDataSource {
         return fallbackDates;
     }
 
-    public static void addCreatedMeetupRoom(
+    public static String addCreatedMeetupRoom(
             String title,
             int participantCount,
             String dDay,
@@ -214,11 +219,12 @@ public class DummyDataSource {
             String deadlineTimeText
     ) {
         if (title == null || title.trim().isEmpty()) {
-            return;
+            return currentDraftRoomId;
         }
 
         String normalizedTitle = title.trim();
         String roomId = createCreatedRoomId(normalizedTitle);
+        currentDraftRoomId = roomId;
         List<String> candidateDates = getCurrentDraftCandidateDates();
 
         MyMeetupRoom createdRoom = new MyMeetupRoom(
@@ -241,11 +247,36 @@ public class DummyDataSource {
 
             if (room.roomId.equals(roomId)) {
                 createdMeetupRooms.set(index, createdRoom);
-                return;
+                return roomId;
             }
         }
 
         createdMeetupRooms.add(createdRoom);
+        return roomId;
+    }
+
+    public static void updateCreatedRoomCandidateDates(
+            String roomId,
+            List<String> candidateDates
+    ) {
+        if (roomId == null || candidateDates == null) {
+            return;
+        }
+
+        for (MyMeetupRoom room : createdMeetupRooms) {
+            if (room.roomId.equals(roomId)) {
+                room.candidateDateIsos = new ArrayList<>(candidateDates);
+                return;
+            }
+        }
+    }
+
+    public static String getInviteLink(String roomId) {
+        if (roomId == null || roomId.isEmpty()) {
+            return "https://pickday.app/room/" + DEFAULT_ROOM_ID;
+        }
+
+        return "https://pickday.app/room/" + roomId;
     }
 
     public static List<Notification> getNotifications() {

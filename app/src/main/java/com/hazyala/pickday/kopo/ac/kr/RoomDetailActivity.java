@@ -2,7 +2,9 @@ package com.hazyala.pickday.kopo.ac.kr;
 
 import android.content.Intent;
 import android.graphics.Color;
+import android.graphics.Typeface;
 import android.os.Bundle;
+import android.view.Gravity;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -41,6 +43,7 @@ public class RoomDetailActivity extends AppCompatActivity {
     private TextView tvConfirmedSchedule;
     private TextView tvProgressRate;
     private TextView tvParticipantSectionTitle;
+    private LinearLayout layoutParticipantContainer;
     private TextView[] candidateDateViews;
     private TextView[] timePreferenceViews;
     private View viewProgressComplete;
@@ -82,6 +85,7 @@ public class RoomDetailActivity extends AppCompatActivity {
         tvConfirmedSchedule = findViewById(R.id.tvConfirmedSchedule);
         tvProgressRate = findViewById(R.id.tvProgressRate);
         tvParticipantSectionTitle = findViewById(R.id.tvParticipantSectionTitle);
+        layoutParticipantContainer = findViewById(R.id.layoutParticipantContainer);
         candidateDateViews = new TextView[]{
                 findViewById(R.id.tvCandidateDate1),
                 findViewById(R.id.tvCandidateDate2),
@@ -137,6 +141,7 @@ public class RoomDetailActivity extends AppCompatActivity {
         updateProgressBar(responseRate, waitingRate);
         renderCandidateDates(room, responses);
         renderTimePreferences(responses);
+        renderParticipants(responses);
     }
 
     private int getCompletedResponseCount(List<DummyDataSource.AvailabilityResponse> responses) {
@@ -372,6 +377,48 @@ public class RoomDetailActivity extends AppCompatActivity {
         }
 
         return builder.toString();
+    }
+
+    private void renderParticipants(List<DummyDataSource.AvailabilityResponse> responses) {
+        layoutParticipantContainer.removeAllViews();
+
+        if (responses.isEmpty()) {
+            TextView emptyView = createParticipantView("참여자 정보 없음", "대기");
+            layoutParticipantContainer.addView(emptyView);
+            return;
+        }
+
+        for (DummyDataSource.AvailabilityResponse response : responses) {
+            String status = response.submitted ? "응답 완료" : "응답 대기";
+            layoutParticipantContainer.addView(
+                    createParticipantView(response.participantName, status)
+            );
+        }
+    }
+
+    private TextView createParticipantView(String name, String status) {
+        TextView textView = new TextView(this);
+        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(dp(70), LinearLayout.LayoutParams.MATCH_PARENT);
+        params.setMargins(0, 0, dp(4), 0);
+        textView.setLayoutParams(params);
+        textView.setGravity(Gravity.CENTER);
+        textView.setText(getInitial(name) + "\n" + name + "\n" + status);
+        textView.setTextColor(Color.parseColor("#77748E"));
+        textView.setTextSize(11);
+        textView.setTypeface(null, Typeface.BOLD);
+        return textView;
+    }
+
+    private String getInitial(String name) {
+        if (name == null || name.isEmpty()) {
+            return "";
+        }
+
+        return name.substring(0, 1);
+    }
+
+    private int dp(int value) {
+        return (int) (value * getResources().getDisplayMetrics().density + 0.5f);
     }
 
     private static class CandidateDateResult {

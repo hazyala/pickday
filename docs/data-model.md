@@ -170,6 +170,8 @@
 
 Chat Detail은 전달받은 `roomId`로 메시지와 채팅 공지 상태를 조회합니다. 메시지 fixture가 없는 생성 방은 같은 방 데이터로 공지 카드를 표시하고, 메시지 영역에는 빈 채팅 상태를 표시합니다.
 
+Create Meetup에서 생성한 방의 `roomId`는 Host Selection과 Invite Members로 이어집니다. Host Selection에서 고른 후보 날짜는 같은 생성 방 데이터의 `candidateDateIsos`에 반영되고, Invite Members는 같은 roomId의 제목, 마감, 참여 인원, 초대 링크를 표시합니다.
+
 ### UserSettings
 
 - `userId`

@@ -74,7 +74,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:includeFontPadding="false"
-                    android:text="현재 방 현황: 참여자 4명 · 응답률 100%"
+                    android:text="현재 방 현황"
                     android:textColor="#252538"
                     android:textSize="15sp"
                     android:textStyle="bold" />
@@ -85,7 +85,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8dp"
                     android:includeFontPadding="false"
-                    android:text="마감까지 D-1"
+                    android:text="마감 -"
                     android:textColor="#77748E"
                     android:textSize="13sp" />
             </LinearLayout>
