@@ -422,13 +422,6 @@
                         android:textSize="15sp"
                         android:textStyle="bold" />
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="전체 보기  ›"
-                        android:textColor="#6A4DFF"
-                        android:textSize="10sp"
-                        android:textStyle="bold" />
                 </LinearLayout>
 
                 <HorizontalScrollView
