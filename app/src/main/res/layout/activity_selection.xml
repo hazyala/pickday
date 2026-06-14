@@ -111,10 +111,9 @@
                         android:textStyle="bold" />
 
                     <TextView
-                        android:layout_width="0dp"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="10dp"
-                        android:layout_weight="1"
                         android:includeFontPadding="false"
                         android:text="양일 이상을 선택할수록\n더 좋은 날짜를 찾을 확률이 높아져요!"
                         android:textColor="#6A4DFF"
