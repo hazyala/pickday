@@ -76,7 +76,9 @@ public class DummyDataSource {
     public static void addCreatedMeetupRoom(
             String title,
             int participantCount,
-            String dDay
+            String dDay,
+            String deadlineDateIso,
+            String deadlineTimeText
     ) {
         if (title == null || title.trim().isEmpty()) {
             return;
@@ -93,7 +95,9 @@ public class DummyDataSource {
                         participantCount,
                         dDay,
                         0,
-                        "default"
+                        "default",
+                        deadlineDateIso,
+                        deadlineTimeText
                 ));
                 return;
             }
@@ -104,7 +108,9 @@ public class DummyDataSource {
                 participantCount,
                 dDay,
                 0,
-                "default"
+                "default",
+                deadlineDateIso,
+                deadlineTimeText
         ));
     }
 
@@ -297,6 +303,8 @@ public class DummyDataSource {
         public String dDay;
         public int responseRate;
         public String iconType;
+        public String deadlineDateIso;
+        public String deadlineTimeText;
 
         public MyMeetupRoom(
                 String title,
@@ -305,11 +313,25 @@ public class DummyDataSource {
                 int responseRate,
                 String iconType
         ) {
+            this(title, participantCount, dDay, responseRate, iconType, "", "");
+        }
+
+        public MyMeetupRoom(
+                String title,
+                int participantCount,
+                String dDay,
+                int responseRate,
+                String iconType,
+                String deadlineDateIso,
+                String deadlineTimeText
+        ) {
             this.title = title;
             this.participantCount = participantCount;
             this.dDay = dDay;
             this.responseRate = responseRate;
             this.iconType = iconType;
+            this.deadlineDateIso = deadlineDateIso;
+            this.deadlineTimeText = deadlineTimeText;
         }
     }
 
