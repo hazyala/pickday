@@ -3,8 +3,6 @@ package com.hazyala.pickday.kopo.ac.kr;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.view.View;
-import android.widget.GridLayout;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -12,7 +10,12 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.AppCompatButton;
 
+import com.hazyala.pickday.kopo.ac.kr.data.DummyDataSource;
+import com.hazyala.pickday.kopo.ac.kr.ui.PickDayDatePicker;
+
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -30,7 +33,7 @@ public class ResponseSelectionActivity extends AppCompatActivity {
     private LinearLayout layoutExcludeDates;
 
     private LinearLayout responseCalendar;
-    private GridLayout calendarGrid;
+    private PickDayDatePicker.CalendarController responseCalendarController;
 
     private final int MAX_SELECT_COUNT = 10;
 
@@ -44,8 +47,6 @@ public class ResponseSelectionActivity extends AppCompatActivity {
 
     private final int PURPLE = Color.parseColor("#5B4CDB");
     private final int DARK_TEXT = Color.parseColor("#232336");
-    private final int SUB_TEXT = Color.parseColor("#8D8AA5");
-    private final int DISABLED_TEXT = Color.parseColor("#B8B8C8");
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -75,104 +76,98 @@ public class ResponseSelectionActivity extends AppCompatActivity {
         layoutExcludeDates = findViewById(R.id.layoutExcludeDates);
 
         responseCalendar = findViewById(R.id.responseCalendar);
-        calendarGrid = responseCalendar.findViewById(R.id.calendarGrid);
     }
 
     private void initCandidateDates() {
-        candidateDates.add(new DateItem("21", "5.21", "수"));
-        candidateDates.add(new DateItem("22", "5.22", "목"));
-        candidateDates.add(new DateItem("23", "5.23", "금"));
-        candidateDates.add(new DateItem("24", "5.24", "토"));
-        candidateDates.add(new DateItem("25", "5.25", "일"));
-        candidateDates.add(new DateItem("26", "5.26", "월"));
-        candidateDates.add(new DateItem("27", "5.27", "화"));
+        List<String> candidateDateValues = DummyDataSource.getResponseCandidateDates();
+        Collections.sort(candidateDateValues);
+
+        for (String isoDate : candidateDateValues) {
+            Calendar date = PickDayDatePicker.parseIsoDate(isoDate);
+            candidateDates.add(new DateItem(
+                    isoDate,
+                    String.valueOf(date.get(Calendar.DAY_OF_MONTH)),
+                    PickDayDatePicker.formatChipDate(date),
+                    PickDayDatePicker.formatWeek(date)
+            ));
+        }
     }
 
     private void setupCalendar() {
-        for (int i = 0; i < calendarGrid.getChildCount(); i++) {
-            View child = calendarGrid.getChildAt(i);
+        Calendar initialMonth = candidateDates.isEmpty()
+                ? PickDayDatePicker.today()
+                : PickDayDatePicker.parseIsoDate(candidateDates.get(0).isoDate);
 
-            if (child instanceof TextView) {
-                TextView dayView = (TextView) child;
-                String dayText = dayView.getText().toString();
+        responseCalendarController = PickDayDatePicker.attachCalendar(
+                responseCalendar,
+                initialMonth,
+                new PickDayDatePicker.CalendarDateRule() {
+                    @Override
+                    public boolean isEnabled(Calendar date) {
+                        return findCandidateDate(date) != null;
+                    }
 
-                dayView.setTextColor(DARK_TEXT);
-                dayView.setBackgroundColor(Color.TRANSPARENT);
-                dayView.setClickable(false);
-                dayView.setFocusable(false);
+                    @Override
+                    public boolean isSelected(Calendar date) {
+                        return selectedDates.contains(PickDayDatePicker.formatIsoDate(date));
+                    }
 
-                DateItem item = findCandidateDate(dayText);
+                    @Override
+                    public boolean isHighlighted(Calendar date) {
+                        return findCandidateDate(date) != null;
+                    }
 
-                if (item != null) {
-                    dayView.setTextColor(PURPLE);
-                    dayView.setBackgroundResource(R.drawable.pickday_card_soft);
-                    dayView.setClickable(true);
-                    dayView.setFocusable(true);
+                    @Override
+                    public boolean usesFilledSelection(Calendar date) {
+                        return true;
+                    }
+                },
+                selectedDate -> {
+                    DateItem item = findCandidateDate(selectedDate);
 
-                    dayView.setOnClickListener(v -> toggleDate(item));
-                } else if (!dayText.isEmpty()) {
-                    dayView.setTextColor(DISABLED_TEXT);
+                    if (item != null) {
+                        toggleDate(item);
+                    }
                 }
-            }
-        }
-    }
-
-    private DateItem findCandidateDate(String day) {
-        for (DateItem item : candidateDates) {
-            if (item.day.equals(day)) {
-                return item;
-            }
-        }
-        return null;
+        );
     }
 
     private void toggleDate(DateItem item) {
-        if (selectedDates.contains(item.label)) {
-            selectedDates.remove(item.label);
+        if (selectedDates.contains(item.isoDate)) {
+            selectedDates.remove(item.isoDate);
         } else {
             if (selectedDates.size() >= MAX_SELECT_COUNT) {
                 Toast.makeText(this, "최대 10개까지 선택할 수 있어요", Toast.LENGTH_SHORT).show();
                 return;
             }
-            selectedDates.add(item.label);
+            selectedDates.add(item.isoDate);
         }
 
         updateCalendarState();
         updateSelectedDateArea();
     }
 
-    private void updateCalendarState() {
-        for (int i = 0; i < calendarGrid.getChildCount(); i++) {
-            View child = calendarGrid.getChildAt(i);
+    private DateItem findCandidateDate(Calendar date) {
+        String isoDate = PickDayDatePicker.formatIsoDate(date);
 
-            if (child instanceof TextView) {
-                TextView dayView = (TextView) child;
-                String dayText = dayView.getText().toString();
-
-                DateItem item = findCandidateDate(dayText);
-
-                if (item == null) {
-                    continue;
-                }
-
-                if (selectedDates.contains(item.label)) {
-                    dayView.setText(item.day + "\n✓");
-                    dayView.setTextColor(Color.WHITE);
-                    dayView.setBackgroundResource(R.drawable.pickday_button_primary);
-                } else {
-                    dayView.setText(item.day);
-                    dayView.setTextColor(PURPLE);
-                    dayView.setBackgroundResource(R.drawable.pickday_card_soft);
-                }
+        for (DateItem item : candidateDates) {
+            if (item.isoDate.equals(isoDate)) {
+                return item;
             }
         }
+
+        return null;
+    }
+
+    private void updateCalendarState() {
+        responseCalendarController.render();
     }
 
     private void updateSelectedDateArea() {
         layoutSelectedDates.removeAllViews();
 
         for (DateItem item : candidateDates) {
-            if (selectedDates.contains(item.label)) {
+            if (selectedDates.contains(item.isoDate)) {
                 TextView chip = createSelectedDateChip(item);
                 layoutSelectedDates.addView(chip);
             }
@@ -200,7 +195,7 @@ public class ResponseSelectionActivity extends AppCompatActivity {
         chip.setFocusable(true);
 
         chip.setOnClickListener(v -> {
-            selectedDates.remove(item.label);
+            selectedDates.remove(item.isoDate);
             updateCalendarState();
             updateSelectedDateArea();
         });
@@ -334,11 +329,13 @@ public class ResponseSelectionActivity extends AppCompatActivity {
     }
 
     private static class DateItem {
+        String isoDate;
         String day;
         String label;
         String week;
 
-        DateItem(String day, String label, String week) {
+        DateItem(String isoDate, String day, String label, String week) {
+            this.isoDate = isoDate;
             this.day = day;
             this.label = label;
             this.week = week;

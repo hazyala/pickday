@@ -22,6 +22,7 @@ public class PickDayDatePicker {
     private static final int DARK_TEXT = Color.parseColor("#252538");
     private static final int PURPLE = Color.parseColor("#6A4DFF");
     private static final int DISABLED_TEXT = Color.parseColor("#B8B8C8");
+    private static final int WHITE = Color.parseColor("#FFFFFF");
     private static final String ISO_PATTERN = "yyyy-MM-dd";
 
     public interface OnDateSelectedListener {
@@ -32,6 +33,14 @@ public class PickDayDatePicker {
         boolean isEnabled(Calendar date);
 
         boolean isSelected(Calendar date);
+
+        default boolean isHighlighted(Calendar date) {
+            return false;
+        }
+
+        default boolean usesFilledSelection(Calendar date) {
+            return false;
+        }
     }
 
     public interface OnCalendarDateClickListener {
@@ -95,6 +104,8 @@ public class PickDayDatePicker {
 
                 boolean enabled = dateRule == null || dateRule.isEnabled(cloneCalendar(cellDate));
                 boolean selected = dateRule != null && dateRule.isSelected(cloneCalendar(cellDate));
+                boolean highlighted = dateRule != null && dateRule.isHighlighted(cloneCalendar(cellDate));
+                boolean filledSelection = dateRule != null && dateRule.usesFilledSelection(cloneCalendar(cellDate));
 
                 if (!enabled) {
                     dayView.setTextColor(DISABLED_TEXT);
@@ -103,8 +114,20 @@ public class PickDayDatePicker {
                     continue;
                 }
 
-                dayView.setTextColor(selected ? PURPLE : DARK_TEXT);
-                dayView.setBackgroundResource(selected ? R.drawable.pickday_selected : 0);
+                if (selected && filledSelection) {
+                    dayView.setTextColor(WHITE);
+                    dayView.setBackgroundResource(R.drawable.pickday_button_primary);
+                } else if (selected) {
+                    dayView.setTextColor(PURPLE);
+                    dayView.setBackgroundResource(R.drawable.pickday_selected);
+                } else if (highlighted) {
+                    dayView.setTextColor(PURPLE);
+                    dayView.setBackgroundResource(R.drawable.pickday_card_soft);
+                } else {
+                    dayView.setTextColor(DARK_TEXT);
+                    dayView.setBackgroundResource(0);
+                }
+
                 dayView.setClickable(true);
                 dayView.setFocusable(true);
                 dayView.setOnClickListener(v -> {
