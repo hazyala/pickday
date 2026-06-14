@@ -3,6 +3,7 @@ package com.hazyala.pickday.kopo.ac.kr;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.Typeface;
+import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
 import android.view.Gravity;
 import android.view.View;
@@ -131,6 +132,8 @@ public class CalendarActivity extends AppCompatActivity {
 
         boolean inMonth = cellDate.get(Calendar.MONTH) == visibleMonth.get(Calendar.MONTH);
         boolean isToday = PickDayDatePicker.isSameDate(cellDate, Calendar.getInstance());
+        List<DummyDataSource.CalendarMeetup> meetups = meetupsByDate.get(PickDayDatePicker.formatIsoDate(cellDate));
+        boolean hasMeetup = inMonth && meetups != null && !meetups.isEmpty();
 
         TextView dayText = new TextView(this);
         LinearLayout.LayoutParams dayParams = new LinearLayout.LayoutParams(dp(34), dp(34));
@@ -143,6 +146,9 @@ public class CalendarActivity extends AppCompatActivity {
 
         if (!inMonth) {
             dayText.setTextColor(MUTED_TEXT);
+        } else if (hasMeetup) {
+            dayText.setTextColor(WHITE);
+            dayText.setBackground(createCircleDrawable(meetups.get(0).accentColor));
         } else if (isToday) {
             dayText.setTextColor(WHITE);
             dayText.setBackgroundResource(R.drawable.bg_calendar_day_selected);
@@ -155,27 +161,15 @@ public class CalendarActivity extends AppCompatActivity {
         }
 
         LinearLayout dots = new LinearLayout(this);
-        dots.setLayoutParams(new LinearLayout.LayoutParams(
-                LinearLayout.LayoutParams.WRAP_CONTENT,
-                dp(8)
-        ));
+        dots.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, dp(10)));
         dots.setGravity(Gravity.CENTER);
         dots.setOrientation(LinearLayout.HORIZONTAL);
 
-        List<DummyDataSource.CalendarMeetup> meetups = meetupsByDate.get(PickDayDatePicker.formatIsoDate(cellDate));
-
-        if (inMonth && meetups != null) {
+        if (hasMeetup && meetups.size() > 1) {
             int maxDotCount = Math.min(meetups.size(), 3);
 
             for (int index = 0; index < maxDotCount; index++) {
-                TextView dot = new TextView(this);
-                dot.setLayoutParams(new LinearLayout.LayoutParams(dp(8), dp(8)));
-                dot.setGravity(Gravity.CENTER);
-                dot.setIncludeFontPadding(false);
-                dot.setText("•");
-                dot.setTextColor(Color.parseColor(meetups.get(index).accentColor));
-                dot.setTextSize(14);
-                dots.addView(dot);
+                dots.addView(createDotView(meetups.get(index).accentColor));
             }
         }
 
@@ -220,7 +214,7 @@ public class CalendarActivity extends AppCompatActivity {
 
         LinearLayout.LayoutParams itemParams = new LinearLayout.LayoutParams(
                 LinearLayout.LayoutParams.MATCH_PARENT,
-                dp(86)
+                dp(104)
         );
         itemParams.setMargins(0, 0, 0, dp(10));
         item.setLayoutParams(itemParams);
@@ -244,7 +238,7 @@ public class CalendarActivity extends AppCompatActivity {
         TextView title = new TextView(this);
         title.setText(meetup.title);
         title.setTextColor(DARK_TEXT);
-        title.setTextSize(17);
+        title.setTextSize(16);
         title.setTypeface(null, Typeface.BOLD);
         title.setIncludeFontPadding(false);
 
@@ -273,7 +267,7 @@ public class CalendarActivity extends AppCompatActivity {
         status.setGravity(Gravity.CENTER);
         status.setText(meetup.statusText);
         status.setTextColor(Color.parseColor(meetup.accentColor));
-        status.setTextSize(12);
+        status.setTextSize(11);
         status.setTypeface(null, Typeface.BOLD);
         status.setBackgroundResource(R.drawable.bg_calendar_pill);
 
@@ -291,6 +285,27 @@ public class CalendarActivity extends AppCompatActivity {
         item.addView(arrow);
 
         return item;
+    }
+
+    private View createDotView(String colorValue) {
+        View dot = new View(this);
+        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(dp(6), dp(6));
+        params.setMargins(dp(2), 0, dp(2), 0);
+        dot.setLayoutParams(params);
+
+        GradientDrawable background = new GradientDrawable();
+        background.setShape(GradientDrawable.OVAL);
+        background.setColor(Color.parseColor(colorValue));
+        dot.setBackground(background);
+
+        return dot;
+    }
+
+    private GradientDrawable createCircleDrawable(String colorValue) {
+        GradientDrawable background = new GradientDrawable();
+        background.setShape(GradientDrawable.OVAL);
+        background.setColor(Color.parseColor(colorValue));
+        return background;
     }
 
     private Map<String, List<DummyDataSource.CalendarMeetup>> getMeetupsByDate() {
