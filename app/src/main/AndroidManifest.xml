@@ -18,6 +18,12 @@
             android:name=".NotificationActivity"
             android:exported="false" />
         <activity
+            android:name=".ChatDetailActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ChatActivity"
+            android:exported="false" />
+        <activity
             android:name=".MyPageActionActivity"
             android:exported="false" />
         <activity

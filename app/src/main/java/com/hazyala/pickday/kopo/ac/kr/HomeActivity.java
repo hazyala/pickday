@@ -37,7 +37,7 @@ public class HomeActivity extends AppCompatActivity {
     private AppCompatButton btnCreateSmall;
     private ImageView btnNotification;
     private LinearLayout tabCalendar;
-    private LinearLayout tabAlarm;
+    private LinearLayout tabChat;
     private LinearLayout tabMy;
 
     @Override
@@ -74,7 +74,7 @@ public class HomeActivity extends AppCompatActivity {
         btnCreateSmall = findViewById(R.id.btnCreateSmall);
         btnNotification = findViewById(R.id.btnNotification);
         tabCalendar = findViewById(R.id.tabCalendar);
-        tabAlarm = findViewById(R.id.tabAlarm);
+        tabChat = findViewById(R.id.tabChat);
         tabMy = findViewById(R.id.tabMy);
     }
 
@@ -314,11 +314,16 @@ public class HomeActivity extends AppCompatActivity {
                 "월별 일정 보기와 약속 필터 기능을 준비 중이에요."
         ));
 
-        tabAlarm.setOnClickListener(v -> openActionPage(
-                "알림",
-                "초대, 응답 완료, 일정 확정 알림을 확인해요.",
-                "새 알림이 있으면 이 화면에서 가장 먼저 보여줄게요."
-        ));
+        tabChat.setOnClickListener(v -> {
+
+            Intent intent =
+                    new Intent(
+                            HomeActivity.this,
+                            ChatActivity.class
+                    );
+
+            startActivity(intent);
+        });
 
         tabMy.setOnClickListener(v -> {
 

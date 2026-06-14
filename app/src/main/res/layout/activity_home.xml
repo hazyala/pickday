@@ -488,7 +488,7 @@
             android:includeFontPadding="false"/>
 
         <LinearLayout
-            android:id="@+id/tabAlarm"
+            android:id="@+id/tabChat"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
@@ -498,7 +498,7 @@
             <ImageView
                 android:layout_width="20dp"
                 android:layout_height="20dp"
-                android:src="@drawable/icon_notification"
+                android:src="@drawable/icon_message"
                 android:tint="#8A88A0"
                 android:scaleType="centerInside" />
 
@@ -507,7 +507,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="2dp"
                 android:includeFontPadding="false"
-                android:text="알림"
+                android:text="방 채팅"
                 android:textColor="#8A88A0"
                 android:textSize="10sp" />
         </LinearLayout>
