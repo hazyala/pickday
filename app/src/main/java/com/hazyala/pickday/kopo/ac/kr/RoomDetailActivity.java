@@ -9,6 +9,7 @@ import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import androidx.activity.OnBackPressedCallback;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.AppCompatButton;
 
@@ -58,6 +59,7 @@ public class RoomDetailActivity extends AppCompatActivity {
         initViews();
         readRoomData();
         renderRoomData();
+        setupBackNavigation();
 
         // 뒤로가기 → 홈
         btnBack.setOnClickListener(v -> goHome());
@@ -79,6 +81,15 @@ public class RoomDetailActivity extends AppCompatActivity {
             );
             intent.putExtra(ParticipantListActivity.EXTRA_ROOM_ID, roomId);
             startActivity(intent);
+        });
+    }
+
+    private void setupBackNavigation() {
+        getOnBackPressedDispatcher().addCallback(this, new OnBackPressedCallback(true) {
+            @Override
+            public void handleOnBackPressed() {
+                goHome();
+            }
         });
     }
 
@@ -462,8 +473,4 @@ public class RoomDetailActivity extends AppCompatActivity {
         finish();
     }
 
-    @Override
-    public void onBackPressed() {
-        goHome();
-    }
 }

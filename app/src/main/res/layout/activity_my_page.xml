@@ -439,7 +439,7 @@
                 android:layout_width="20dp"
                 android:layout_height="20dp"
                 android:src="@drawable/icon_home"
-                android:tint="#8A88A0"
+                app:tint="#8A88A0"
                 android:scaleType="centerInside" />
 
             <TextView
@@ -464,7 +464,7 @@
                 android:layout_width="20dp"
                 android:layout_height="20dp"
                 android:src="@drawable/icon_calendars"
-                android:tint="#8A88A0"
+                app:tint="#8A88A0"
                 android:scaleType="centerInside" />
 
             <TextView
@@ -504,7 +504,7 @@
                 android:layout_width="20dp"
                 android:layout_height="20dp"
                 android:src="@drawable/icon_notification"
-                android:tint="#8A88A0"
+                app:tint="#8A88A0"
                 android:scaleType="centerInside" />
 
             <TextView
@@ -529,7 +529,7 @@
                 android:layout_width="20dp"
                 android:layout_height="20dp"
                 android:src="@drawable/icon_person"
-                android:tint="#5B4CDB"
+                app:tint="#5B4CDB"
                 android:scaleType="centerInside" />
 
             <TextView

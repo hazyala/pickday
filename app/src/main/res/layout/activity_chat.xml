@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#F8F7FF">
@@ -33,7 +34,7 @@
                     android:padding="8dp"
                     android:scaleType="centerInside"
                     android:src="@drawable/ic_arrow_back"
-                    android:tint="#252538" />
+                    app:tint="#252538" />
 
                 <LinearLayout
                     android:layout_width="0dp"
@@ -49,7 +50,7 @@
                         android:layout_marginEnd="7dp"
                         android:scaleType="centerInside"
                         android:src="@drawable/icon_message"
-                        android:tint="#202033" />
+                        app:tint="#202033" />
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -204,7 +205,7 @@
                 android:layout_height="20dp"
                 android:scaleType="centerInside"
                 android:src="@drawable/icon_home"
-                android:tint="#8A88A0" />
+                app:tint="#8A88A0" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -229,7 +230,7 @@
                 android:layout_height="20dp"
                 android:scaleType="centerInside"
                 android:src="@drawable/icon_calendars"
-                android:tint="#8A88A0" />
+                app:tint="#8A88A0" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -269,7 +270,7 @@
                 android:layout_height="20dp"
                 android:scaleType="centerInside"
                 android:src="@drawable/icon_message"
-                android:tint="#5B4CDB" />
+                app:tint="#5B4CDB" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -295,7 +296,7 @@
                 android:layout_height="20dp"
                 android:scaleType="centerInside"
                 android:src="@drawable/icon_person"
-                android:tint="#8A88A0" />
+                app:tint="#8A88A0" />
 
             <TextView
                 android:layout_width="wrap_content"

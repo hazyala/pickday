@@ -308,7 +308,7 @@
                         android:layout_height="54dp"
                         android:padding="12dp"
                         android:src="@drawable/icon_calendars"
-                        android:tint="#6A4DFF"
+                        app:tint="#6A4DFF"
                         android:scaleType="centerInside" />
                 </LinearLayout>
 

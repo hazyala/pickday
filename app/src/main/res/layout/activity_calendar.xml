@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#FAF9FF">
@@ -192,7 +193,7 @@
                 android:layout_height="20dp"
                 android:scaleType="centerInside"
                 android:src="@drawable/icon_home"
-                android:tint="#8A88A0" />
+                app:tint="#8A88A0" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -217,7 +218,7 @@
                 android:layout_height="20dp"
                 android:scaleType="centerInside"
                 android:src="@drawable/icon_calendars"
-                android:tint="#5B2DFF" />
+                app:tint="#5B2DFF" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -258,7 +259,7 @@
                 android:layout_height="20dp"
                 android:scaleType="centerInside"
                 android:src="@drawable/icon_message"
-                android:tint="#8A88A0" />
+                app:tint="#8A88A0" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -283,7 +284,7 @@
                 android:layout_height="20dp"
                 android:scaleType="centerInside"
                 android:src="@drawable/icon_person"
-                android:tint="#8A88A0" />
+                app:tint="#8A88A0" />
 
             <TextView
                 android:layout_width="wrap_content"

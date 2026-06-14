@@ -226,7 +226,7 @@
                         android:background="@drawable/pickday_card_soft"
                         android:padding="13dp"
                         android:src="@drawable/icon_share"
-                        android:tint="#6A4DFF"
+                        app:tint="#6A4DFF"
                         android:scaleType="centerInside" />
 
                     <LinearLayout
@@ -389,7 +389,7 @@
                         android:background="@drawable/pickday_card_soft"
                         android:padding="18dp"
                         android:src="@drawable/icon_group"
-                        android:tint="#6A4DFF"
+                        app:tint="#6A4DFF"
                         android:scaleType="centerInside" />
 
                     <LinearLayout
@@ -457,7 +457,7 @@
                         android:background="@drawable/pickday_card_soft"
                         android:padding="10dp"
                         android:src="@drawable/icon_notification"
-                        android:tint="#6A4DFF"
+                        app:tint="#6A4DFF"
                         android:scaleType="centerInside" />
 
                     <LinearLayout
