@@ -131,10 +131,11 @@ public class ParticipantListActivity extends AppCompatActivity {
 
     private View createEmptyView() {
         TextView emptyView = new TextView(this);
-        emptyView.setText("아직 참여자 응답 정보가 없어요");
+        emptyView.setText("응답 정보 없음\n아직 제출된 참여자 응답이 없어요");
         emptyView.setTextColor(Color.parseColor("#8D8AA5"));
         emptyView.setTextSize(13);
         emptyView.setGravity(Gravity.CENTER);
+        emptyView.setLineSpacing(dp(4), 1f);
         emptyView.setMinHeight(dp(180));
         emptyView.setBackgroundResource(R.drawable.pickday_card_white);
         return emptyView;
