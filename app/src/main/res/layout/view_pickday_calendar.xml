@@ -7,17 +7,47 @@
     android:orientation="vertical"
     android:padding="8dp">
 
-    <TextView
-        android:id="@+id/tvCalendarTitle"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="18dp"
         android:gravity="center"
-        android:includeFontPadding="false"
-        android:text="2025년 5월"
         android:layout_marginBottom="10dp"
-        android:textColor="#232336"
-        android:textSize="12sp"
-        android:textStyle="bold" />
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/btnCalendarPrev"
+            android:layout_width="28dp"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:includeFontPadding="false"
+            android:text="‹"
+            android:textColor="#6A4DFF"
+            android:textSize="13sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/tvCalendarTitle"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:includeFontPadding="false"
+            android:text="2025년 5월"
+            android:textColor="#232336"
+            android:textSize="12sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/btnCalendarNext"
+            android:layout_width="28dp"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:includeFontPadding="false"
+            android:text="›"
+            android:textColor="#6A4DFF"
+            android:textSize="13sp"
+            android:textStyle="bold" />
+    </LinearLayout>
 
     <GridLayout
         android:layout_width="match_parent"
@@ -77,6 +107,13 @@
         <TextView android:id="@+id/day29" style="@style/PickDayCalendarDayText" android:text="29" />
         <TextView android:id="@+id/day30" style="@style/PickDayCalendarDayText" android:text="30" />
         <TextView android:id="@+id/day31" style="@style/PickDayCalendarDayText" android:text="31" />
+        <TextView android:id="@+id/day32" style="@style/PickDayCalendarDayText" />
+        <TextView android:id="@+id/day33" style="@style/PickDayCalendarDayText" />
+        <TextView android:id="@+id/day34" style="@style/PickDayCalendarDayText" />
+        <TextView android:id="@+id/day35" style="@style/PickDayCalendarDayText" />
+        <TextView android:id="@+id/day36" style="@style/PickDayCalendarDayText" />
+        <TextView android:id="@+id/day37" style="@style/PickDayCalendarDayText" />
+        <TextView android:id="@+id/day38" style="@style/PickDayCalendarDayText" />
 
     </GridLayout>
 
