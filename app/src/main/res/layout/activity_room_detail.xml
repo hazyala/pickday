@@ -48,6 +48,7 @@
                     android:scaleType="fitCenter" />
 
                 <TextView
+                    android:id="@+id/tvRoomStatus"
                     android:layout_width="72dp"
                     android:layout_height="28dp"
                     android:layout_marginTop="55dp"
@@ -60,6 +61,7 @@
                     android:textStyle="bold" />
 
                 <TextView
+                    android:id="@+id/tvRoomTitle"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="80dp"
@@ -70,6 +72,7 @@
                     android:includeFontPadding="false" />
 
                 <TextView
+                    android:id="@+id/tvRoomSubtitle"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="120dp"
@@ -87,6 +90,7 @@
                     android:gravity="center_vertical">
 
                     <TextView
+                        android:id="@+id/tvDeadline"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="▣  마감일 5.27 (화) 오후 11:59"
@@ -95,6 +99,7 @@
                         android:textStyle="bold" />
 
                     <TextView
+                        android:id="@+id/tvParticipantSummary"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="18dp"
@@ -134,6 +139,7 @@
                         android:textStyle="bold" />
 
                     <TextView
+                        android:id="@+id/tvProgressUpdatedAt"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="5.23 (금) 오후 8:30 기준"
@@ -149,6 +155,7 @@
                     android:orientation="horizontal">
 
                     <TextView
+                        android:id="@+id/tvParticipantProgress"
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
                         android:layout_weight="1"
@@ -159,6 +166,7 @@
                         android:textStyle="bold" />
 
                     <TextView
+                        android:id="@+id/tvResponseCompleted"
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
                         android:layout_weight="1"
@@ -169,6 +177,7 @@
                         android:textStyle="bold" />
 
                     <TextView
+                        android:id="@+id/tvResponseWaiting"
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
                         android:layout_weight="1"
@@ -179,6 +188,7 @@
                         android:textStyle="bold" />
 
                     <TextView
+                        android:id="@+id/tvConfirmedSchedule"
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
                         android:layout_weight="1"
@@ -204,18 +214,21 @@
                         android:orientation="horizontal">
 
                         <View
+                            android:id="@+id/viewProgressComplete"
                             android:layout_width="0dp"
                             android:layout_height="match_parent"
                             android:layout_weight="66"
                             android:background="@drawable/pickday_button_primary" />
 
                         <View
+                            android:id="@+id/viewProgressWaiting"
                             android:layout_width="0dp"
                             android:layout_height="match_parent"
                             android:layout_weight="34" />
                     </LinearLayout>
 
                     <TextView
+                        android:id="@+id/tvProgressRate"
                         android:layout_width="44dp"
                         android:layout_height="wrap_content"
                         android:gravity="end"
@@ -385,6 +398,7 @@
                     android:orientation="horizontal">
 
                     <TextView
+                        android:id="@+id/tvParticipantSectionTitle"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
