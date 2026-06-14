@@ -26,7 +26,7 @@ import java.util.Set;
 public class SelectionActivity extends AppCompatActivity {
 
     private View btnBack;
-    private TextView btnNext, btnCalendarToggle;
+    private TextView btnNext;
     private View selectionCalendar;
 
     private TextView tvDateCount, tvExcludeCount;
@@ -60,7 +60,6 @@ public class SelectionActivity extends AppCompatActivity {
     private void initViews() {
         btnBack = findViewById(R.id.btnBack);
         btnNext = findViewById(R.id.btnNext);
-        btnCalendarToggle = findViewById(R.id.btnCalendarToggle);
 
         selectionCalendar = findViewById(R.id.selectionCalendar);
         layoutCandidateDates = findViewById(R.id.layoutCandidateDates);
@@ -93,15 +92,7 @@ public class SelectionActivity extends AppCompatActivity {
             startActivity(intent);
         });
 
-        btnCalendarToggle.setOnClickListener(v -> {
-            if (selectionCalendar.getVisibility() == View.VISIBLE) {
-                selectionCalendar.setVisibility(View.GONE);
-                btnCalendarToggle.setText("▣  달력 보기");
-            } else {
-                selectionCalendar.setVisibility(View.VISIBLE);
-                btnCalendarToggle.setText("▣  닫기");
-            }
-        });
+        selectionCalendar.setVisibility(View.VISIBLE);
     }
 
     private void initDateChips() {
