@@ -96,6 +96,63 @@ public class DummyDataSource {
         return sdf.format(date.getTime());
     }
 
+    private static String formatIsoDate(Calendar date) {
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd", Locale.KOREAN);
+        return sdf.format(date.getTime());
+    }
+
+    public static List<CalendarMeetup> getCalendarMeetups() {
+        List<CalendarMeetup> meetups = new ArrayList<>();
+        Calendar month = Calendar.getInstance();
+
+        meetups.add(createCalendarMeetup(month, 20, "세미콜론 동아리 모임", "오후 12:00 ~ 15:00", 6, "참여 예정", "#5B2DFF", "동"));
+        meetups.add(createCalendarMeetup(month, 24, "팀플 회의 일정", "오후 2:00 ~ 4:00", 4, "D-3", "#3367E8", "팀"));
+        meetups.add(createCalendarMeetup(month, 27, "스터디 그룹", "오후 7:00 ~ 9:00", 3, "확정", "#4EBD73", "스"));
+
+        for (MyMeetupRoom room : createdMeetupRooms) {
+            if (room.deadlineDateIso == null || room.deadlineDateIso.trim().isEmpty()) {
+                continue;
+            }
+
+            meetups.add(new CalendarMeetup(
+                    room.title,
+                    room.deadlineDateIso,
+                    "마감 " + room.deadlineTimeText,
+                    room.participantCount,
+                    room.dDay,
+                    "#FF9338",
+                    "마"
+            ));
+        }
+
+        return meetups;
+    }
+
+    private static CalendarMeetup createCalendarMeetup(
+            Calendar month,
+            int day,
+            String title,
+            String timeText,
+            int participantCount,
+            String statusText,
+            String accentColor,
+            String iconText
+    ) {
+        Calendar date = (Calendar) month.clone();
+        int lastDay = date.getActualMaximum(Calendar.DAY_OF_MONTH);
+        date.set(Calendar.DAY_OF_MONTH, Math.min(day, lastDay));
+
+        return new CalendarMeetup(
+                title,
+                formatIsoDate(date),
+                timeText,
+                participantCount,
+                statusText,
+                accentColor,
+                iconText
+        );
+    }
+
     public static List<MyMeetupRoom> getMyMeetupRooms() {
         List<MyMeetupRoom> rooms = new ArrayList<>();
 
@@ -380,6 +437,34 @@ public class DummyDataSource {
             this.selected = selected;
             this.best = best;
             this.hasMeetupStatus = hasMeetupStatus;
+        }
+    }
+
+    public static class CalendarMeetup {
+        public String title;
+        public String dateIso;
+        public String timeText;
+        public int participantCount;
+        public String statusText;
+        public String accentColor;
+        public String iconText;
+
+        public CalendarMeetup(
+                String title,
+                String dateIso,
+                String timeText,
+                int participantCount,
+                String statusText,
+                String accentColor,
+                String iconText
+        ) {
+            this.title = title;
+            this.dateIso = dateIso;
+            this.timeText = timeText;
+            this.participantCount = participantCount;
+            this.statusText = statusText;
+            this.accentColor = accentColor;
+            this.iconText = iconText;
         }
     }
 

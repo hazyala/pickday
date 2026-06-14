@@ -316,11 +316,15 @@ public class HomeActivity extends AppCompatActivity {
             startActivity(intent);
         });
 
-        tabCalendar.setOnClickListener(v -> openActionPage(
-                "캘린더",
-                "참여 중인 약속과 확정된 일정을 한 곳에서 확인해요.",
-                "월별 일정 보기와 약속 필터 기능을 준비 중이에요."
-        ));
+        tabCalendar.setOnClickListener(v -> {
+            Intent intent =
+                    new Intent(
+                            HomeActivity.this,
+                            CalendarActivity.class
+                    );
+
+            startActivity(intent);
+        });
 
         tabChat.setOnClickListener(v -> {
 
@@ -343,21 +347,6 @@ public class HomeActivity extends AppCompatActivity {
 
             startActivity(intent);
         });
-    }
-
-    private void openActionPage(String title, String subtitle, String body) {
-
-        Intent intent =
-                new Intent(
-                        HomeActivity.this,
-                        MyPageActionActivity.class
-                );
-
-        intent.putExtra(MyPageActionActivity.EXTRA_TITLE, title);
-        intent.putExtra(MyPageActionActivity.EXTRA_SUBTITLE, subtitle);
-        intent.putExtra(MyPageActionActivity.EXTRA_BODY, body);
-
-        startActivity(intent);
     }
 
     private void setStartIcon(
