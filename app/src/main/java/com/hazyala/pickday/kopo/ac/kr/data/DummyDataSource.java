@@ -3,6 +3,9 @@ package com.hazyala.pickday.kopo.ac.kr.data;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
@@ -27,6 +30,7 @@ public class DummyDataSource {
 
     public static MainMeetup getMainMeetup() {
         MyMeetupRoom room = getMeetupRoomById(DEFAULT_ROOM_ID);
+        RoomAvailabilitySummary summary = getRoomAvailabilitySummary(room.roomId);
 
         return new MainMeetup(
                 room.roomId,
@@ -34,9 +38,38 @@ public class DummyDataSource {
                 room.title,
                 room.participantCount,
                 room.dDay,
-                room.responseRate,
-                "7월 4일 (토) 오후 2시",
-                5
+                summary.responseRate,
+                summary.bestDateTime,
+                summary.bestAvailableCount
+        );
+    }
+
+    public static RoomAvailabilitySummary getRoomAvailabilitySummary(String roomId) {
+        MyMeetupRoom room = getMeetupRoomById(roomId);
+        List<AvailabilityResponse> responses = getAvailabilityResponses(room.roomId);
+        int completedCount = getCompletedResponseCount(responses);
+        int responseRate = getResponseRate(room, responses);
+        List<CandidateDateResult> dateResults = getCandidateDateResults(room, responses);
+        TimePreferenceResult timeResult = getBestTimePreference(responses);
+
+        if (dateResults.isEmpty()) {
+            return new RoomAvailabilitySummary(
+                    room.roomId,
+                    completedCount,
+                    responseRate,
+                    "미정",
+                    0
+            );
+        }
+
+        CandidateDateResult bestDate = dateResults.get(0);
+
+        return new RoomAvailabilitySummary(
+                room.roomId,
+                completedCount,
+                responseRate,
+                formatBestDateTime(bestDate.dateIso, timeResult.label),
+                bestDate.availableCount
         );
     }
 
@@ -467,6 +500,105 @@ public class DummyDataSource {
         return timeSlots;
     }
 
+    private static int getCompletedResponseCount(List<AvailabilityResponse> responses) {
+        int count = 0;
+
+        for (AvailabilityResponse response : responses) {
+            if (response.submitted) {
+                count++;
+            }
+        }
+
+        return count;
+    }
+
+    private static int getResponseRate(
+            MyMeetupRoom room,
+            List<AvailabilityResponse> responses
+    ) {
+        if (room.participantCount <= 0) {
+            return 0;
+        }
+
+        if (responses.isEmpty()) {
+            return room.responseRate;
+        }
+
+        return Math.round(getCompletedResponseCount(responses) * 100f / room.participantCount);
+    }
+
+    private static List<CandidateDateResult> getCandidateDateResults(
+            MyMeetupRoom room,
+            List<AvailabilityResponse> responses
+    ) {
+        List<CandidateDateResult> results = new ArrayList<>();
+
+        for (String dateIso : room.candidateDateIsos) {
+            int availableCount = 0;
+
+            for (AvailabilityResponse response : responses) {
+                if (response.submitted && response.availableDateIsos.contains(dateIso)) {
+                    availableCount++;
+                }
+            }
+
+            results.add(new CandidateDateResult(dateIso, availableCount));
+        }
+
+        Collections.sort(results, (first, second) -> {
+            int countCompare = Integer.compare(second.availableCount, first.availableCount);
+
+            if (countCompare != 0) {
+                return countCompare;
+            }
+
+            return first.dateIso.compareTo(second.dateIso);
+        });
+
+        return results;
+    }
+
+    private static TimePreferenceResult getBestTimePreference(List<AvailabilityResponse> responses) {
+        List<TimePreferenceResult> results = new ArrayList<>();
+
+        for (TimeSlot timeSlot : getTimeSlots()) {
+            int count = 0;
+
+            for (AvailabilityResponse response : responses) {
+                if (response.submitted && response.selectedTimeSlotCodes.contains(timeSlot.code)) {
+                    count++;
+                }
+            }
+
+            results.add(new TimePreferenceResult(timeSlot.label, count));
+        }
+
+        Collections.sort(results, Comparator
+                .comparingInt((TimePreferenceResult result) -> result.count)
+                .reversed());
+
+        return results.isEmpty() ? new TimePreferenceResult("", 0) : results.get(0);
+    }
+
+    private static String formatBestDateTime(String dateIso, String timeLabel) {
+        String dateText = dateIso;
+
+        try {
+            SimpleDateFormat parser = new SimpleDateFormat("yyyy-MM-dd", Locale.KOREAN);
+            Date date = parser.parse(dateIso);
+            SimpleDateFormat formatter = new SimpleDateFormat("M월 d일 (E)", Locale.KOREAN);
+            dateText = formatter.format(date);
+        } catch (Exception e) {
+            dateText = dateIso;
+        }
+
+        if (timeLabel == null || timeLabel.trim().isEmpty()) {
+            return dateText;
+        }
+
+        return dateText + " " + timeLabel;
+    }
+
     private static List<MyMeetupRoom> getDefaultMeetupRooms() {
         List<MyMeetupRoom> rooms = new ArrayList<>();
 
@@ -584,6 +716,28 @@ public class DummyDataSource {
             this.responseRate = responseRate;
             this.bestDateTime = bestDateTime;
             this.availableCount = availableCount;
+        }
+    }
+
+    public static class RoomAvailabilitySummary {
+        public String roomId;
+        public int completedResponseCount;
+        public int responseRate;
+        public String bestDateTime;
+        public int bestAvailableCount;
+
+        public RoomAvailabilitySummary(
+                String roomId,
+                int completedResponseCount,
+                int responseRate,
+                String bestDateTime,
+                int bestAvailableCount
+        ) {
+            this.roomId = roomId;
+            this.completedResponseCount = completedResponseCount;
+            this.responseRate = responseRate;
+            this.bestDateTime = bestDateTime;
+            this.bestAvailableCount = bestAvailableCount;
         }
     }
 
@@ -826,6 +980,26 @@ public class DummyDataSource {
             this.code = code;
             this.label = label;
             this.timeRange = timeRange;
+        }
+    }
+
+    private static class CandidateDateResult {
+        String dateIso;
+        int availableCount;
+
+        CandidateDateResult(String dateIso, int availableCount) {
+            this.dateIso = dateIso;
+            this.availableCount = availableCount;
+        }
+    }
+
+    private static class TimePreferenceResult {
+        String label;
+        int count;
+
+        TimePreferenceResult(String label, int count) {
+            this.label = label;
+            this.count = count;
         }
     }
 }
