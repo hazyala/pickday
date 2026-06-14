@@ -487,7 +487,7 @@
                             android:textStyle="bold" />
                     </LinearLayout>
 
-                    <Switch
+                    <androidx.appcompat.widget.SwitchCompat
                         android:id="@+id/switchNotify"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
