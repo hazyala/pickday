@@ -15,6 +15,7 @@ import com.hazyala.pickday.kopo.ac.kr.data.DummyDataSource;
 import com.hazyala.pickday.kopo.ac.kr.ui.PickDayDatePicker;
 
 import java.util.Calendar;
+import java.util.Locale;
 
 public class CreateMeetupActivity extends AppCompatActivity {
 
@@ -122,7 +123,8 @@ public class CreateMeetupActivity extends AppCompatActivity {
                             hour = 12;
                         }
 
-                        tvDeadlineTime.setText(String.format("%s %d:%02d", amPm, hour, minute));
+                        tvDeadlineTime.setText(String.format(Locale.KOREAN,
+                                "%s %d:%02d", amPm, hour, minute));
                     },
                     23,
                     59,
