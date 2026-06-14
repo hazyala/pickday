@@ -35,24 +35,31 @@
                     android:src="@drawable/ic_arrow_back"
                     android:tint="#252538" />
 
-                <TextView
+                <LinearLayout
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="6dp"
                     android:layout_weight="1"
-                    android:includeFontPadding="false"
-                    android:text="방 채팅"
-                    android:textColor="#202033"
-                    android:textSize="28sp"
-                    android:textStyle="bold" />
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
 
-                <ImageView
-                    android:layout_width="34dp"
-                    android:layout_height="34dp"
-                    android:padding="5dp"
-                    android:scaleType="centerInside"
-                    android:src="@drawable/icon_message"
-                    android:tint="#5B4CDB" />
+                    <ImageView
+                        android:layout_width="28dp"
+                        android:layout_height="28dp"
+                        android:layout_marginEnd="7dp"
+                        android:scaleType="centerInside"
+                        android:src="@drawable/icon_message"
+                        android:tint="#202033" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:includeFontPadding="false"
+                        android:text="방 채팅"
+                        android:textColor="#202033"
+                        android:textSize="28sp"
+                        android:textStyle="bold" />
+                </LinearLayout>
             </LinearLayout>
 
             <TextView

@@ -138,6 +138,55 @@ public class DummyDataSource {
         return notifications;
     }
 
+    public static List<ChatMessage> getChatMessages(String roomTitle) {
+        List<ChatMessage> messages = new ArrayList<>();
+
+        if ("팀플 회의 일정".equals(roomTitle)) {
+            messages.add(new ChatMessage("수용", "회의 끝나고 뭐 먹을까요?", "오후 6:12", false, false));
+            messages.add(new ChatMessage("김해민", "짜장면 괜찮아요. 학교 앞에 새로 생긴 중국집도 있어요.", "오후 6:13", true, false));
+            messages.add(new ChatMessage("지윤", "거기 탕수육도 괜찮대요.", "오후 6:15", false, false));
+            messages.add(new ChatMessage("김해민", "그럼 중국집이랑 분식집 두 군데 후보로 적어둘게요.", "오후 6:16", true, false));
+            return messages;
+        }
+
+        if ("지윤이 생일 파티".equals(roomTitle)) {
+            messages.add(new ChatMessage("민재", "케이크는 초코가 좋을까요?", "오후 3:25", false, false));
+            messages.add(new ChatMessage("김해민", "초코 좋고, 음식은 파스타나 피자 쪽이 무난할 것 같아요.", "오후 3:27", true, false));
+            messages.add(new ChatMessage("서연", "맛집 알아요? 너무 시끄럽지 않은 곳이면 좋겠어요.", "오후 3:30", false, false));
+            messages.add(new ChatMessage("김해민", "조용한 파스타집 하나 찾아보고 후보에 넣어둘게요.", "오후 3:32", true, false));
+            return messages;
+        }
+
+        messages.add(new ChatMessage("현우", "MT 가면 저녁은 뭐 먹을까요?", "오후 9:12", false, false));
+        messages.add(new ChatMessage("김해민", "고기 구워 먹는 것도 좋고, 비 오는 날이면 전골도 괜찮을 것 같아요.", "오후 9:13", true, false));
+        messages.add(new ChatMessage("지윤", "근처 맛집 알아요?", "오후 9:15", false, false));
+        messages.add(new ChatMessage("김해민", "숙소 근처 식당 몇 군데 찾아보고 후보로 정리해볼게요.", "오후 9:17", true, false));
+
+        return messages;
+    }
+
+    public static ChatRoomStatus getChatRoomStatus(String roomTitle) {
+        for (MyMeetupRoom room : getMyMeetupRooms()) {
+            if (room.title.equals(roomTitle)) {
+                return new ChatRoomStatus(
+                        room.title,
+                        room.participantCount,
+                        room.dDay,
+                        room.responseRate
+                );
+            }
+        }
+
+        MainMeetup meetup = getMainMeetup();
+
+        return new ChatRoomStatus(
+                meetup.title,
+                meetup.participantCount,
+                meetup.dDay,
+                meetup.responseRate
+        );
+    }
+
     public static class User {
         public String name;
         public String role;
@@ -247,6 +296,47 @@ public class DummyDataSource {
             this.message = message;
             this.time = time;
             this.accentColor = accentColor;
+        }
+    }
+
+    public static class ChatMessage {
+        public String senderName;
+        public String message;
+        public String time;
+        public boolean mine;
+        public boolean notice;
+
+        public ChatMessage(
+                String senderName,
+                String message,
+                String time,
+                boolean mine,
+                boolean notice
+        ) {
+            this.senderName = senderName;
+            this.message = message;
+            this.time = time;
+            this.mine = mine;
+            this.notice = notice;
+        }
+    }
+
+    public static class ChatRoomStatus {
+        public String title;
+        public int participantCount;
+        public String dDay;
+        public int responseRate;
+
+        public ChatRoomStatus(
+                String title,
+                int participantCount,
+                String dDay,
+                int responseRate
+        ) {
+            this.title = title;
+            this.participantCount = participantCount;
+            this.dDay = dDay;
+            this.responseRate = responseRate;
         }
     }
 }

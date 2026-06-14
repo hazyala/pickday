@@ -87,7 +87,7 @@ public class ChatActivity extends AppCompatActivity {
                     view.findViewById(R.id.tvChatRoomRate);
 
             tvChatRoomTitle.setText(room.title);
-            tvChatRoomMessage.setText("약속 방에서 대화를 시작해보세요");
+            tvChatRoomMessage.setText(getLastPreviewMessage(room.title));
             tvChatRoomInfo.setText(
                     "참여자 " +
                             room.participantCount +
@@ -127,6 +127,21 @@ public class ChatActivity extends AppCompatActivity {
 
             layoutChatRoomContainer.addView(view);
         }
+    }
+
+    private String getLastPreviewMessage(String roomTitle) {
+        List<DummyDataSource.ChatMessage> messages =
+                DummyDataSource.getChatMessages(roomTitle);
+
+        for (int index = messages.size() - 1; index >= 0; index--) {
+            DummyDataSource.ChatMessage message = messages.get(index);
+
+            if (!message.notice) {
+                return message.message;
+            }
+        }
+
+        return "아직 채팅이 없습니다";
     }
 
     private void showClosedRooms() {

@@ -43,15 +43,108 @@
                 android:textStyle="bold" />
         </LinearLayout>
 
-        <TextView
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="86dp"
+            android:layout_marginTop="18dp"
+            android:background="@drawable/bg_chat_notice"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:paddingStart="16dp"
+            android:paddingEnd="16dp">
+
+            <ImageView
+                android:layout_width="44dp"
+                android:layout_height="44dp"
+                android:background="@drawable/bg_chat_notice_icon"
+                android:padding="9dp"
+                android:scaleType="centerInside"
+                android:src="@drawable/icon_annotation"
+                android:tint="#5B4CDB" />
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="14dp"
+                android:layout_weight="1"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/tvChatNoticeTitle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:includeFontPadding="false"
+                    android:text="현재 방 현황: 참여자 4명 · 응답률 100%"
+                    android:textColor="#252538"
+                    android:textSize="15sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/tvChatNoticeMeta"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:includeFontPadding="false"
+                    android:text="마감까지 D-1"
+                    android:textColor="#77748E"
+                    android:textSize="13sp" />
+            </LinearLayout>
+        </LinearLayout>
+
+        <ScrollView
+            android:id="@+id/scrollChatMessages"
             android:layout_width="match_parent"
             android:layout_height="0dp"
+            android:layout_marginTop="18dp"
             android:layout_weight="1"
-            android:gravity="center"
-            android:includeFontPadding="false"
-            android:text="채팅 화면은 다음 단계에서 구성합니다"
-            android:textColor="#77748E"
-            android:textSize="15sp" />
+            android:clipToPadding="false"
+            android:paddingBottom="16dp">
+
+            <LinearLayout
+                android:id="@+id/layoutChatMessageContainer"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical" />
+        </ScrollView>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="54dp"
+            android:layout_marginTop="10dp"
+            android:background="@drawable/pickday_input_field"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:paddingStart="18dp"
+            android:paddingEnd="8dp">
+
+            <EditText
+                android:id="@+id/etMessageInput"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:background="@android:color/transparent"
+                android:hint="메시지를 입력하세요"
+                android:includeFontPadding="false"
+                android:inputType="textMultiLine|textCapSentences"
+                android:maxLines="3"
+                android:minHeight="0dp"
+                android:padding="0dp"
+                android:textColor="#252538"
+                android:textColorHint="#B7B8CC"
+                android:textSize="14sp" />
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/btnSendMessage"
+                android:layout_width="62dp"
+                android:layout_height="38dp"
+                android:background="@drawable/pickday_button_primary"
+                android:gravity="center"
+                android:includeFontPadding="false"
+                android:text="전송"
+                android:textColor="#FFFFFF"
+                android:textSize="13sp"
+                android:textStyle="bold" />
+        </LinearLayout>
     </LinearLayout>
 
 </FrameLayout>
