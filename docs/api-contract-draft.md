@@ -4,6 +4,8 @@
 
 앱은 아래 API가 Local Repository를 대체할 수 있도록 설계합니다.
 
+현재 dev 목표는 UI를 유지하고 기능 데이터만 실제 구조로 교체하는 것입니다. API도 기존 화면의 방 생성, 응답 저장, 달력/통계 계산, 알림/내 정보 표시를 뒷받침하는 범위로 먼저 맞춥니다.
+
 ## 인증
 
 인증은 이번 dev 목표의 필수 구현 범위가 아닙니다.
@@ -90,17 +92,7 @@ Request:
   "availableDateIds": ["date_1", "date_2"],
   "preferredDateIds": ["date_2"],
   "selectedTimeSlotCodes": ["AFTERNOON", "EVENING"],
-  "excludedDateIds": ["date_8"],
-  "placeVotes": [
-    {
-      "name": "홍대입구",
-      "type": "POSSIBLE"
-    },
-    {
-      "name": "연남동",
-      "type": "PREFERRED"
-    }
-  ]
+  "excludedDateIds": ["date_8"]
 }
 ```
 
@@ -112,7 +104,6 @@ Request:
 
 - 날짜 후보
 - 시간 후보
-- 장소 후보
 - 전원 교집합 후보
 - 마지막 계산 시각
 
@@ -125,8 +116,7 @@ Request:
 ```json
 {
   "date": "2026-05-24",
-  "timeSlotCode": "AFTERNOON",
-  "placeName": "홍대입구"
+  "timeSlotCode": "AFTERNOON"
 }
 ```
 
@@ -135,6 +125,31 @@ Request:
 `POST /api/rooms/{roomId}/reminders`
 
 실제 push 알림 전까지는 stub으로 둘 수 있습니다.
+
+### 알림 목록
+
+`GET /api/notifications`
+
+응답에 포함할 내용:
+
+- 알림 ID
+- 연결된 방 ID
+- 알림 종류
+- 제목과 보조 문구
+- 읽음 여부
+- 생성 시각
+
+### 내 정보 조회
+
+`GET /api/me`
+
+응답에 포함할 내용:
+
+- 사용자 ID
+- 표시 이름
+- 프로필 이미지 URL 또는 placeholder 정보
+- 게스트 여부
+- 기본 알림 설정
 
 ## 오류 형식
 
