@@ -51,6 +51,7 @@ PickDay는 단체 약속의 날짜, 시간, 장소를 쉽고 예쁘게 정하기
 - [데이터 모델](docs/data-model.md)
 - [API 계약 초안](docs/api-contract-draft.md)
 - [수동 테스트 케이스](docs/manual-test-cases.md)
+- [과제 보고서 준비 문서](docs/assignment-report-prep.md)
 
 ## 현재 개발 방향
 
