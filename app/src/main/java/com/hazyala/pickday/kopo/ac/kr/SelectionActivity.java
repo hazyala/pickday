@@ -292,9 +292,18 @@ public class SelectionActivity extends AppCompatActivity {
                 exclude0601, exclude0605, exclude0606
         };
 
-        for (TextView excludeView : excludeViews) {
+        Calendar excludeDate = PickDayDatePicker.today();
+
+        for (int index = 0; index < excludeViews.length; index++) {
+            TextView excludeView = excludeViews[index];
+            excludeDate.add(Calendar.DAY_OF_MONTH, index == 0 ? 0 : 1);
+            excludeView.setText(formatExcludeDateLabel(excludeDate));
             excludeView.setOnClickListener(v -> toggleExcludeChip((TextView) v));
         }
+    }
+
+    private String formatExcludeDateLabel(Calendar date) {
+        return PickDayDatePicker.formatChipDate(date) + "\n" + PickDayDatePicker.formatWeek(date);
     }
 
     private void toggleExcludeChip(TextView excludeView) {
