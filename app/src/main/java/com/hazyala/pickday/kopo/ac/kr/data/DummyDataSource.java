@@ -5,11 +5,19 @@ import java.util.List;
 
 public class DummyDataSource {
 
+    public static HomeState getHomeState() {
+        return new HomeState(
+                getCurrentUser(),
+                getMainMeetup(),
+                getAvailableDates(),
+                getMyMeetupRooms()
+        );
+    }
+
     public static User getCurrentUser() {
         return new User(
                 "김해민",
-                "방장",
-                "home_profile"
+                "방장"
         );
     }
 
@@ -47,7 +55,7 @@ public class DummyDataSource {
                 4,
                 "D-1",
                 100,
-                "group"
+                "응답 완료"
         ));
 
         rooms.add(new MyMeetupRoom(
@@ -55,7 +63,7 @@ public class DummyDataSource {
                 6,
                 "D-3",
                 83,
-                "cake"
+                "응답 대기"
         ));
 
         rooms.add(new MyMeetupRoom(
@@ -63,21 +71,38 @@ public class DummyDataSource {
                 7,
                 "D-2",
                 78,
-                "camp"
+                "진행 중"
         ));
 
         return rooms;
     }
 
+    public static class HomeState {
+        public User currentUser;
+        public MainMeetup mainMeetup;
+        public List<AvailableDate> availableDates;
+        public List<MyMeetupRoom> meetupRooms;
+
+        public HomeState(
+                User currentUser,
+                MainMeetup mainMeetup,
+                List<AvailableDate> availableDates,
+                List<MyMeetupRoom> meetupRooms
+        ) {
+            this.currentUser = currentUser;
+            this.mainMeetup = mainMeetup;
+            this.availableDates = availableDates;
+            this.meetupRooms = meetupRooms;
+        }
+    }
+
     public static class User {
         public String name;
         public String role;
-        public String profileImageName;
 
-        public User(String name, String role, String profileImageName) {
+        public User(String name, String role) {
             this.name = name;
             this.role = role;
-            this.profileImageName = profileImageName;
         }
     }
 
@@ -139,20 +164,20 @@ public class DummyDataSource {
         public int participantCount;
         public String dDay;
         public int responseRate;
-        public String iconType;
+        public String statusLabel;
 
         public MyMeetupRoom(
                 String title,
                 int participantCount,
                 String dDay,
                 int responseRate,
-                String iconType
+                String statusLabel
         ) {
             this.title = title;
             this.participantCount = participantCount;
             this.dDay = dDay;
             this.responseRate = responseRate;
-            this.iconType = iconType;
+            this.statusLabel = statusLabel;
         }
     }
 }
