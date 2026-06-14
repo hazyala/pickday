@@ -2,110 +2,91 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/roomRoot"
     android:layout_width="match_parent"
-    android:layout_height="74dp"
-    android:layout_marginBottom="10dp"
-    android:background="@drawable/bg_home_room_card"
+    android:layout_height="55dp"
+    android:layout_marginBottom="6dp"
+    android:background="@drawable/pickday_card_white"
     android:gravity="center_vertical"
     android:orientation="horizontal"
-    android:paddingStart="14dp"
-    android:paddingEnd="12dp">
+    android:paddingStart="9dp"
+    android:paddingEnd="8dp">
 
     <TextView
-        android:id="@+id/tvRoomInitial"
-        android:layout_width="44dp"
-        android:layout_height="44dp"
-        android:background="@drawable/bg_home_initial"
+        android:id="@+id/tvRoomIcon"
+        android:layout_width="36dp"
+        android:layout_height="36dp"
+        android:background="@drawable/pickday_unselected"
         android:gravity="center"
-        android:includeFontPadding="false"
-        android:text="팀"
-        android:textColor="@color/pickday_purple"
-        android:textSize="16sp"
-        android:textStyle="bold" />
+        android:text="👥"
+        android:textSize="17sp"
+        android:includeFontPadding="false" />
 
     <LinearLayout
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="12dp"
+        android:layout_marginStart="9dp"
         android:layout_weight="1"
         android:orientation="vertical">
 
         <TextView
-            android:id="@+id/tvRoomStatus"
-            android:layout_width="wrap_content"
-            android:layout_height="20dp"
-            android:background="@drawable/bg_home_room_status"
-            android:gravity="center"
-            android:includeFontPadding="false"
-            android:paddingStart="8dp"
-            android:paddingEnd="8dp"
-            android:text="진행 중"
-            android:textColor="@color/pickday_purple"
-            android:textSize="10sp"
-            android:textStyle="bold" />
-
-        <TextView
             android:id="@+id/tvRoomTitle"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="6dp"
-            android:ellipsize="end"
-            android:includeFontPadding="false"
-            android:maxLines="1"
             android:text="팀플 회의 일정"
-            android:textColor="@color/pickday_text_primary"
-            android:textSize="15sp"
-            android:textStyle="bold" />
+            android:textColor="#252538"
+            android:textSize="12sp"
+            android:textStyle="bold"
+            android:includeFontPadding="false"
+            android:singleLine="true"
+            android:ellipsize="end" />
 
         <TextView
             android:id="@+id/tvRoomInfo"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="5dp"
-            android:ellipsize="end"
-            android:includeFontPadding="false"
-            android:maxLines="1"
+            android:layout_marginTop="4dp"
             android:text="참여자 4명 · 마감까지 D-1"
-            android:textColor="@color/pickday_text_secondary"
-            android:textSize="12sp" />
+            android:textColor="#77748E"
+            android:textSize="9sp"
+            android:includeFontPadding="false"
+            android:singleLine="true"
+            android:ellipsize="end" />
 
     </LinearLayout>
 
     <LinearLayout
-        android:layout_width="58dp"
+        android:layout_width="44dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="10dp"
         android:gravity="end"
         android:orientation="vertical">
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:includeFontPadding="false"
             android:text="응답률"
-            android:textColor="@color/pickday_text_secondary"
-            android:textSize="11sp" />
+            android:textColor="#8A88A0"
+            android:textSize="8sp"
+            android:includeFontPadding="false" />
 
         <TextView
             android:id="@+id/tvRoomRate"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="4dp"
-            android:includeFontPadding="false"
+            android:layout_marginTop="2dp"
             android:text="100%"
-            android:textColor="@color/pickday_purple"
-            android:textSize="17sp"
-            android:textStyle="bold" />
+            android:textColor="#5B4CDB"
+            android:textSize="14sp"
+            android:textStyle="bold"
+            android:includeFontPadding="false" />
 
     </LinearLayout>
 
     <TextView
-        android:layout_width="16dp"
+        android:layout_width="14dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="6dp"
         android:gravity="center"
-        android:includeFontPadding="false"
         android:text="›"
-        android:textColor="@color/pickday_text_hint"
-        android:textSize="24sp" />
+        android:textColor="#9A98B2"
+        android:textSize="22sp"
+        android:includeFontPadding="false" />
 
 </LinearLayout>

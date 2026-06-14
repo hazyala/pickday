@@ -1,6 +1,5 @@
 package com.hazyala.pickday.kopo.ac.kr;
 
-import android.content.res.ColorStateList;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -22,24 +21,17 @@ public class HomeActivity extends AppCompatActivity {
 
     private TextView tvGreeting;
     private TextView tvMainTitle;
-    private TextView tvMainStatus;
     private TextView tvMainParticipants;
     private TextView tvMainDday;
-    private TextView tvMainResponseRate;
     private TextView tvBestDate;
     private TextView tvBestCount;
 
-    private View cardMainMeetup;
-    private View cardEmptyMeetup;
-    private View sectionAvailableDates;
     private LinearLayout layoutDateContainer;
     private LinearLayout layoutRoomContainer;
-    private TextView tvRoomEmpty;
 
     private AppCompatButton btnDetail;
     private AppCompatButton btnFab;
     private AppCompatButton btnCreateSmall;
-    private String mainMeetupId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,7 +40,11 @@ public class HomeActivity extends AppCompatActivity {
 
         initViews();
 
-        renderHome(DummyDataSource.getHomeState());
+        setMainMeetupData();
+
+        loadAvailableDates();
+
+        loadMeetupRooms();
 
         setListeners();
     }
@@ -57,87 +53,55 @@ public class HomeActivity extends AppCompatActivity {
 
         tvGreeting = findViewById(R.id.tvGreeting);
 
-        tvMainStatus = findViewById(R.id.tvMainStatus);
         tvMainTitle = findViewById(R.id.tvMainTitle);
         tvMainParticipants = findViewById(R.id.tvMainParticipants);
         tvMainDday = findViewById(R.id.tvMainDday);
-        tvMainResponseRate = findViewById(R.id.tvMainResponseRate);
         tvBestDate = findViewById(R.id.tvBestDate);
         tvBestCount = findViewById(R.id.tvBestCount);
 
-        cardMainMeetup = findViewById(R.id.cardMainMeetup);
-        cardEmptyMeetup = findViewById(R.id.cardEmptyMeetup);
-        sectionAvailableDates = findViewById(R.id.sectionAvailableDates);
         layoutDateContainer = findViewById(R.id.layoutDateContainer);
         layoutRoomContainer = findViewById(R.id.layoutRoomContainer);
-        tvRoomEmpty = findViewById(R.id.tvRoomEmpty);
 
         btnDetail = findViewById(R.id.btnDetail);
         btnFab = findViewById(R.id.btnFab);
         btnCreateSmall = findViewById(R.id.btnCreateSmall);
     }
 
-    private void renderHome(DummyDataSource.HomeState homeState) {
-        renderMainMeetup(homeState.currentUser, homeState.mainMeetup);
-        loadAvailableDates(homeState.availableDates);
-        loadMeetupRooms(homeState.meetupRooms);
-    }
+    private void setMainMeetupData() {
 
-    private void renderMainMeetup(
-            DummyDataSource.User user,
-            DummyDataSource.MainMeetup meetup
-    ) {
+        DummyDataSource.User user =
+                DummyDataSource.getCurrentUser();
+
+        DummyDataSource.MainMeetup meetup =
+                DummyDataSource.getMainMeetup();
+
         tvGreeting.setText(
-                "안녕하세요, " + user.name + "님"
+                "안녕하세요, " + user.name + "님! 👋"
         );
-
-        if (meetup == null) {
-            mainMeetupId = null;
-            cardMainMeetup.setVisibility(View.GONE);
-            cardEmptyMeetup.setVisibility(View.VISIBLE);
-            return;
-        }
-
-        cardMainMeetup.setVisibility(View.VISIBLE);
-        cardEmptyMeetup.setVisibility(View.GONE);
-
-        tvMainStatus.setText(meetup.statusLabel);
-        mainMeetupId = meetup.id;
 
         tvMainTitle.setText(meetup.title);
 
         tvMainParticipants.setText(
-                "참여자 " + meetup.participantCount + "명"
+                "👥 참여자 " + meetup.participantCount + "명"
         );
 
         tvMainDday.setText(
-                "마감까지 " + meetup.dDay
+                "🕘 마감까지 " + meetup.dDay
         );
 
-        tvMainResponseRate.setText(
-                meetup.responseRate + "%\n응답 완료"
-        );
+        tvBestDate.setText(meetup.bestDateTime);
 
-        if (meetup.bestDateTime == null || meetup.bestDateTime.length() == 0) {
-            tvBestDate.setText("아직 충분한 응답이 없어요");
-            tvBestCount.setText("응답이 모이면 추천 날짜가 표시됩니다");
-        } else {
-            tvBestDate.setText(meetup.bestDateTime);
-            tvBestCount.setText(meetup.availableCount + "명 가능");
-        }
+        tvBestCount.setText(
+                "👥 " + meetup.availableCount + "명 가능"
+        );
     }
 
-    private void loadAvailableDates(List<DummyDataSource.AvailableDate> dates) {
+    private void loadAvailableDates() {
+
+        List<DummyDataSource.AvailableDate> dates =
+                DummyDataSource.getAvailableDates();
+
         LayoutInflater inflater = LayoutInflater.from(this);
-
-        layoutDateContainer.removeAllViews();
-
-        if (dates == null || dates.size() == 0) {
-            sectionAvailableDates.setVisibility(View.GONE);
-            return;
-        }
-
-        sectionAvailableDates.setVisibility(View.VISIBLE);
 
         for (DummyDataSource.AvailableDate date : dates) {
 
@@ -172,7 +136,7 @@ public class HomeActivity extends AppCompatActivity {
             tvDayOfWeek.setText("(" + date.dayOfWeek + ")");
 
             tvAvailableCount.setText(
-                    date.availableCount + "명"
+                    "👥 " + date.availableCount + "명"
             );
 
             if (date.selected) {
@@ -188,11 +152,6 @@ public class HomeActivity extends AppCompatActivity {
                 tvDateLabel.setTextColor(Color.WHITE);
 
                 tvAvailableCount.setTextColor(Color.WHITE);
-            } else {
-
-                tvAvailableCount.setTextColor(
-                        getAvailabilityColor(date.availableCount)
-                );
             }
 
             if (date.best) {
@@ -204,17 +163,12 @@ public class HomeActivity extends AppCompatActivity {
         }
     }
 
-    private void loadMeetupRooms(List<DummyDataSource.MyMeetupRoom> rooms) {
+    private void loadMeetupRooms() {
+
+        List<DummyDataSource.MyMeetupRoom> rooms =
+                DummyDataSource.getMyMeetupRooms();
+
         LayoutInflater inflater = LayoutInflater.from(this);
-
-        layoutRoomContainer.removeAllViews();
-
-        if (rooms == null || rooms.size() == 0) {
-            tvRoomEmpty.setVisibility(View.VISIBLE);
-            return;
-        }
-
-        tvRoomEmpty.setVisibility(View.GONE);
 
         for (DummyDataSource.MyMeetupRoom room : rooms) {
 
@@ -224,6 +178,9 @@ public class HomeActivity extends AppCompatActivity {
                     false
             );
 
+            TextView tvRoomIcon =
+                    view.findViewById(R.id.tvRoomIcon);
+
             TextView tvRoomTitle =
                     view.findViewById(R.id.tvRoomTitle);
 
@@ -232,12 +189,6 @@ public class HomeActivity extends AppCompatActivity {
 
             TextView tvRoomRate =
                     view.findViewById(R.id.tvRoomRate);
-
-            TextView tvRoomStatus =
-                    view.findViewById(R.id.tvRoomStatus);
-
-            TextView tvRoomInitial =
-                    view.findViewById(R.id.tvRoomInitial);
 
             tvRoomTitle.setText(room.title);
 
@@ -252,61 +203,41 @@ public class HomeActivity extends AppCompatActivity {
                     room.responseRate + "%"
             );
 
-            tvRoomStatus.setText(room.statusLabel);
+            switch (room.iconType) {
 
-            tvRoomInitial.setText(
-                    getRoomInitial(room.title)
-            );
+                case "group":
+                    tvRoomIcon.setText("👥");
+                    break;
 
-            tvRoomInitial.setBackgroundTintList(
-                    ColorStateList.valueOf(getRoomTintColor(room.responseRate))
-            );
+                case "cake":
+                    tvRoomIcon.setText("🎂");
+                    break;
 
-            view.setOnClickListener(v -> openRoomDetail(room.id));
+                case "camp":
+                    tvRoomIcon.setText("⛺");
+                    break;
+
+                default:
+                    tvRoomIcon.setText("📅");
+                    break;
+            }
 
             layoutRoomContainer.addView(view);
         }
     }
 
-    private int getAvailabilityColor(int availableCount) {
-        if (availableCount >= 7) {
-            return Color.parseColor("#5B2DFF");
-        }
-
-        if (availableCount >= 4) {
-            return Color.parseColor("#5F9DFF");
-        }
-
-        if (availableCount >= 1) {
-            return Color.parseColor("#9D97C8");
-        }
-
-        return Color.parseColor("#C9C7D8");
-    }
-
-    private int getRoomTintColor(int responseRate) {
-        if (responseRate >= 90) {
-            return Color.parseColor("#EEE8FF");
-        }
-
-        if (responseRate >= 80) {
-            return Color.parseColor("#F4ECFF");
-        }
-
-        return Color.parseColor("#F8F6FF");
-    }
-
-    private String getRoomInitial(String title) {
-        if (title == null || title.length() == 0) {
-            return "픽";
-        }
-
-        return title.substring(0, 1);
-    }
-
     private void setListeners() {
 
-        btnDetail.setOnClickListener(v -> openRoomDetail(mainMeetupId));
+        btnDetail.setOnClickListener(v -> {
+
+            Intent intent =
+                    new Intent(
+                            HomeActivity.this,
+                            RoomDetailActivity.class
+                    );
+
+            startActivity(intent);
+        });
 
         btnFab.setOnClickListener(v -> {
 
@@ -329,19 +260,5 @@ public class HomeActivity extends AppCompatActivity {
 
             startActivity(intent);
         });
-    }
-
-    private void openRoomDetail(String roomId) {
-        Intent intent =
-                new Intent(
-                        HomeActivity.this,
-                        RoomDetailActivity.class
-                );
-
-        if (roomId != null && roomId.length() > 0) {
-            intent.putExtra("roomId", roomId);
-        }
-
-        startActivity(intent);
     }
 }
