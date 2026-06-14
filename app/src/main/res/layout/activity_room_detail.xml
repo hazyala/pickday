@@ -63,7 +63,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="80dp"
-                    android:text="동아리 MT  ⛺"
+                    android:text="동아리 MT"
                     android:textColor="#202033"
                     android:textSize="25sp"
                     android:textStyle="bold"
@@ -183,7 +183,7 @@
                         android:layout_height="match_parent"
                         android:layout_weight="1"
                         android:gravity="center"
-                        android:text="최종 확정 🚩\n미정"
+                        android:text="최종 확정\n미정"
                         android:textColor="#202033"
                         android:textSize="12sp"
                         android:textStyle="bold" />
@@ -412,12 +412,12 @@
                         android:layout_height="match_parent"
                         android:orientation="horizontal">
 
-                        <TextView android:layout_width="60dp" android:layout_height="match_parent" android:gravity="center" android:text="👧\n나 \n미응답" android:textSize="12sp" android:textStyle="bold" android:textColor="#77748E"/>
-                        <TextView android:layout_width="60dp" android:layout_height="match_parent" android:gravity="center" android:text="🐱\n지우\n응답 완료" android:textSize="12sp" android:textStyle="bold" android:textColor="#77748E"/>
-                        <TextView android:layout_width="60dp" android:layout_height="match_parent" android:gravity="center" android:text="👦\n현우\n응답 완료" android:textSize="12sp" android:textStyle="bold" android:textColor="#77748E"/>
-                        <TextView android:layout_width="60dp" android:layout_height="match_parent" android:gravity="center" android:text="🐰\n수빈\n응답 완료" android:textSize="12sp" android:textStyle="bold" android:textColor="#77748E"/>
-                        <TextView android:layout_width="60dp" android:layout_height="match_parent" android:gravity="center" android:text="👤\n민재\n응답 대기" android:textSize="12sp" android:textStyle="bold" android:textColor="#77748E"/>
-                        <TextView android:layout_width="60dp" android:layout_height="match_parent" android:gravity="center" android:text="👤\n서연\n응답 대기" android:textSize="12sp" android:textStyle="bold" android:textColor="#77748E"/>
+                        <TextView android:layout_width="60dp" android:layout_height="match_parent" android:gravity="center" android:text="나\n나 \n미응답" android:textSize="12sp" android:textStyle="bold" android:textColor="#77748E"/>
+                        <TextView android:layout_width="60dp" android:layout_height="match_parent" android:gravity="center" android:text="지\n지우\n응답 완료" android:textSize="12sp" android:textStyle="bold" android:textColor="#77748E"/>
+                        <TextView android:layout_width="60dp" android:layout_height="match_parent" android:gravity="center" android:text="현\n현우\n응답 완료" android:textSize="12sp" android:textStyle="bold" android:textColor="#77748E"/>
+                        <TextView android:layout_width="60dp" android:layout_height="match_parent" android:gravity="center" android:text="수\n수빈\n응답 완료" android:textSize="12sp" android:textStyle="bold" android:textColor="#77748E"/>
+                        <TextView android:layout_width="60dp" android:layout_height="match_parent" android:gravity="center" android:text="민\n민재\n응답 대기" android:textSize="12sp" android:textStyle="bold" android:textColor="#77748E"/>
+                        <TextView android:layout_width="60dp" android:layout_height="match_parent" android:gravity="center" android:text="서\n서연\n응답 대기" android:textSize="12sp" android:textStyle="bold" android:textColor="#77748E"/>
 
                     </LinearLayout>
                 </HorizontalScrollView>

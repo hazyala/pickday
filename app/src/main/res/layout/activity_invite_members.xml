@@ -103,8 +103,10 @@
                     android:background="@drawable/pickday_card_soft"
                     android:gravity="center"
                     android:includeFontPadding="false"
-                    android:text="⛺"
-                    android:textSize="30sp" />
+                    android:text="동"
+                    android:textColor="#6A4DFF"
+                    android:textSize="18sp"
+                    android:textStyle="bold" />
 
                 <LinearLayout
                     android:layout_width="0dp"
@@ -210,14 +212,14 @@
                     android:paddingStart="14dp"
                     android:paddingEnd="14dp">
 
-                    <TextView
+                    <ImageView
                         android:layout_width="52dp"
                         android:layout_height="52dp"
                         android:background="@drawable/pickday_card_soft"
-                        android:gravity="center"
-                        android:includeFontPadding="false"
-                        android:text="🔗"
-                        android:textSize="24sp" />
+                        android:padding="13dp"
+                        android:src="@drawable/icon_share"
+                        android:tint="#6A4DFF"
+                        android:scaleType="centerInside" />
 
                     <LinearLayout
                         android:layout_width="0dp"
@@ -373,16 +375,14 @@
                     android:gravity="center_vertical"
                     android:orientation="horizontal">
 
-                    <TextView
+                    <ImageView
                         android:layout_width="68dp"
                         android:layout_height="68dp"
                         android:background="@drawable/pickday_card_soft"
-                        android:gravity="center"
-                        android:includeFontPadding="false"
-                        android:text="♧"
-                        android:textColor="#6A4DFF"
-                        android:textSize="30sp"
-                        android:textStyle="bold" />
+                        android:padding="18dp"
+                        android:src="@drawable/icon_group"
+                        android:tint="#6A4DFF"
+                        android:scaleType="centerInside" />
 
                     <LinearLayout
                         android:layout_width="0dp"
@@ -443,14 +443,14 @@
                     android:paddingStart="14dp"
                     android:paddingEnd="14dp">
 
-                    <TextView
+                    <ImageView
                         android:layout_width="42dp"
                         android:layout_height="42dp"
                         android:background="@drawable/pickday_card_soft"
-                        android:gravity="center"
-                        android:includeFontPadding="false"
-                        android:text="🔔"
-                        android:textSize="20sp" />
+                        android:padding="10dp"
+                        android:src="@drawable/icon_notification"
+                        android:tint="#6A4DFF"
+                        android:scaleType="centerInside" />
 
                     <LinearLayout
                         android:layout_width="0dp"
