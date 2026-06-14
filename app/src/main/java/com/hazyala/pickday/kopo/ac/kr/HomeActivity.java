@@ -22,6 +22,8 @@ import java.util.List;
 
 public class HomeActivity extends AppCompatActivity {
 
+    private static final int ROOM_PREVIEW_LIMIT = 1;
+
     private TextView tvGreeting;
     private TextView tvMainTitle;
     private TextView tvMainParticipants;
@@ -221,7 +223,10 @@ public class HomeActivity extends AppCompatActivity {
 
         LayoutInflater inflater = LayoutInflater.from(this);
 
-        for (DummyDataSource.MyMeetupRoom room : rooms) {
+        int visibleRoomCount = Math.min(ROOM_PREVIEW_LIMIT, rooms.size());
+
+        for (int index = 0; index < visibleRoomCount; index++) {
+            DummyDataSource.MyMeetupRoom room = rooms.get(index);
 
             View view = inflater.inflate(
                     R.layout.item_meetup_room,
