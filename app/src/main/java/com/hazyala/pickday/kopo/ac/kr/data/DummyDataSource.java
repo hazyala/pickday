@@ -5,6 +5,8 @@ import java.util.List;
 
 public class DummyDataSource {
 
+    private static final List<MyMeetupRoom> createdMeetupRooms = new ArrayList<>();
+
     public static User getCurrentUser() {
         return new User(
                 "김해민",
@@ -66,7 +68,44 @@ public class DummyDataSource {
                 "camp"
         ));
 
+        rooms.addAll(createdMeetupRooms);
+
         return rooms;
+    }
+
+    public static void addCreatedMeetupRoom(
+            String title,
+            int participantCount,
+            String dDay
+    ) {
+        if (title == null || title.trim().isEmpty()) {
+            return;
+        }
+
+        String normalizedTitle = title.trim();
+
+        for (int index = 0; index < createdMeetupRooms.size(); index++) {
+            MyMeetupRoom room = createdMeetupRooms.get(index);
+
+            if (room.title.equals(normalizedTitle)) {
+                createdMeetupRooms.set(index, new MyMeetupRoom(
+                        normalizedTitle,
+                        participantCount,
+                        dDay,
+                        0,
+                        "default"
+                ));
+                return;
+            }
+        }
+
+        createdMeetupRooms.add(new MyMeetupRoom(
+                normalizedTitle,
+                participantCount,
+                dDay,
+                0,
+                "default"
+        ));
     }
 
     public static List<Notification> getNotifications() {

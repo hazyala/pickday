@@ -11,6 +11,8 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.hazyala.pickday.kopo.ac.kr.data.DummyDataSource;
+
 public class CreateMeetupActivity extends AppCompatActivity {
 
     private TextView tvNameCount;
@@ -18,6 +20,7 @@ public class CreateMeetupActivity extends AppCompatActivity {
     private TextView tvDeadlineDate;
     private TextView tvDeadlineTime;
     private TextView tvPeopleCount;
+    private TextView edtMeetupName;
 
     private int peopleCount = 2;
     private TextView selectedDayView = null;
@@ -42,6 +45,7 @@ public class CreateMeetupActivity extends AppCompatActivity {
         tvDeadlineDate = findViewById(R.id.tvDeadlineDate);
         tvDeadlineTime = findViewById(R.id.tvDeadlineTime);
         tvPeopleCount = findViewById(R.id.tvPeopleCount);
+        edtMeetupName = findViewById(R.id.edtMeetupName);
 
         setupTextCounters();
         setupBackButton();
@@ -52,7 +56,6 @@ public class CreateMeetupActivity extends AppCompatActivity {
     }
 
     private void setupTextCounters() {
-        TextView edtMeetupName = findViewById(R.id.edtMeetupName);
         TextView edtMeetupDesc = findViewById(R.id.edtMeetupDesc);
 
         edtMeetupName.addTextChangedListener(new TextWatcher() {
@@ -92,6 +95,19 @@ public class CreateMeetupActivity extends AppCompatActivity {
 
     private void setupNextButton() {
         findViewById(R.id.btnNext).setOnClickListener(v -> {
+            String meetupTitle = edtMeetupName.getText().toString().trim();
+
+            if (meetupTitle.isEmpty()) {
+                Toast.makeText(this, "모임명을 입력해주세요", Toast.LENGTH_SHORT).show();
+                return;
+            }
+
+            DummyDataSource.addCreatedMeetupRoom(
+                    meetupTitle,
+                    peopleCount,
+                    "D-1"
+            );
+
             Intent intent = new Intent(CreateMeetupActivity.this, SelectionActivity.class);
             startActivity(intent);
         });
