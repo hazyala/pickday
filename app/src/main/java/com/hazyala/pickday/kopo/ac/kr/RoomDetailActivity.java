@@ -43,6 +43,7 @@ public class RoomDetailActivity extends AppCompatActivity {
     private TextView tvConfirmedSchedule;
     private TextView tvProgressRate;
     private TextView tvParticipantSectionTitle;
+    private TextView btnViewAllParticipants;
     private LinearLayout layoutParticipantContainer;
     private TextView[] candidateDateViews;
     private TextView[] timePreferenceViews;
@@ -70,6 +71,15 @@ public class RoomDetailActivity extends AppCompatActivity {
             intent.putExtra(EXTRA_ROOM_ID, roomId);
             startActivity(intent);
         });
+
+        btnViewAllParticipants.setOnClickListener(v -> {
+            Intent intent = new Intent(
+                    RoomDetailActivity.this,
+                    ParticipantListActivity.class
+            );
+            intent.putExtra(ParticipantListActivity.EXTRA_ROOM_ID, roomId);
+            startActivity(intent);
+        });
     }
 
     private void initViews() {
@@ -86,6 +96,7 @@ public class RoomDetailActivity extends AppCompatActivity {
         tvConfirmedSchedule = findViewById(R.id.tvConfirmedSchedule);
         tvProgressRate = findViewById(R.id.tvProgressRate);
         tvParticipantSectionTitle = findViewById(R.id.tvParticipantSectionTitle);
+        btnViewAllParticipants = findViewById(R.id.btnViewAllParticipants);
         layoutParticipantContainer = findViewById(R.id.layoutParticipantContainer);
         candidateDateViews = new TextView[]{
                 findViewById(R.id.tvCandidateDate1),
