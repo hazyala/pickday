@@ -32,7 +32,7 @@
             android:layout_weight="1"
             android:gravity="center"
             android:includeFontPadding="false"
-            android:text="2025년 5월"
+            android:text="달력"
             android:textColor="#232336"
             android:textSize="12sp"
             android:textStyle="bold" />

@@ -221,7 +221,7 @@
                         android:layout_marginStart="7dp"
                         android:layout_weight="1"
                         android:includeFontPadding="false"
-                        android:text="2025.05.27"
+                        android:text="마감일 선택"
                         android:textColor="#232336"
                         android:textSize="15sp"
                         android:textStyle="bold" />
