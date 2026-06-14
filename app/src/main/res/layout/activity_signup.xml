@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/splash_background"
+    android:clipToPadding="false"
+    android:fillViewport="true"
+    tools:context=".SignupActivity">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:paddingStart="28dp"
+        android:paddingTop="42dp"
+        android:paddingEnd="28dp"
+        android:paddingBottom="32dp">
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/btnBack"
+            android:layout_width="46dp"
+            android:layout_height="46dp"
+            android:background="@drawable/pickday_card_white"
+            app:backgroundTint="@null"
+            android:gravity="center"
+            android:includeFontPadding="false"
+            android:minWidth="0dp"
+            android:minHeight="0dp"
+            android:padding="0dp"
+            android:text="&lt;"
+            android:textAllCaps="false"
+            android:textColor="#202033"
+            android:textSize="24sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="26dp"
+            android:fontFamily="@font/notosanskr_bold"
+            android:includeFontPadding="false"
+            android:text="회원가입"
+            android:textColor="#202033"
+            android:textSize="30sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:includeFontPadding="false"
+            android:lineSpacingExtra="3dp"
+            android:text="PickDay에서 약속을 만들고 친구들의 가능한 시간을 한 번에 모아보세요."
+            android:textColor="#77748E"
+            android:textSize="14sp" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="30dp"
+            android:background="@drawable/pickday_auth_card"
+            android:orientation="vertical"
+            android:paddingStart="18dp"
+            android:paddingTop="22dp"
+            android:paddingEnd="18dp"
+            android:paddingBottom="22dp">
+
+            <TextView
+                style="@style/PickDayAuthLabel"
+                android:text="이름" />
+
+            <EditText
+                android:id="@+id/etName"
+                style="@style/PickDayAuthInput"
+                android:hint="이름을 입력해주세요"
+                android:inputType="textPersonName" />
+
+            <TextView
+                style="@style/PickDayAuthLabel"
+                android:layout_marginTop="18dp"
+                android:text="이메일" />
+
+            <EditText
+                android:id="@+id/etEmail"
+                style="@style/PickDayAuthInput"
+                android:hint="pickday@example.com"
+                android:inputType="textEmailAddress" />
+
+            <TextView
+                style="@style/PickDayAuthLabel"
+                android:layout_marginTop="18dp"
+                android:text="비밀번호" />
+
+            <EditText
+                android:id="@+id/etPassword"
+                style="@style/PickDayAuthInput"
+                android:hint="비밀번호를 입력해주세요"
+                android:inputType="textPassword" />
+
+            <TextView
+                style="@style/PickDayAuthLabel"
+                android:layout_marginTop="18dp"
+                android:text="비밀번호 확인" />
+
+            <EditText
+                android:id="@+id/etPasswordConfirm"
+                style="@style/PickDayAuthInput"
+                android:hint="비밀번호를 한 번 더 입력해주세요"
+                android:inputType="textPassword" />
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/btnSignup"
+                android:layout_width="match_parent"
+                android:layout_height="56dp"
+                android:layout_marginTop="24dp"
+                android:background="@drawable/pickday_button_primary"
+                app:backgroundTint="@null"
+                android:gravity="center"
+                android:includeFontPadding="false"
+                android:minWidth="0dp"
+                android:minHeight="0dp"
+                android:padding="0dp"
+                android:text="회원가입"
+                android:textAllCaps="false"
+                android:textColor="#FFFFFF"
+                android:textSize="17sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/tvLogin"
+                android:layout_width="match_parent"
+                android:layout_height="44dp"
+                android:layout_marginTop="8dp"
+                android:background="?android:attr/selectableItemBackground"
+                android:clickable="true"
+                android:focusable="true"
+                android:gravity="center"
+                android:includeFontPadding="false"
+                android:text="이미 계정이 있으신가요? 로그인"
+                android:textColor="#5B4CDB"
+                android:textSize="13sp"
+                android:textStyle="bold" />
+        </LinearLayout>
+    </LinearLayout>
+</ScrollView>
