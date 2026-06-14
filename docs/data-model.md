@@ -154,6 +154,8 @@
 - `DEADLINE_SOON`
 - `SCHEDULE_CONFIRMED`
 
+현재 Android 더미 데이터는 화면 렌더링용으로 `section`, `title`, `roomTitle`, `message`, `time`, `accentColor`만 사용합니다. `id`, `roomId`, `type`, `isRead`, `createdAt`은 Repository/API 연동 시 정식 모델로 확장합니다.
+
 ### UserSettings
 
 - `userId`

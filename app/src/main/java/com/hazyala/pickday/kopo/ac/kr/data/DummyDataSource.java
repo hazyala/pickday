@@ -69,6 +69,75 @@ public class DummyDataSource {
         return rooms;
     }
 
+    public static List<Notification> getNotifications() {
+        List<Notification> notifications = new ArrayList<>();
+
+        notifications.add(new Notification(
+                "오늘",
+                "현우님이 응답했어요",
+                "동아리 MT 일정 정하기",
+                "",
+                "방금 전",
+                "#5B4CDB"
+        ));
+
+        notifications.add(new Notification(
+                "오늘",
+                "지윤님이 응답했어요",
+                "동아리 MT 일정 정하기",
+                "",
+                "10분 전",
+                "#5B4CDB"
+        ));
+
+        notifications.add(new Notification(
+                "이번 주",
+                "마감이 1일 남았어요",
+                "동아리 MT 일정 정하기",
+                "응답하지 않은 2명이 있어요",
+                "오늘",
+                "#FFC21A"
+        ));
+
+        notifications.add(new Notification(
+                "이번 주",
+                "일정이 확정되었어요!",
+                "동아리 MT 일정 정하기",
+                "5월 24일 (토) 오후 12:00",
+                "어제",
+                "#61D48A"
+        ));
+
+        notifications.add(new Notification(
+                "이번 주",
+                "새로운 초대장이 도착했어요",
+                "세미콜론 종강 회식",
+                "참여 여부를 선택해주세요",
+                "2일 전",
+                "#FF7DA8"
+        ));
+
+        notifications.add(new Notification(
+                "이번 주",
+                "수용님이 댓글을 남겼어요",
+                "팀플 회의 일정",
+                "\"저녁 7시 이후는 어떤가요?\"",
+                "3일 전",
+                "#5B4CDB"
+        ));
+
+        notifications.add(new Notification(
+                "이전",
+                "민재님이 응답했어요",
+                "지윤이 생일 파티",
+                "",
+                "5일 전",
+                "#5B4CDB"
+        ));
+
+        return notifications;
+    }
+
     public static class User {
         public String name;
         public String role;
@@ -153,6 +222,31 @@ public class DummyDataSource {
             this.dDay = dDay;
             this.responseRate = responseRate;
             this.iconType = iconType;
+        }
+    }
+
+    public static class Notification {
+        public String section;
+        public String title;
+        public String roomTitle;
+        public String message;
+        public String time;
+        public String accentColor;
+
+        public Notification(
+                String section,
+                String title,
+                String roomTitle,
+                String message,
+                String time,
+                String accentColor
+        ) {
+            this.section = section;
+            this.title = title;
+            this.roomTitle = roomTitle;
+            this.message = message;
+            this.time = time;
+            this.accentColor = accentColor;
         }
     }
 }

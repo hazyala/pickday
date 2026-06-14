@@ -139,6 +139,8 @@ Request:
 - 읽음 여부
 - 생성 시각
 
+현재 Android 구현은 API 없이 `DummyDataSource.getNotifications()`의 로컬 더미 데이터만 사용합니다. 빈 상태, 모두 읽음, 읽음/안읽음 저장은 서버/Repository 연동 단계에서 붙입니다.
+
 ### 내 정보 조회
 
 `GET /api/me`

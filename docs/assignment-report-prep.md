@@ -93,6 +93,7 @@ Android:
 - InviteMembersActivity
 - RoomDetailActivity
 - ResponseSelectionActivity
+- NotificationActivity
 
 Activity 간 데이터 전송 근거:
 
@@ -138,6 +139,7 @@ Activity 간 데이터 전송 근거:
 | InviteMembersActivity | 필요 | 필요 | 초대 링크/코드를 공유하고 다음 흐름으로 이동하는 화면 |
 | RoomDetailActivity | 필요 | 필요 | 방별 응답 현황과 추천 일정을 확인하는 상세 화면 |
 | ResponseSelectionActivity | 필요 | 필요 | 참여자가 가능한 날짜와 시간대를 응답하는 화면 |
+| NotificationActivity | 필요 | 필요 | Home 상단 알림 버튼에서 진입해 최근 로컬 알림 목록을 확인하는 화면 |
 
 ## 6. Figma 전체 UI 캡처 준비
 
@@ -210,7 +212,9 @@ Activity 간 데이터 전송 근거:
 - [ ] 달력이 2025년 5월 고정이 아니라 현재 월/선택 월/방 후보 날짜 기준으로 동작함
 - [ ] Room Detail 통계가 실제 참여자 응답 데이터로 계산됨
 - [ ] Create Meetup, Invite, Room Detail, Response Selection의 화면 흐름이 끊기지 않음
-- [ ] 추가 구현 예정 화면은 알림 화면과 내 정보 화면만 남김
+- [ ] Home 상단 알림 버튼에서 알림 목록 화면으로 이동함
+- [ ] 하단 내비게이션의 알림 탭은 알림 화면과 연결하지 않음
+- [ ] 추가 구현 예정 화면은 내 정보 화면과 후속 방 채팅 화면만 남김
 - [ ] 주요 화면이 현재 UI 가이드라인과 일관됨
 - [ ] `./gradlew assembleDebug` 통과
 
@@ -229,4 +233,4 @@ Activity 간 데이터 전송 근거:
 - 현재는 Android Activity와 로컬 데이터 기반으로 핵심 화면 흐름을 구현했습니다.
 - 다음 단계에서는 현재 UI를 유지하면서 달력, 방 데이터, 응답 저장, 일정 계산을 실제 로컬 Repository 기반 기능으로 교체할 예정입니다.
 - 이후에는 Repository 계층과 Retrofit API를 연결하여 실제 사용자별 방 생성, 응답 저장, 일정 계산을 서버와 동기화할 예정입니다.
-- 추가 화면은 하단 내비게이션의 알림 화면과 내 정보 화면만 계획하고, Google/Kakao 로그인, 푸시 알림, 캘린더 Provider 연동은 실제 서비스 확장 단계에서 붙일 기능입니다.
+- 알림 목록은 Home 상단 알림 버튼에서 진입하는 로컬 데이터 기반 화면으로 먼저 제공하고, 하단 내비게이션의 알림 탭은 이후 방 채팅 진입점으로 바꿀 예정입니다. Google/Kakao 로그인, 푸시 알림, 캘린더 Provider 연동은 실제 서비스 확장 단계에서 붙일 기능입니다.
