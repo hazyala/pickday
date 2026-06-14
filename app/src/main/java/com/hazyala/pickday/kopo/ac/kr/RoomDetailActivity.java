@@ -9,7 +9,12 @@ import androidx.appcompat.widget.AppCompatButton;
 
 public class RoomDetailActivity extends AppCompatActivity {
 
+    public static final String EXTRA_ROOM_ID = "extra_room_id";
+    public static final String EXTRA_ROOM_TITLE = "extra_room_title";
+
     private AppCompatButton btnBack;
+    private String roomId;
+    private String roomTitle;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -17,6 +22,8 @@ public class RoomDetailActivity extends AppCompatActivity {
         setContentView(R.layout.activity_room_detail);
 
         btnBack = findViewById(R.id.btnBack);
+        roomId = getIntent().getStringExtra(EXTRA_ROOM_ID);
+        roomTitle = getIntent().getStringExtra(EXTRA_ROOM_TITLE);
 
         // 뒤로가기 → 홈
         btnBack.setOnClickListener(v -> goHome());

@@ -28,6 +28,7 @@ public class HomeActivity extends AppCompatActivity {
     private TextView tvMainDday;
     private TextView tvBestDate;
     private TextView tvBestCount;
+    private String mainRoomId = DummyDataSource.DEFAULT_ROOM_ID;
 
     private LinearLayout layoutDateContainer;
     private LinearLayout layoutRoomContainer;
@@ -85,6 +86,8 @@ public class HomeActivity extends AppCompatActivity {
 
         DummyDataSource.MainMeetup meetup =
                 DummyDataSource.getMainMeetup();
+
+        mainRoomId = meetup.roomId;
 
         tvGreeting.setText(
                 "안녕하세요, " + user.name + "님!"
@@ -266,6 +269,16 @@ public class HomeActivity extends AppCompatActivity {
                     break;
             }
 
+            view.setOnClickListener(v -> {
+                Intent intent = new Intent(
+                        HomeActivity.this,
+                        RoomDetailActivity.class
+                );
+                intent.putExtra(RoomDetailActivity.EXTRA_ROOM_ID, room.roomId);
+                intent.putExtra(RoomDetailActivity.EXTRA_ROOM_TITLE, room.title);
+                startActivity(intent);
+            });
+
             layoutRoomContainer.addView(view);
         }
     }
@@ -280,6 +293,7 @@ public class HomeActivity extends AppCompatActivity {
                             RoomDetailActivity.class
                     );
 
+            intent.putExtra(RoomDetailActivity.EXTRA_ROOM_ID, mainRoomId);
             startActivity(intent);
         });
 

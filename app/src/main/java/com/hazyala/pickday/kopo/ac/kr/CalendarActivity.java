@@ -303,7 +303,8 @@ public class CalendarActivity extends AppCompatActivity {
         item.addView(arrow);
         item.setOnClickListener(v -> {
             Intent intent = new Intent(CalendarActivity.this, RoomDetailActivity.class);
-            intent.putExtra(ChatDetailActivity.EXTRA_ROOM_TITLE, meetup.title);
+            intent.putExtra(RoomDetailActivity.EXTRA_ROOM_ID, meetup.roomId);
+            intent.putExtra(RoomDetailActivity.EXTRA_ROOM_TITLE, meetup.title);
             startActivity(intent);
         });
 

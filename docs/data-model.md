@@ -166,7 +166,7 @@
 
 현재 Android 더미 데이터는 `DummyDataSource` 내부에서 `roomId`를 로컬 기준키로 사용합니다. 기본 방 3개와 런타임 생성 방은 안정적인 `roomId`를 가지고, 후보 날짜, 마감/확정 캘린더 일정, 채팅 메시지, 채팅 공지 상태, 알림 더미 데이터가 같은 `roomId`를 참조합니다.
 
-기존 화면 호환을 위해 일부 조회 함수는 `title` 또는 `roomTitle` 인자를 유지합니다. 이 함수들은 내부에서 `roomId`로 변환해 조회하며, 이후 화면 이동과 상세/채팅 화면 연결이 `roomId` extra로 전환되면 호환 계층을 줄입니다.
+화면 이동은 Home 방 목록과 Calendar 일정 목록에서 `RoomDetailActivity.EXTRA_ROOM_ID`, Chat 방 목록에서 `ChatDetailActivity.EXTRA_ROOM_ID`를 전달합니다. 기존 화면 호환을 위해 일부 조회 함수와 title extra는 잠시 유지하되, 내부 조회 기준은 `roomId`입니다.
 
 ### UserSettings
 

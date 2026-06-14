@@ -95,7 +95,7 @@ public class ChatActivity extends AppCompatActivity {
                     view.findViewById(R.id.tvChatRoomRate);
 
             tvChatRoomTitle.setText(room.title);
-            tvChatRoomMessage.setText(getLastPreviewMessage(room.title));
+            tvChatRoomMessage.setText(getLastPreviewMessage(room.roomId));
             tvChatRoomInfo.setText(
                     "참여자 " +
                             room.participantCount +
@@ -129,6 +129,7 @@ public class ChatActivity extends AppCompatActivity {
                                 ChatDetailActivity.class
                         );
 
+                intent.putExtra(ChatDetailActivity.EXTRA_ROOM_ID, room.roomId);
                 intent.putExtra(ChatDetailActivity.EXTRA_ROOM_TITLE, room.title);
                 startActivity(intent);
             });
@@ -137,9 +138,9 @@ public class ChatActivity extends AppCompatActivity {
         }
     }
 
-    private String getLastPreviewMessage(String roomTitle) {
+    private String getLastPreviewMessage(String roomId) {
         List<DummyDataSource.ChatMessage> messages =
-                DummyDataSource.getChatMessages(roomTitle);
+                DummyDataSource.getChatMessagesByRoomId(roomId);
 
         for (int index = messages.size() - 1; index >= 0; index--) {
             DummyDataSource.ChatMessage message = messages.get(index);

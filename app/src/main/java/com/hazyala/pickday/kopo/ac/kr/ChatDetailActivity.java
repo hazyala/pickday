@@ -20,6 +20,7 @@ import java.util.List;
 
 public class ChatDetailActivity extends AppCompatActivity {
 
+    public static final String EXTRA_ROOM_ID = "extra_room_id";
     public static final String EXTRA_ROOM_TITLE = "extra_room_title";
 
     private ImageView btnBack;
@@ -30,6 +31,7 @@ public class ChatDetailActivity extends AppCompatActivity {
     private LinearLayout layoutChatMessageContainer;
     private EditText etMessageInput;
     private AppCompatButton btnSendMessage;
+    private String roomId;
     private String roomTitle;
 
     @Override
@@ -38,7 +40,7 @@ public class ChatDetailActivity extends AppCompatActivity {
         setContentView(R.layout.activity_chat_detail);
 
         initViews();
-        setRoomTitle();
+        setRoomData();
         loadMessages();
         setListeners();
     }
@@ -54,13 +56,19 @@ public class ChatDetailActivity extends AppCompatActivity {
         btnSendMessage = findViewById(R.id.btnSendMessage);
     }
 
-    private void setRoomTitle() {
+    private void setRoomData() {
+        roomId = getIntent().getStringExtra(EXTRA_ROOM_ID);
         roomTitle = getIntent().getStringExtra(EXTRA_ROOM_TITLE);
 
+        if (roomId == null || roomId.isEmpty()) {
+            roomId = DummyDataSource.getMeetupRoomByTitle(roomTitle).roomId;
+        }
+
+        DummyDataSource.MyMeetupRoom room =
+                DummyDataSource.getMeetupRoomById(roomId);
+
         if (roomTitle == null || roomTitle.isEmpty()) {
-            roomTitle = "채팅";
-            tvChatDetailTitle.setText("채팅");
-            return;
+            roomTitle = room.title;
         }
 
         tvChatDetailTitle.setText(roomTitle);
@@ -70,7 +78,7 @@ public class ChatDetailActivity extends AppCompatActivity {
         setNoticeStatus();
 
         List<DummyDataSource.ChatMessage> messages =
-                DummyDataSource.getChatMessages(roomTitle);
+                DummyDataSource.getChatMessagesByRoomId(roomId);
 
         for (DummyDataSource.ChatMessage message : messages) {
             addMessageView(message);
@@ -136,7 +144,7 @@ public class ChatDetailActivity extends AppCompatActivity {
 
     private void setNoticeStatus() {
         DummyDataSource.ChatRoomStatus status =
-                DummyDataSource.getChatRoomStatus(roomTitle);
+                DummyDataSource.getChatRoomStatusByRoomId(roomId);
 
         tvChatNoticeTitle.setText(
                 "현재 방 현황: 참여자 " +
@@ -170,6 +178,7 @@ public class ChatDetailActivity extends AppCompatActivity {
         }
 
         addMessageView(new DummyDataSource.ChatMessage(
+                roomId,
                 "김해민",
                 message,
                 "방금 전",
