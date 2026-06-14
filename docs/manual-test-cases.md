@@ -173,8 +173,7 @@
 ## Backend-ready 확인
 
 - Activity가 Retrofit을 직접 호출하지 않습니다.
-- API 구현 전 Repository interface가 존재합니다.
-- Local Repository를 API Repository로 교체할 수 있습니다.
-- 달력, 통계, 참여자 상태는 Activity 하드코딩이 아니라 모델/Repository/계산기에서 나옵니다.
+- Repository interface와 API Repository 교체 구조는 다음 저장소 계층 정리 단계에서 추가합니다.
+- 달력, 통계, 참여자 상태는 Activity 하드코딩이 아니라 모델/로컬 데이터 소스/계산기에서 나옵니다.
 - 문서와 실제 동작이 일치합니다.
 - 빌드가 통과합니다.
