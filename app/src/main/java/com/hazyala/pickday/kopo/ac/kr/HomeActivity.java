@@ -29,9 +29,9 @@ public class HomeActivity extends AppCompatActivity {
     private TextView tvBestDate;
     private TextView tvBestCount;
 
-    private LinearLayout cardMainMeetup;
-    private LinearLayout cardEmptyMeetup;
-    private LinearLayout sectionAvailableDates;
+    private View cardMainMeetup;
+    private View cardEmptyMeetup;
+    private View sectionAvailableDates;
     private LinearLayout layoutDateContainer;
     private LinearLayout layoutRoomContainer;
     private TextView tvRoomEmpty;
