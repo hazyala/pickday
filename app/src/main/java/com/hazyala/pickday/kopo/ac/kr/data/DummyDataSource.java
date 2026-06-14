@@ -373,6 +373,67 @@ public class DummyDataSource {
         );
     }
 
+    public static List<AvailabilityResponse> getAvailabilityResponses(String roomId) {
+        List<AvailabilityResponse> responses = new ArrayList<>();
+
+        if (ROOM_ID_TEAM_MEETING.equals(roomId)) {
+            responses.add(new AvailabilityResponse(roomId, "김해민", true,
+                    listOf("2026-05-22", "2026-05-24"), listOf("AFTERNOON", "EVENING")));
+            responses.add(new AvailabilityResponse(roomId, "수용", true,
+                    listOf("2026-05-24", "2026-05-27"), listOf("EVENING")));
+            responses.add(new AvailabilityResponse(roomId, "지윤", true,
+                    listOf("2026-05-22", "2026-05-24"), listOf("AFTERNOON")));
+            responses.add(new AvailabilityResponse(roomId, "민재", true,
+                    listOf("2026-05-24", "2026-05-27"), listOf("AFTERNOON", "LATE_AFTERNOON")));
+            return responses;
+        }
+
+        if (ROOM_ID_BIRTHDAY_PARTY.equals(roomId)) {
+            responses.add(new AvailabilityResponse(roomId, "김해민", true,
+                    listOf("2026-06-19", "2026-06-20"), listOf("EVENING")));
+            responses.add(new AvailabilityResponse(roomId, "민재", true,
+                    listOf("2026-06-20"), listOf("EVENING", "LATE_EVENING")));
+            responses.add(new AvailabilityResponse(roomId, "서연", true,
+                    listOf("2026-06-20", "2026-06-21"), listOf("AFTERNOON", "EVENING")));
+            responses.add(new AvailabilityResponse(roomId, "지윤", true,
+                    listOf("2026-06-20"), listOf("EVENING")));
+            responses.add(new AvailabilityResponse(roomId, "현우", true,
+                    listOf("2026-06-19", "2026-06-21"), listOf("AFTERNOON")));
+            responses.add(new AvailabilityResponse(roomId, "수빈", false,
+                    new ArrayList<>(), new ArrayList<>()));
+            return responses;
+        }
+
+        if (ROOM_ID_CAMP_MT.equals(roomId)) {
+            responses.add(new AvailabilityResponse(roomId, "김해민", true,
+                    listOf("2026-06-28", "2026-07-04"), listOf("AFTERNOON", "EVENING")));
+            responses.add(new AvailabilityResponse(roomId, "현우", true,
+                    listOf("2026-07-04", "2026-07-05"), listOf("AFTERNOON")));
+            responses.add(new AvailabilityResponse(roomId, "지윤", true,
+                    listOf("2026-06-28", "2026-07-04"), listOf("LATE_AFTERNOON", "EVENING")));
+            responses.add(new AvailabilityResponse(roomId, "수빈", true,
+                    listOf("2026-07-04"), listOf("AFTERNOON", "LATE_AFTERNOON")));
+            responses.add(new AvailabilityResponse(roomId, "민재", true,
+                    listOf("2026-06-28", "2026-07-05"), listOf("EVENING")));
+            responses.add(new AvailabilityResponse(roomId, "서연", false,
+                    new ArrayList<>(), new ArrayList<>()));
+            responses.add(new AvailabilityResponse(roomId, "도윤", false,
+                    new ArrayList<>(), new ArrayList<>()));
+        }
+
+        return responses;
+    }
+
+    public static List<TimeSlot> getTimeSlots() {
+        List<TimeSlot> timeSlots = new ArrayList<>();
+        timeSlots.add(new TimeSlot("MORNING", "오전", "09:00~12:00"));
+        timeSlots.add(new TimeSlot("AFTERNOON", "오후", "12:00~15:00"));
+        timeSlots.add(new TimeSlot("LATE_AFTERNOON", "늦은 오후", "15:00~18:00"));
+        timeSlots.add(new TimeSlot("EVENING", "저녁", "18:00~21:00"));
+        timeSlots.add(new TimeSlot("LATE_EVENING", "늦은 저녁", "21:00~24:00"));
+        return timeSlots;
+    }
+
     private static List<MyMeetupRoom> getDefaultMeetupRooms() {
         List<MyMeetupRoom> rooms = new ArrayList<>();
 
@@ -423,7 +484,7 @@ public class DummyDataSource {
                 "동아리 MT 일정 정하기",
                 7,
                 "D-10",
-                78,
+                71,
                 "camp",
                 "2026-06-25",
                 "오후 11:59",
@@ -438,6 +499,16 @@ public class DummyDataSource {
 
     private static String createCreatedRoomId(String title) {
         return "room-created-" + Integer.toHexString(title.hashCode());
+    }
+
+    private static List<String> listOf(String... values) {
+        List<String> list = new ArrayList<>();
+
+        for (String value : values) {
+            list.add(value);
+        }
+
+        return list;
     }
 
     public static class User {
@@ -682,6 +753,40 @@ public class DummyDataSource {
             this.participantCount = participantCount;
             this.dDay = dDay;
             this.responseRate = responseRate;
+        }
+    }
+
+    public static class AvailabilityResponse {
+        public String roomId;
+        public String participantName;
+        public boolean submitted;
+        public List<String> availableDateIsos;
+        public List<String> selectedTimeSlotCodes;
+
+        public AvailabilityResponse(
+                String roomId,
+                String participantName,
+                boolean submitted,
+                List<String> availableDateIsos,
+                List<String> selectedTimeSlotCodes
+        ) {
+            this.roomId = roomId;
+            this.participantName = participantName;
+            this.submitted = submitted;
+            this.availableDateIsos = new ArrayList<>(availableDateIsos);
+            this.selectedTimeSlotCodes = new ArrayList<>(selectedTimeSlotCodes);
+        }
+    }
+
+    public static class TimeSlot {
+        public String code;
+        public String label;
+        public String timeRange;
+
+        public TimeSlot(String code, String label, String timeRange) {
+            this.code = code;
+            this.label = label;
+            this.timeRange = timeRange;
         }
     }
 }

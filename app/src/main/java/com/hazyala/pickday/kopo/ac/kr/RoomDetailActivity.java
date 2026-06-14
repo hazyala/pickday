@@ -1,6 +1,7 @@
 package com.hazyala.pickday.kopo.ac.kr;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.LinearLayout;
@@ -13,7 +14,11 @@ import com.hazyala.pickday.kopo.ac.kr.data.DummyDataSource;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
+import java.util.List;
 import java.util.Locale;
 
 public class RoomDetailActivity extends AppCompatActivity {
@@ -36,6 +41,8 @@ public class RoomDetailActivity extends AppCompatActivity {
     private TextView tvConfirmedSchedule;
     private TextView tvProgressRate;
     private TextView tvParticipantSectionTitle;
+    private TextView[] candidateDateViews;
+    private TextView[] timePreferenceViews;
     private View viewProgressComplete;
     private View viewProgressWaiting;
 
@@ -75,6 +82,19 @@ public class RoomDetailActivity extends AppCompatActivity {
         tvConfirmedSchedule = findViewById(R.id.tvConfirmedSchedule);
         tvProgressRate = findViewById(R.id.tvProgressRate);
         tvParticipantSectionTitle = findViewById(R.id.tvParticipantSectionTitle);
+        candidateDateViews = new TextView[]{
+                findViewById(R.id.tvCandidateDate1),
+                findViewById(R.id.tvCandidateDate2),
+                findViewById(R.id.tvCandidateDate3),
+                findViewById(R.id.tvCandidateDate4)
+        };
+        timePreferenceViews = new TextView[]{
+                findViewById(R.id.tvTimePreference1),
+                findViewById(R.id.tvTimePreference2),
+                findViewById(R.id.tvTimePreference3),
+                findViewById(R.id.tvTimePreference4),
+                findViewById(R.id.tvTimePreference5)
+        };
         viewProgressComplete = findViewById(R.id.viewProgressComplete);
         viewProgressWaiting = findViewById(R.id.viewProgressWaiting);
     }
@@ -90,9 +110,12 @@ public class RoomDetailActivity extends AppCompatActivity {
 
     private void renderRoomData() {
         DummyDataSource.MyMeetupRoom room = DummyDataSource.getMeetupRoomById(roomId);
-        int completedCount = getCompletedResponseCount(room);
+        List<DummyDataSource.AvailabilityResponse> responses =
+                DummyDataSource.getAvailabilityResponses(room.roomId);
+        int completedCount = getCompletedResponseCount(responses);
         int waitingCount = Math.max(0, room.participantCount - completedCount);
-        int waitingRate = Math.max(0, 100 - room.responseRate);
+        int responseRate = getResponseRate(room, responses);
+        int waitingRate = Math.max(0, 100 - responseRate);
 
         tvRoomStatus.setText(getStatusText(room));
         tvRoomTitle.setText(room.title);
@@ -102,20 +125,45 @@ public class RoomDetailActivity extends AppCompatActivity {
         tvProgressUpdatedAt.setText("로컬 더미 데이터 기준");
         tvParticipantProgress.setText("참여자\n" + room.participantCount + "명");
         tvResponseCompleted.setText(
-                "응답 완료\n" + completedCount + "명 (" + room.responseRate + "%)"
+                "응답 완료\n" + completedCount + "명 (" + responseRate + "%)"
         );
         tvResponseWaiting.setText(
                 "응답 대기\n" + waitingCount + "명 (" + waitingRate + "%)"
         );
         tvConfirmedSchedule.setText("최종 확정\n" + getConfirmedText(room));
-        tvProgressRate.setText(room.responseRate + "%");
+        tvProgressRate.setText(responseRate + "%");
         tvParticipantSectionTitle.setText("참여자 (" + room.participantCount + "명)");
 
-        updateProgressBar(room.responseRate, waitingRate);
+        updateProgressBar(responseRate, waitingRate);
+        renderCandidateDates(room, responses);
+        renderTimePreferences(responses);
     }
 
-    private int getCompletedResponseCount(DummyDataSource.MyMeetupRoom room) {
-        return Math.round(room.participantCount * room.responseRate / 100f);
+    private int getCompletedResponseCount(List<DummyDataSource.AvailabilityResponse> responses) {
+        int count = 0;
+
+        for (DummyDataSource.AvailabilityResponse response : responses) {
+            if (response.submitted) {
+                count++;
+            }
+        }
+
+        return count;
+    }
+
+    private int getResponseRate(
+            DummyDataSource.MyMeetupRoom room,
+            List<DummyDataSource.AvailabilityResponse> responses
+    ) {
+        if (room.participantCount <= 0) {
+            return 0;
+        }
+
+        if (responses.isEmpty()) {
+            return room.responseRate;
+        }
+
+        return Math.round(getCompletedResponseCount(responses) * 100f / room.participantCount);
     }
 
     private String getStatusText(DummyDataSource.MyMeetupRoom room) {
@@ -171,6 +219,181 @@ public class RoomDetailActivity extends AppCompatActivity {
         waitingParams.weight = Math.max(0, waitingRate);
         viewProgressComplete.setLayoutParams(completedParams);
         viewProgressWaiting.setLayoutParams(waitingParams);
+    }
+
+    private void renderCandidateDates(
+            DummyDataSource.MyMeetupRoom room,
+            List<DummyDataSource.AvailabilityResponse> responses
+    ) {
+        List<CandidateDateResult> results = getCandidateDateResults(room, responses);
+
+        for (int index = 0; index < candidateDateViews.length; index++) {
+            TextView view = candidateDateViews[index];
+
+            if (index >= results.size()) {
+                view.setVisibility(View.GONE);
+                continue;
+            }
+
+            CandidateDateResult result = results.get(index);
+            int rate = getPercent(result.availableCount, Math.max(1, room.participantCount));
+            view.setVisibility(View.VISIBLE);
+            view.setBackgroundResource(index == 0
+                    ? R.drawable.pickday_selected
+                    : R.drawable.pickday_unselected);
+            view.setTextColor(index == 0
+                    ? Color.parseColor("#5B4CDB")
+                    : Color.parseColor("#77748E"));
+            view.setText(
+                    formatDate(result.dateIso) +
+                            (index == 0 ? "   1순위" : "") +
+                            "\n" +
+                            result.availableCount +
+                            "명 가능\n" +
+                            rate +
+                            "%\n" +
+                            getAvailabilityDots(result.availableCount, room.participantCount)
+            );
+        }
+    }
+
+    private List<CandidateDateResult> getCandidateDateResults(
+            DummyDataSource.MyMeetupRoom room,
+            List<DummyDataSource.AvailabilityResponse> responses
+    ) {
+        List<CandidateDateResult> results = new ArrayList<>();
+
+        for (String dateIso : room.candidateDateIsos) {
+            int availableCount = 0;
+
+            for (DummyDataSource.AvailabilityResponse response : responses) {
+                if (response.submitted && response.availableDateIsos.contains(dateIso)) {
+                    availableCount++;
+                }
+            }
+
+            results.add(new CandidateDateResult(dateIso, availableCount));
+        }
+
+        Collections.sort(results, (first, second) -> {
+            int countCompare = Integer.compare(second.availableCount, first.availableCount);
+
+            if (countCompare != 0) {
+                return countCompare;
+            }
+
+            return first.dateIso.compareTo(second.dateIso);
+        });
+
+        return results;
+    }
+
+    private void renderTimePreferences(List<DummyDataSource.AvailabilityResponse> responses) {
+        List<TimePreferenceResult> results = getTimePreferenceResults(responses);
+
+        for (int index = 0; index < timePreferenceViews.length; index++) {
+            TextView view = timePreferenceViews[index];
+
+            if (index >= results.size()) {
+                view.setVisibility(View.GONE);
+                continue;
+            }
+
+            TimePreferenceResult result = results.get(index);
+            view.setVisibility(View.VISIBLE);
+            view.setTextColor(result.count > 0
+                    ? Color.parseColor("#77748E")
+                    : Color.parseColor("#C9C6D8"));
+            view.setText(
+                    result.label +
+                            " (" +
+                            result.timeRange +
+                            ")    " +
+                            getPreferenceBar(result.count) +
+                            "  " +
+                            result.count +
+                            "명"
+            );
+        }
+    }
+
+    private List<TimePreferenceResult> getTimePreferenceResults(
+            List<DummyDataSource.AvailabilityResponse> responses
+    ) {
+        List<TimePreferenceResult> results = new ArrayList<>();
+
+        for (DummyDataSource.TimeSlot timeSlot : DummyDataSource.getTimeSlots()) {
+            int count = 0;
+
+            for (DummyDataSource.AvailabilityResponse response : responses) {
+                if (response.submitted && response.selectedTimeSlotCodes.contains(timeSlot.code)) {
+                    count++;
+                }
+            }
+
+            results.add(new TimePreferenceResult(timeSlot.label, timeSlot.timeRange, count));
+        }
+
+        Collections.sort(results, Comparator
+                .comparingInt((TimePreferenceResult result) -> result.count)
+                .reversed());
+
+        return results;
+    }
+
+    private int getPercent(int value, int total) {
+        if (total <= 0) {
+            return 0;
+        }
+
+        return Math.round(value * 100f / total);
+    }
+
+    private String getAvailabilityDots(int availableCount, int participantCount) {
+        StringBuilder builder = new StringBuilder();
+
+        for (int index = 0; index < participantCount; index++) {
+            if (index > 0) {
+                builder.append(" ");
+            }
+
+            builder.append(index < availableCount ? "●" : "○");
+        }
+
+        return builder.toString();
+    }
+
+    private String getPreferenceBar(int count) {
+        int length = Math.max(1, count * 3);
+        StringBuilder builder = new StringBuilder();
+
+        for (int index = 0; index < length; index++) {
+            builder.append("━");
+        }
+
+        return builder.toString();
+    }
+
+    private static class CandidateDateResult {
+        String dateIso;
+        int availableCount;
+
+        CandidateDateResult(String dateIso, int availableCount) {
+            this.dateIso = dateIso;
+            this.availableCount = availableCount;
+        }
+    }
+
+    private static class TimePreferenceResult {
+        String label;
+        String timeRange;
+        int count;
+
+        TimePreferenceResult(String label, String timeRange, int count) {
+            this.label = label;
+            this.timeRange = timeRange;
+            this.count = count;
+        }
     }
 
     private void goHome() {
