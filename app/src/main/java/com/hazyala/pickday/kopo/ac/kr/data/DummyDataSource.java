@@ -33,17 +33,11 @@ public class DummyDataSource {
 
     public static List<AvailableDate> getAvailableDates() {
         List<AvailableDate> dates = new ArrayList<>();
-        int[] sampleCounts = {2, 4, 6, 7, 5, 3, 1};
         Calendar today = Calendar.getInstance();
         Calendar weekStart = Calendar.getInstance();
         weekStart.set(Calendar.DAY_OF_WEEK, Calendar.SUNDAY);
 
-        int bestCount = 0;
         int todayIndex = 0;
-
-        for (int index = 0; index < sampleCounts.length; index++) {
-            bestCount = Math.max(bestCount, sampleCounts[index]);
-        }
 
         for (int index = 0; index < 7; index++) {
             Calendar date = (Calendar) weekStart.clone();
@@ -58,7 +52,6 @@ public class DummyDataSource {
             Calendar date = (Calendar) weekStart.clone();
             date.add(Calendar.DAY_OF_MONTH, index);
 
-            int availableCount = sampleCounts[index];
             String label = "";
 
             if (isSameDay(date, today)) {
@@ -72,13 +65,16 @@ public class DummyDataSource {
                 }
             }
 
+            boolean hasMeetupStatus = false;
+
             dates.add(new AvailableDate(
                     label,
                     formatMonthDay(date),
                     formatWeekday(date),
-                    availableCount,
+                    0,
                     index == todayIndex,
-                    availableCount == bestCount
+                    false,
+                    hasMeetupStatus
             ));
         }
 
@@ -366,6 +362,7 @@ public class DummyDataSource {
         public int availableCount;
         public boolean selected;
         public boolean best;
+        public boolean hasMeetupStatus;
 
         public AvailableDate(
                 String label,
@@ -373,7 +370,8 @@ public class DummyDataSource {
                 String dayOfWeek,
                 int availableCount,
                 boolean selected,
-                boolean best
+                boolean best,
+                boolean hasMeetupStatus
         ) {
             this.label = label;
             this.date = date;
@@ -381,6 +379,7 @@ public class DummyDataSource {
             this.availableCount = availableCount;
             this.selected = selected;
             this.best = best;
+            this.hasMeetupStatus = hasMeetupStatus;
         }
     }
 

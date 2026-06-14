@@ -164,9 +164,13 @@ public class HomeActivity extends AppCompatActivity {
 
             tvDayOfWeek.setText("(" + date.dayOfWeek + ")");
 
-            tvAvailableCount.setText(
-                    date.availableCount + "명"
-            );
+            if (date.hasMeetupStatus) {
+                tvAvailableCount.setText(
+                        date.availableCount + "명"
+                );
+            } else {
+                tvAvailableCount.setVisibility(View.INVISIBLE);
+            }
 
             if (date.selected) {
 
@@ -180,17 +184,21 @@ public class HomeActivity extends AppCompatActivity {
 
                 tvDateLabel.setTextColor(Color.WHITE);
 
-                tvAvailableCount.setTextColor(Color.WHITE);
+                if (date.hasMeetupStatus) {
+                    tvAvailableCount.setTextColor(Color.WHITE);
+                }
             }
 
-            setStartIcon(
-                    tvAvailableCount,
-                    R.drawable.icon_group,
-                    9,
-                    tvAvailableCount.getCurrentTextColor()
-            );
+            if (date.hasMeetupStatus) {
+                setStartIcon(
+                        tvAvailableCount,
+                        R.drawable.icon_group,
+                        9,
+                        tvAvailableCount.getCurrentTextColor()
+                );
+            }
 
-            if (date.best) {
+            if (date.hasMeetupStatus && date.best) {
 
                 tvDateBest.setVisibility(View.VISIBLE);
             }
