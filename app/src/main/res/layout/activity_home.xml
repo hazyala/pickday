@@ -235,6 +235,7 @@
                     android:textStyle="bold" />
 
                 <androidx.appcompat.widget.AppCompatButton
+                    android:id="@+id/btnViewAllDates"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:background="@android:color/transparent"
@@ -319,6 +320,7 @@
                     android:textStyle="bold" />
 
                 <androidx.appcompat.widget.AppCompatButton
+                    android:id="@+id/btnViewAllRooms"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:background="@android:color/transparent"

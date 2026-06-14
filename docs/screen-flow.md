@@ -74,8 +74,24 @@ Notifications는 Home 상단 알림 버튼에서 진입하는 로컬 알림 목�
 - 신규/빈 데이터 상태에서는 기존 방, BEST 날짜, 응답률을 임의로 만들지 않습니다.
 - 진행 중 약속이나 방 목록이 없으면 빈 상태와 방 만들기 CTA를 보여줍니다.
 - 이번주 약속 현황, BEST, 응답률, 마감 D-day는 고정 문자열이 아니라 실제 방/응답 데이터에서 계산합니다.
+- 이번주 약속 현황의 전체 보기는 Calendar 화면으로 이동합니다.
+- 내 약속 방의 전체 보기는 전체 방 리스트 화면으로 이동합니다.
 - 방 만들기 CTA가 Create Meetup으로 이동합니다.
 - 하단 캘린더 탭은 Calendar 화면으로 이동합니다.
+
+### SCR-03A All Meetup Rooms
+
+목적:
+
+- Home의 내 약속 방 전체 보기에서 모든 약속 방을 확인합니다.
+
+현재 구현 기준:
+
+- `DummyDataSource.getMyMeetupRooms()`의 roomId 기반 로컬 방 목록을 모두 표시합니다.
+- 각 방 row는 방 제목, 참여자 수, 마감 D-day, 응답률을 표시합니다.
+- 방 row를 누르면 `RoomDetailActivity.EXTRA_ROOM_ID`로 선택한 방 상세로 이동합니다.
+- 방이 없으면 빈 상태를 표시합니다.
+- 새 약속 만들기 CTA는 Create Meetup으로 이동합니다.
 
 ### SCR-04 Calendar
 

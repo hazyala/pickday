@@ -36,6 +36,8 @@ public class HomeActivity extends AppCompatActivity {
     private AppCompatButton btnDetail;
     private AppCompatButton btnFab;
     private AppCompatButton btnCreateSmall;
+    private AppCompatButton btnViewAllDates;
+    private AppCompatButton btnViewAllRooms;
     private ImageView btnNotification;
     private LinearLayout tabCalendar;
     private LinearLayout tabChat;
@@ -73,6 +75,8 @@ public class HomeActivity extends AppCompatActivity {
         btnDetail = findViewById(R.id.btnDetail);
         btnFab = findViewById(R.id.btnFab);
         btnCreateSmall = findViewById(R.id.btnCreateSmall);
+        btnViewAllDates = findViewById(R.id.btnViewAllDates);
+        btnViewAllRooms = findViewById(R.id.btnViewAllRooms);
         btnNotification = findViewById(R.id.btnNotification);
         tabCalendar = findViewById(R.id.tabCalendar);
         tabChat = findViewById(R.id.tabChat);
@@ -325,6 +329,26 @@ public class HomeActivity extends AppCompatActivity {
                     new Intent(
                             HomeActivity.this,
                             NotificationActivity.class
+                    );
+
+            startActivity(intent);
+        });
+
+        btnViewAllDates.setOnClickListener(v -> {
+            Intent intent =
+                    new Intent(
+                            HomeActivity.this,
+                            CalendarActivity.class
+                    );
+
+            startActivity(intent);
+        });
+
+        btnViewAllRooms.setOnClickListener(v -> {
+            Intent intent =
+                    new Intent(
+                            HomeActivity.this,
+                            AllMeetupRoomsActivity.class
                     );
 
             startActivity(intent);

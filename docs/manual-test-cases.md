@@ -35,8 +35,18 @@
 - BEST 표시는 계산 결과 또는 명시된 데이터가 있을 때만 표시됩니다.
 - 마감 D-day와 응답률은 고정 텍스트가 아니라 방 데이터 기준으로 갱신됩니다.
 - 대표 방 상세 버튼 또는 방 row를 누르면 선택한 roomId의 Room Detail로 이동합니다.
+- 이번주 약속 현황 옆 전체 보기를 누르면 Calendar 화면으로 이동합니다.
+- 내 약속 방 옆 전체 보기를 누르면 전체 방 리스트 화면으로 이동합니다.
 - 방 만들기 버튼을 누르면 Create Meetup으로 이동합니다.
 - 하단 캘린더 탭을 누르면 Calendar 화면으로 이동합니다.
+
+## All Meetup Rooms
+
+- 전체 방 리스트는 `DummyDataSource.getMyMeetupRooms()`의 모든 방을 표시합니다.
+- 각 방 row에는 방 제목, 참여자 수, 마감 D-day, 응답률이 표시됩니다.
+- 방 row를 누르면 선택한 roomId의 Room Detail로 이동합니다.
+- 새 약속 만들기 버튼을 누르면 Create Meetup으로 이동합니다.
+- 뒤로가기를 누르면 Home으로 돌아갑니다.
 
 ## Calendar
 
