@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.FrameLayout;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -34,6 +35,7 @@ public class HomeActivity extends AppCompatActivity {
     private AppCompatButton btnDetail;
     private AppCompatButton btnFab;
     private AppCompatButton btnCreateSmall;
+    private ImageView btnNotification;
     private LinearLayout tabCalendar;
     private LinearLayout tabAlarm;
     private LinearLayout tabMy;
@@ -70,6 +72,7 @@ public class HomeActivity extends AppCompatActivity {
         btnDetail = findViewById(R.id.btnDetail);
         btnFab = findViewById(R.id.btnFab);
         btnCreateSmall = findViewById(R.id.btnCreateSmall);
+        btnNotification = findViewById(R.id.btnNotification);
         tabCalendar = findViewById(R.id.tabCalendar);
         tabAlarm = findViewById(R.id.tabAlarm);
         tabMy = findViewById(R.id.tabMy);
@@ -289,6 +292,17 @@ public class HomeActivity extends AppCompatActivity {
                     new Intent(
                             HomeActivity.this,
                             CreateMeetupActivity.class
+                    );
+
+            startActivity(intent);
+        });
+
+        btnNotification.setOnClickListener(v -> {
+
+            Intent intent =
+                    new Intent(
+                            HomeActivity.this,
+                            NotificationActivity.class
                     );
 
             startActivity(intent);
