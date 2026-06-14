@@ -104,7 +104,19 @@
                 android:id="@+id/layoutChatMessageContainer"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical" />
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/tvChatEmptyState"
+                    android:layout_width="match_parent"
+                    android:layout_height="220dp"
+                    android:gravity="center"
+                    android:includeFontPadding="false"
+                    android:text="아직 채팅이 없습니다"
+                    android:textColor="#8A88A0"
+                    android:textSize="14sp"
+                    android:textStyle="bold" />
+            </LinearLayout>
         </ScrollView>
 
         <LinearLayout

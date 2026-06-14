@@ -13,7 +13,11 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.hazyala.pickday.kopo.ac.kr.data.DummyDataSource;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 public class ChatActivity extends AppCompatActivity {
 
@@ -99,8 +103,10 @@ public class ChatActivity extends AppCompatActivity {
             tvChatRoomInfo.setText(
                     "참여자 " +
                             room.participantCount +
-                            "명  |  마감까지 " +
-                            room.dDay
+                            "명  |  마감 " +
+                            formatDate(room.deadlineDateIso) +
+                            " " +
+                            room.deadlineTimeText
             );
             tvChatRoomRate.setText(room.responseRate + "%");
 
@@ -151,6 +157,21 @@ public class ChatActivity extends AppCompatActivity {
         }
 
         return "아직 채팅이 없습니다";
+    }
+
+    private String formatDate(String dateIso) {
+        if (dateIso == null || dateIso.isEmpty()) {
+            return "미정";
+        }
+
+        try {
+            SimpleDateFormat parser = new SimpleDateFormat("yyyy-MM-dd", Locale.KOREAN);
+            Date date = parser.parse(dateIso);
+            SimpleDateFormat formatter = new SimpleDateFormat("M.d (E)", Locale.KOREAN);
+            return formatter.format(date);
+        } catch (ParseException e) {
+            return dateIso;
+        }
     }
 
     private void showClosedRooms() {

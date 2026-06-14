@@ -369,7 +369,9 @@ public class DummyDataSource {
                 room.title,
                 room.participantCount,
                 room.dDay,
-                room.responseRate
+                room.responseRate,
+                room.deadlineDateIso,
+                room.deadlineTimeText
         );
     }
 
@@ -740,19 +742,25 @@ public class DummyDataSource {
         public int participantCount;
         public String dDay;
         public int responseRate;
+        public String deadlineDateIso;
+        public String deadlineTimeText;
 
         public ChatRoomStatus(
                 String roomId,
                 String title,
                 int participantCount,
                 String dDay,
-                int responseRate
+                int responseRate,
+                String deadlineDateIso,
+                String deadlineTimeText
         ) {
             this.roomId = roomId;
             this.title = title;
             this.participantCount = participantCount;
             this.dDay = dDay;
             this.responseRate = responseRate;
+            this.deadlineDateIso = deadlineDateIso;
+            this.deadlineTimeText = deadlineTimeText;
         }
     }
 

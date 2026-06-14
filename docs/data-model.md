@@ -168,6 +168,8 @@
 
 화면 이동은 Home 방 목록과 Calendar 일정 목록에서 `RoomDetailActivity.EXTRA_ROOM_ID`, Chat 방 목록에서 `ChatDetailActivity.EXTRA_ROOM_ID`를 전달합니다. 기존 화면 호환을 위해 일부 조회 함수와 title extra는 잠시 유지하되, 내부 조회 기준은 `roomId`입니다.
 
+Chat Detail은 전달받은 `roomId`로 메시지와 채팅 공지 상태를 조회합니다. 메시지 fixture가 없는 생성 방은 같은 방 데이터로 공지 카드를 표시하고, 메시지 영역에는 빈 채팅 상태를 표시합니다.
+
 ### UserSettings
 
 - `userId`

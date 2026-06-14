@@ -16,7 +16,11 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.hazyala.pickday.kopo.ac.kr.data.DummyDataSource;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 public class ChatDetailActivity extends AppCompatActivity {
 
@@ -27,6 +31,7 @@ public class ChatDetailActivity extends AppCompatActivity {
     private TextView tvChatDetailTitle;
     private TextView tvChatNoticeTitle;
     private TextView tvChatNoticeMeta;
+    private TextView tvChatEmptyState;
     private ScrollView scrollChatMessages;
     private LinearLayout layoutChatMessageContainer;
     private EditText etMessageInput;
@@ -50,6 +55,7 @@ public class ChatDetailActivity extends AppCompatActivity {
         tvChatDetailTitle = findViewById(R.id.tvChatDetailTitle);
         tvChatNoticeTitle = findViewById(R.id.tvChatNoticeTitle);
         tvChatNoticeMeta = findViewById(R.id.tvChatNoticeMeta);
+        tvChatEmptyState = findViewById(R.id.tvChatEmptyState);
         scrollChatMessages = findViewById(R.id.scrollChatMessages);
         layoutChatMessageContainer = findViewById(R.id.layoutChatMessageContainer);
         etMessageInput = findViewById(R.id.etMessageInput);
@@ -79,6 +85,8 @@ public class ChatDetailActivity extends AppCompatActivity {
 
         List<DummyDataSource.ChatMessage> messages =
                 DummyDataSource.getChatMessagesByRoomId(roomId);
+
+        tvChatEmptyState.setVisibility(messages.isEmpty() ? View.VISIBLE : View.GONE);
 
         for (DummyDataSource.ChatMessage message : messages) {
             addMessageView(message);
@@ -154,7 +162,27 @@ public class ChatDetailActivity extends AppCompatActivity {
                         "%"
         );
 
-        tvChatNoticeMeta.setText("마감까지 " + status.dDay);
+        tvChatNoticeMeta.setText(
+                "마감 " +
+                        formatDate(status.deadlineDateIso) +
+                        " " +
+                        status.deadlineTimeText
+        );
+    }
+
+    private String formatDate(String dateIso) {
+        if (dateIso == null || dateIso.isEmpty()) {
+            return "미정";
+        }
+
+        try {
+            SimpleDateFormat parser = new SimpleDateFormat("yyyy-MM-dd", Locale.KOREAN);
+            Date date = parser.parse(dateIso);
+            SimpleDateFormat formatter = new SimpleDateFormat("M.d (E)", Locale.KOREAN);
+            return formatter.format(date);
+        } catch (ParseException e) {
+            return dateIso;
+        }
     }
 
     private String getInitial(String senderName) {
@@ -177,6 +205,7 @@ public class ChatDetailActivity extends AppCompatActivity {
             return;
         }
 
+        tvChatEmptyState.setVisibility(View.GONE);
         addMessageView(new DummyDataSource.ChatMessage(
                 roomId,
                 "김해민",
