@@ -6,8 +6,10 @@ import java.util.Calendar;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 
 public class DummyDataSource {
 
@@ -17,7 +19,7 @@ public class DummyDataSource {
     public static final String DEFAULT_ROOM_ID = ROOM_ID_CAMP_MT;
 
     private static final List<MyMeetupRoom> createdMeetupRooms = new ArrayList<>();
-    private static final List<String> currentDraftCandidateDates = new ArrayList<>();
+    private static final Map<String, List<String>> draftCandidateDatesByRoomId = new HashMap<>();
     private static String currentDraftRoomId = DEFAULT_ROOM_ID;
 
     public static User getCurrentUser() {
@@ -206,19 +208,42 @@ public class DummyDataSource {
     }
 
     public static void setCurrentDraftCandidateDates(List<String> candidateDates) {
-        currentDraftCandidateDates.clear();
-
-        if (candidateDates != null) {
-            currentDraftCandidateDates.addAll(candidateDates);
-        }
+        setDraftCandidateDates(currentDraftRoomId, candidateDates);
     }
 
     public static List<String> getCurrentDraftCandidateDates() {
-        return new ArrayList<>(currentDraftCandidateDates);
+        return getDraftCandidateDates(currentDraftRoomId);
     }
 
     public static String getCurrentDraftRoomId() {
         return currentDraftRoomId;
+    }
+
+    public static void setDraftCandidateDates(String roomId, List<String> candidateDates) {
+        if (roomId == null || roomId.isEmpty()) {
+            return;
+        }
+
+        if (candidateDates == null || candidateDates.isEmpty()) {
+            draftCandidateDatesByRoomId.remove(roomId);
+            return;
+        }
+
+        draftCandidateDatesByRoomId.put(roomId, new ArrayList<>(candidateDates));
+    }
+
+    public static List<String> getDraftCandidateDates(String roomId) {
+        if (roomId == null || roomId.isEmpty()) {
+            return new ArrayList<>();
+        }
+
+        List<String> candidateDates = draftCandidateDatesByRoomId.get(roomId);
+
+        if (candidateDates == null) {
+            return new ArrayList<>();
+        }
+
+        return new ArrayList<>(candidateDates);
     }
 
     public static List<String> getResponseCandidateDates() {
@@ -232,8 +257,10 @@ public class DummyDataSource {
             return new ArrayList<>(room.candidateDateIsos);
         }
 
-        if (!currentDraftCandidateDates.isEmpty()) {
-            return getCurrentDraftCandidateDates();
+        List<String> draftCandidateDates = getDraftCandidateDates(room.roomId);
+
+        if (!draftCandidateDates.isEmpty()) {
+            return draftCandidateDates;
         }
 
         List<String> fallbackDates = new ArrayList<>();
@@ -258,7 +285,7 @@ public class DummyDataSource {
         String normalizedTitle = title.trim();
         String roomId = createCreatedRoomId(normalizedTitle);
         currentDraftRoomId = roomId;
-        List<String> candidateDates = getCurrentDraftCandidateDates();
+        setDraftCandidateDates(roomId, new ArrayList<>());
 
         MyMeetupRoom createdRoom = new MyMeetupRoom(
                 roomId,
@@ -269,7 +296,7 @@ public class DummyDataSource {
                 "default",
                 deadlineDateIso,
                 deadlineTimeText,
-                candidateDates,
+                new ArrayList<>(),
                 "",
                 "",
                 "마"
@@ -299,6 +326,7 @@ public class DummyDataSource {
         for (MyMeetupRoom room : createdMeetupRooms) {
             if (room.roomId.equals(roomId)) {
                 room.candidateDateIsos = new ArrayList<>(candidateDates);
+                setDraftCandidateDates(roomId, candidateDates);
                 return;
             }
         }

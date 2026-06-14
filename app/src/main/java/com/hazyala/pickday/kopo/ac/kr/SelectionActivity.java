@@ -94,7 +94,7 @@ public class SelectionActivity extends AppCompatActivity {
                 return;
             }
 
-            DummyDataSource.setCurrentDraftCandidateDates(getSortedSelectedDates());
+            DummyDataSource.setDraftCandidateDates(roomId, getSortedSelectedDates());
             DummyDataSource.updateCreatedRoomCandidateDates(roomId, getSortedSelectedDates());
 
             Intent intent = new Intent(SelectionActivity.this, InviteMembersActivity.class);
@@ -106,7 +106,7 @@ public class SelectionActivity extends AppCompatActivity {
     }
 
     private void initDateChips() {
-        selectedDates.addAll(DummyDataSource.getCurrentDraftCandidateDates());
+        selectedDates.addAll(DummyDataSource.getDraftCandidateDates(roomId));
 
         selectionCalendarController = PickDayDatePicker.attachCalendar(
                 selectionCalendar,
