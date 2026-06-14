@@ -217,11 +217,15 @@ public class MyPageActivity extends AppCompatActivity {
             finish();
         });
 
-        tabCalendar.setOnClickListener(v -> openActionPage(
-                "캘린더",
-                "참여 중인 약속과 확정된 일정을 한 곳에서 확인해요.",
-                "월별 일정 보기와 약속 필터 기능을 준비 중이에요."
-        ));
+        tabCalendar.setOnClickListener(v -> {
+            Intent intent =
+                    new Intent(
+                            MyPageActivity.this,
+                            CalendarActivity.class
+                    );
+
+            startActivity(intent);
+        });
 
         tabAlarm.setOnClickListener(v -> openActionPage(
                 "알림",

@@ -2,7 +2,9 @@ package com.hazyala.pickday.kopo.ac.kr;
 
 import android.content.Intent;
 import android.graphics.Color;
+import android.graphics.Typeface;
 import android.os.Bundle;
+import android.view.Gravity;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -10,18 +12,28 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.hazyala.pickday.kopo.ac.kr.data.DummyDataSource;
+import com.hazyala.pickday.kopo.ac.kr.ui.PickDayDatePicker;
+
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Collections;
 import java.util.HashSet;
+import java.util.LinkedHashSet;
+import java.util.List;
 import java.util.Set;
 
 public class SelectionActivity extends AppCompatActivity {
 
     private View btnBack;
-    private TextView btnNext, btnCalendarToggle;
+    private TextView btnNext;
     private View selectionCalendar;
 
     private TextView tvDateCount, tvExcludeCount;
+    private LinearLayout layoutCandidateDates;
+    private PickDayDatePicker.CalendarController selectionCalendarController;
 
-    private final Set<View> selectedDates = new HashSet<>();
+    private final Set<String> selectedDates = new LinkedHashSet<>();
     private final Set<TextView> selectedTimes = new HashSet<>();
     private final Set<TextView> selectedExcludeDates = new HashSet<>();
 
@@ -48,9 +60,9 @@ public class SelectionActivity extends AppCompatActivity {
     private void initViews() {
         btnBack = findViewById(R.id.btnBack);
         btnNext = findViewById(R.id.btnNext);
-        btnCalendarToggle = findViewById(R.id.btnCalendarToggle);
 
         selectionCalendar = findViewById(R.id.selectionCalendar);
+        layoutCandidateDates = findViewById(R.id.layoutCandidateDates);
 
         tvDateCount = findViewById(R.id.tvDateCount);
         tvExcludeCount = findViewById(R.id.tvExcludeCount);
@@ -74,93 +86,142 @@ public class SelectionActivity extends AppCompatActivity {
                 return;
             }
 
+            DummyDataSource.setCurrentDraftCandidateDates(getSortedSelectedDates());
+
             Intent intent = new Intent(SelectionActivity.this, InviteMembersActivity.class);
             startActivity(intent);
         });
 
-        btnCalendarToggle.setOnClickListener(v -> {
-            if (selectionCalendar.getVisibility() == View.VISIBLE) {
-                selectionCalendar.setVisibility(View.GONE);
-                btnCalendarToggle.setText("▣  달력 보기");
-            } else {
-                selectionCalendar.setVisibility(View.VISIBLE);
-                btnCalendarToggle.setText("▣  닫기");
-            }
-        });
+        selectionCalendar.setVisibility(View.VISIBLE);
     }
 
     private void initDateChips() {
-        LinearLayout date0521 = findViewById(R.id.date0521);
-        LinearLayout date0522 = findViewById(R.id.date0522);
-        LinearLayout date0523 = findViewById(R.id.date0523);
-        LinearLayout date0524 = findViewById(R.id.date0524);
-        LinearLayout date0525 = findViewById(R.id.date0525);
-        LinearLayout date0526 = findViewById(R.id.date0526);
-        LinearLayout date0527 = findViewById(R.id.date0527);
+        selectedDates.addAll(DummyDataSource.getCurrentDraftCandidateDates());
 
-        View[] dateViews = {
-                date0521, date0522, date0523, date0524,
-                date0525, date0526, date0527
-        };
+        selectionCalendarController = PickDayDatePicker.attachCalendar(
+                selectionCalendar,
+                selectedDates.isEmpty() ? PickDayDatePicker.today() : PickDayDatePicker.parseIsoDate(getSortedSelectedDates().get(0)),
+                new PickDayDatePicker.CalendarDateRule() {
+                    @Override
+                    public boolean isEnabled(Calendar date) {
+                        return !PickDayDatePicker.isBeforeToday(date);
+                    }
 
-        for (View dateView : dateViews) {
-            dateView.setOnClickListener(v -> toggleDateChip(v));
-        }
+                    @Override
+                    public boolean isSelected(Calendar date) {
+                        return selectedDates.contains(PickDayDatePicker.formatIsoDate(date));
+                    }
+                },
+                selectedDate -> toggleDate(PickDayDatePicker.formatIsoDate(selectedDate))
+        );
+
+        renderSelectedDateChips();
     }
 
-    private void toggleDateChip(View dateView) {
-        boolean isSelected = selectedDates.contains(dateView);
+    private void toggleDate(String isoDate) {
+        boolean isSelected = selectedDates.contains(isoDate);
 
         if (isSelected) {
-            selectedDates.remove(dateView);
-            setDateChipSelected(dateView, false);
+            selectedDates.remove(isoDate);
         } else {
             if (selectedDates.size() >= MAX_DATE_COUNT) {
                 Toast.makeText(this, "최대 10개까지 선택할 수 있어요", Toast.LENGTH_SHORT).show();
                 return;
             }
 
-            selectedDates.add(dateView);
-            setDateChipSelected(dateView, true);
+            selectedDates.add(isoDate);
         }
 
+        renderSelectedDateChips();
+        selectionCalendarController.render();
         updateDateCount();
     }
 
-    private void setDateChipSelected(View dateView, boolean selected) {
-        dateView.setBackgroundResource(selected
-                ? R.drawable.pickday_selected
-                : R.drawable.pickday_unselected);
+    private void renderSelectedDateChips() {
+        layoutCandidateDates.removeAllViews();
 
-        if (dateView instanceof LinearLayout) {
-            LinearLayout layout = (LinearLayout) dateView;
-
-            for (int i = 0; i < layout.getChildCount(); i++) {
-                View child = layout.getChildAt(i);
-
-                if (child instanceof TextView) {
-                    TextView textView = (TextView) child;
-
-                    if (selected) {
-                        textView.setTextColor(PURPLE);
-                    } else {
-                        textView.setTextColor(DARK_TEXT);
-                    }
-
-                    if ("✓".contentEquals(textView.getText())) {
-                        textView.setVisibility(selected ? View.VISIBLE : View.GONE);
-                        textView.setTextColor(selected ? WHITE : PURPLE);
-                        textView.setBackgroundResource(selected
-                                ? R.drawable.pickday_button_primary
-                                : R.drawable.pickday_card_white);
-                    }
-                }
-            }
+        for (String isoDate : getSortedSelectedDates()) {
+            layoutCandidateDates.addView(createDateChip(isoDate));
         }
+    }
+
+    private View createDateChip(String isoDate) {
+        Calendar date = PickDayDatePicker.parseIsoDate(isoDate);
+        LinearLayout chip = new LinearLayout(this);
+        chip.setOrientation(LinearLayout.VERTICAL);
+        chip.setGravity(Gravity.CENTER);
+        chip.setPadding(0, dp(8), 0, dp(8));
+        chip.setBackgroundResource(R.drawable.pickday_selected);
+        chip.setClickable(true);
+        chip.setFocusable(true);
+
+        LinearLayout.LayoutParams chipParams = new LinearLayout.LayoutParams(dp(58), dp(76));
+        chipParams.setMargins(0, 0, dp(8), 0);
+        chip.setLayoutParams(chipParams);
+
+        TextView topText = createDateChipText(8, WHITE, "");
+        TextView mainText = createDateChipText(22, PURPLE, PickDayDatePicker.formatChipDate(date));
+        mainText.setTextSize(16);
+        TextView subText = createDateChipText(16, PURPLE, PickDayDatePicker.formatWeek(date));
+        TextView checkText = createDateChipText(16, WHITE, "✓");
+        checkText.setTextSize(10);
+        checkText.setBackgroundResource(R.drawable.pickday_button_primary);
+
+        String relativeLabel = getRelativeDateLabel(date);
+        topText.setText(relativeLabel);
+
+        chip.addView(topText);
+        chip.addView(mainText);
+        chip.addView(subText);
+        chip.addView(checkText);
+        chip.setOnClickListener(v -> toggleDate(isoDate));
+
+        return chip;
+    }
+
+    private TextView createDateChipText(int heightDp, int color, String text) {
+        TextView textView = new TextView(this);
+        textView.setLayoutParams(new LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.MATCH_PARENT,
+                dp(heightDp)
+        ));
+        textView.setGravity(Gravity.CENTER);
+        textView.setIncludeFontPadding(false);
+        textView.setText(text);
+        textView.setTextColor(color);
+        textView.setTextSize(11);
+        textView.setTypeface(null, Typeface.BOLD);
+        return textView;
+    }
+
+    private String getRelativeDateLabel(Calendar date) {
+        Calendar today = PickDayDatePicker.today();
+        Calendar tomorrow = PickDayDatePicker.today();
+        tomorrow.add(Calendar.DAY_OF_MONTH, 1);
+
+        if (PickDayDatePicker.isSameDate(date, today)) {
+            return "오늘";
+        }
+
+        if (PickDayDatePicker.isSameDate(date, tomorrow)) {
+            return "내일";
+        }
+
+        return "";
+    }
+
+    private List<String> getSortedSelectedDates() {
+        List<String> dates = new ArrayList<>(selectedDates);
+        Collections.sort(dates);
+        return dates;
     }
 
     private void updateDateCount() {
         tvDateCount.setText("✓ 최대 10개까지 선택할 수 있어요 (" + selectedDates.size() + "/10)");
+    }
+
+    private int dp(int value) {
+        return (int) (value * getResources().getDisplayMetrics().density + 0.5f);
     }
 
     private void initTimeChips() {

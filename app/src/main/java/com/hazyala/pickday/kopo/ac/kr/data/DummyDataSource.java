@@ -1,11 +1,15 @@
 package com.hazyala.pickday.kopo.ac.kr.data;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
+import java.util.Locale;
+import java.text.SimpleDateFormat;
 
 public class DummyDataSource {
 
     private static final List<MyMeetupRoom> createdMeetupRooms = new ArrayList<>();
+    private static final List<String> currentDraftCandidateDates = new ArrayList<>();
 
     public static User getCurrentUser() {
         return new User(
@@ -29,16 +33,126 @@ public class DummyDataSource {
 
     public static List<AvailableDate> getAvailableDates() {
         List<AvailableDate> dates = new ArrayList<>();
+        Calendar today = Calendar.getInstance();
+        Calendar weekStart = Calendar.getInstance();
+        weekStart.set(Calendar.DAY_OF_WEEK, Calendar.SUNDAY);
 
-        dates.add(new AvailableDate("오늘", "5.21", "수", 3, false, false));
-        dates.add(new AvailableDate("내일", "5.22", "목", 4, false, false));
-        dates.add(new AvailableDate("", "5.23", "금", 6, false, false));
-        dates.add(new AvailableDate("", "5.24", "토", 7, true, false));
-        dates.add(new AvailableDate("", "5.25", "일", 5, false, true));
-        dates.add(new AvailableDate("", "5.26", "월", 2, false, false));
-        dates.add(new AvailableDate("", "5.27", "화", 3, false, false));
+        int todayIndex = 0;
+
+        for (int index = 0; index < 7; index++) {
+            Calendar date = (Calendar) weekStart.clone();
+            date.add(Calendar.DAY_OF_MONTH, index);
+
+            if (isSameDay(date, today)) {
+                todayIndex = index;
+            }
+        }
+
+        for (int index = 0; index < 7; index++) {
+            Calendar date = (Calendar) weekStart.clone();
+            date.add(Calendar.DAY_OF_MONTH, index);
+
+            String label = "";
+
+            if (isSameDay(date, today)) {
+                label = "오늘";
+            } else {
+                Calendar tomorrow = (Calendar) today.clone();
+                tomorrow.add(Calendar.DAY_OF_MONTH, 1);
+
+                if (isSameDay(date, tomorrow)) {
+                    label = "내일";
+                }
+            }
+
+            boolean hasMeetupStatus = false;
+
+            dates.add(new AvailableDate(
+                    label,
+                    formatMonthDay(date),
+                    formatWeekday(date),
+                    0,
+                    index == todayIndex,
+                    false,
+                    hasMeetupStatus
+            ));
+        }
 
         return dates;
+    }
+
+    private static boolean isSameDay(Calendar first, Calendar second) {
+        return first.get(Calendar.YEAR) == second.get(Calendar.YEAR)
+                && first.get(Calendar.DAY_OF_YEAR) == second.get(Calendar.DAY_OF_YEAR);
+    }
+
+    private static String formatMonthDay(Calendar date) {
+        SimpleDateFormat sdf = new SimpleDateFormat("M.d", Locale.KOREAN);
+        return sdf.format(date.getTime());
+    }
+
+    private static String formatWeekday(Calendar date) {
+        SimpleDateFormat sdf = new SimpleDateFormat("E", Locale.KOREAN);
+        return sdf.format(date.getTime());
+    }
+
+    public static List<CalendarMeetup> getCalendarMeetups() {
+        List<CalendarMeetup> meetups = new ArrayList<>();
+
+        meetups.add(new CalendarMeetup(
+                "팀플 회의 일정",
+                "2026-05-24",
+                "오후 11:59",
+                4,
+                "응답 마감일",
+                "#FF9338",
+                "팀"
+        ));
+        meetups.add(new CalendarMeetup(
+                "지윤이 생일 파티",
+                "2026-05-25",
+                "오후 6:00 ~ 9:00",
+                6,
+                "확정된 약속일",
+                "#4EBD73",
+                "생"
+        ));
+        meetups.add(new CalendarMeetup(
+                "동아리 MT 일정 정하기",
+                "2026-05-25",
+                "오후 11:59",
+                7,
+                "응답 마감일",
+                "#FF9338",
+                "동"
+        ));
+        meetups.add(new CalendarMeetup(
+                "동아리 MT 일정 정하기",
+                "2026-05-30",
+                "오후 2:00",
+                7,
+                "확정된 약속일",
+                "#4EBD73",
+                "동"
+        ));
+
+        for (MyMeetupRoom room : createdMeetupRooms) {
+            if (room.deadlineDateIso == null || room.deadlineDateIso.trim().isEmpty()) {
+                continue;
+            }
+
+            meetups.add(new CalendarMeetup(
+                    room.title,
+                    room.deadlineDateIso,
+                    room.deadlineTimeText,
+                    room.participantCount,
+                    "응답 마감일",
+                    "#FF9338",
+                    "마"
+            ));
+        }
+
+        return meetups;
     }
 
     public static List<MyMeetupRoom> getMyMeetupRooms() {
@@ -73,10 +187,40 @@ public class DummyDataSource {
         return rooms;
     }
 
+    public static void setCurrentDraftCandidateDates(List<String> candidateDates) {
+        currentDraftCandidateDates.clear();
+
+        if (candidateDates != null) {
+            currentDraftCandidateDates.addAll(candidateDates);
+        }
+    }
+
+    public static List<String> getCurrentDraftCandidateDates() {
+        return new ArrayList<>(currentDraftCandidateDates);
+    }
+
+    public static List<String> getResponseCandidateDates() {
+        if (!currentDraftCandidateDates.isEmpty()) {
+            return getCurrentDraftCandidateDates();
+        }
+
+        List<String> fallbackDates = new ArrayList<>();
+        fallbackDates.add("2026-05-21");
+        fallbackDates.add("2026-05-22");
+        fallbackDates.add("2026-05-23");
+        fallbackDates.add("2026-05-24");
+        fallbackDates.add("2026-05-25");
+        fallbackDates.add("2026-05-26");
+        fallbackDates.add("2026-05-27");
+        return fallbackDates;
+    }
+
     public static void addCreatedMeetupRoom(
             String title,
             int participantCount,
-            String dDay
+            String dDay,
+            String deadlineDateIso,
+            String deadlineTimeText
     ) {
         if (title == null || title.trim().isEmpty()) {
             return;
@@ -93,7 +237,9 @@ public class DummyDataSource {
                         participantCount,
                         dDay,
                         0,
-                        "default"
+                        "default",
+                        deadlineDateIso,
+                        deadlineTimeText
                 ));
                 return;
             }
@@ -104,7 +250,9 @@ public class DummyDataSource {
                 participantCount,
                 dDay,
                 0,
-                "default"
+                "default",
+                deadlineDateIso,
+                deadlineTimeText
         ));
     }
 
@@ -273,6 +421,7 @@ public class DummyDataSource {
         public int availableCount;
         public boolean selected;
         public boolean best;
+        public boolean hasMeetupStatus;
 
         public AvailableDate(
                 String label,
@@ -280,7 +429,8 @@ public class DummyDataSource {
                 String dayOfWeek,
                 int availableCount,
                 boolean selected,
-                boolean best
+                boolean best,
+                boolean hasMeetupStatus
         ) {
             this.label = label;
             this.date = date;
@@ -288,6 +438,35 @@ public class DummyDataSource {
             this.availableCount = availableCount;
             this.selected = selected;
             this.best = best;
+            this.hasMeetupStatus = hasMeetupStatus;
+        }
+    }
+
+    public static class CalendarMeetup {
+        public String title;
+        public String dateIso;
+        public String timeText;
+        public int participantCount;
+        public String statusText;
+        public String accentColor;
+        public String iconText;
+
+        public CalendarMeetup(
+                String title,
+                String dateIso,
+                String timeText,
+                int participantCount,
+                String statusText,
+                String accentColor,
+                String iconText
+        ) {
+            this.title = title;
+            this.dateIso = dateIso;
+            this.timeText = timeText;
+            this.participantCount = participantCount;
+            this.statusText = statusText;
+            this.accentColor = accentColor;
+            this.iconText = iconText;
         }
     }
 
@@ -297,6 +476,8 @@ public class DummyDataSource {
         public String dDay;
         public int responseRate;
         public String iconType;
+        public String deadlineDateIso;
+        public String deadlineTimeText;
 
         public MyMeetupRoom(
                 String title,
@@ -305,11 +486,25 @@ public class DummyDataSource {
                 int responseRate,
                 String iconType
         ) {
+            this(title, participantCount, dDay, responseRate, iconType, "", "");
+        }
+
+        public MyMeetupRoom(
+                String title,
+                int participantCount,
+                String dDay,
+                int responseRate,
+                String iconType,
+                String deadlineDateIso,
+                String deadlineTimeText
+        ) {
             this.title = title;
             this.participantCount = participantCount;
             this.dDay = dDay;
             this.responseRate = responseRate;
             this.iconType = iconType;
+            this.deadlineDateIso = deadlineDateIso;
+            this.deadlineTimeText = deadlineTimeText;
         }
     }
 

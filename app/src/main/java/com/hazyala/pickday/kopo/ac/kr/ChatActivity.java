@@ -24,6 +24,10 @@ public class ChatActivity extends AppCompatActivity {
     private TextView tvClosedRoomTab;
     private TextView tvChatRoomSectionTitle;
     private TextView tvChatRoomCount;
+    private LinearLayout tabHome;
+    private LinearLayout tabCalendar;
+    private LinearLayout tabMy;
+    private TextView btnFab;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,6 +47,10 @@ public class ChatActivity extends AppCompatActivity {
         tvClosedRoomTab = findViewById(R.id.tvClosedRoomTab);
         tvChatRoomSectionTitle = findViewById(R.id.tvChatRoomSectionTitle);
         tvChatRoomCount = findViewById(R.id.tvChatRoomCount);
+        tabHome = findViewById(R.id.tabHome);
+        tabCalendar = findViewById(R.id.tabCalendar);
+        tabMy = findViewById(R.id.tabMy);
+        btnFab = findViewById(R.id.btnFab);
     }
 
     private void loadChatRooms() {
@@ -178,5 +186,16 @@ public class ChatActivity extends AppCompatActivity {
         ));
 
         tvClosedRoomTab.setOnClickListener(v -> showClosedRooms());
+
+        tabHome.setOnClickListener(v -> {
+            Intent intent = new Intent(ChatActivity.this, HomeActivity.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            startActivity(intent);
+            finish();
+        });
+
+        tabCalendar.setOnClickListener(v -> startActivity(new Intent(ChatActivity.this, CalendarActivity.class)));
+        tabMy.setOnClickListener(v -> startActivity(new Intent(ChatActivity.this, MyPageActivity.class)));
+        btnFab.setOnClickListener(v -> startActivity(new Intent(ChatActivity.this, CreateMeetupActivity.class)));
     }
 }

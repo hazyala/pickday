@@ -145,19 +145,6 @@
                         android:textColor="#232336"
                         android:textSize="15sp"
                         android:textStyle="bold" />
-
-                    <TextView
-                        android:id="@+id/btnCalendarToggle"
-                        android:layout_width="92dp"
-                        android:layout_height="34dp"
-                        android:background="@drawable/pickday_unselected"
-                        android:clickable="true"
-                        android:focusable="true"
-                        android:gravity="center"
-                        android:text="▣  달력 보기"
-                        android:textColor="#6A4DFF"
-                        android:textSize="11sp"
-                        android:textStyle="bold" />
                 </LinearLayout>
 
                 <HorizontalScrollView
@@ -250,8 +237,7 @@
                     layout="@layout/view_pickday_calendar"
                     android:layout_width="match_parent"
                     android:layout_height="190dp"
-                    android:layout_marginTop="10dp"
-                    android:visibility="gone" />
+                    android:layout_marginTop="10dp" />
 
                 <TextView
                     android:id="@+id/tvDateCount"
