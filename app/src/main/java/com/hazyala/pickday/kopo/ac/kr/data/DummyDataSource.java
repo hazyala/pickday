@@ -1,7 +1,10 @@
 package com.hazyala.pickday.kopo.ac.kr.data;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
+import java.util.Locale;
+import java.text.SimpleDateFormat;
 
 public class DummyDataSource {
 
@@ -30,16 +33,71 @@ public class DummyDataSource {
 
     public static List<AvailableDate> getAvailableDates() {
         List<AvailableDate> dates = new ArrayList<>();
+        int[] sampleCounts = {2, 4, 6, 7, 5, 3, 1};
+        Calendar today = Calendar.getInstance();
+        Calendar weekStart = Calendar.getInstance();
+        weekStart.set(Calendar.DAY_OF_WEEK, Calendar.SUNDAY);
 
-        dates.add(new AvailableDate("오늘", "5.21", "수", 3, false, false));
-        dates.add(new AvailableDate("내일", "5.22", "목", 4, false, false));
-        dates.add(new AvailableDate("", "5.23", "금", 6, false, false));
-        dates.add(new AvailableDate("", "5.24", "토", 7, true, false));
-        dates.add(new AvailableDate("", "5.25", "일", 5, false, true));
-        dates.add(new AvailableDate("", "5.26", "월", 2, false, false));
-        dates.add(new AvailableDate("", "5.27", "화", 3, false, false));
+        int bestCount = 0;
+        int todayIndex = 0;
+
+        for (int index = 0; index < sampleCounts.length; index++) {
+            bestCount = Math.max(bestCount, sampleCounts[index]);
+        }
+
+        for (int index = 0; index < 7; index++) {
+            Calendar date = (Calendar) weekStart.clone();
+            date.add(Calendar.DAY_OF_MONTH, index);
+
+            if (isSameDay(date, today)) {
+                todayIndex = index;
+            }
+        }
+
+        for (int index = 0; index < 7; index++) {
+            Calendar date = (Calendar) weekStart.clone();
+            date.add(Calendar.DAY_OF_MONTH, index);
+
+            int availableCount = sampleCounts[index];
+            String label = "";
+
+            if (isSameDay(date, today)) {
+                label = "오늘";
+            } else {
+                Calendar tomorrow = (Calendar) today.clone();
+                tomorrow.add(Calendar.DAY_OF_MONTH, 1);
+
+                if (isSameDay(date, tomorrow)) {
+                    label = "내일";
+                }
+            }
+
+            dates.add(new AvailableDate(
+                    label,
+                    formatMonthDay(date),
+                    formatWeekday(date),
+                    availableCount,
+                    index == todayIndex,
+                    availableCount == bestCount
+            ));
+        }
 
         return dates;
+    }
+
+    private static boolean isSameDay(Calendar first, Calendar second) {
+        return first.get(Calendar.YEAR) == second.get(Calendar.YEAR)
+                && first.get(Calendar.DAY_OF_YEAR) == second.get(Calendar.DAY_OF_YEAR);
+    }
+
+    private static String formatMonthDay(Calendar date) {
+        SimpleDateFormat sdf = new SimpleDateFormat("M.d", Locale.KOREAN);
+        return sdf.format(date.getTime());
+    }
+
+    private static String formatWeekday(Calendar date) {
+        SimpleDateFormat sdf = new SimpleDateFormat("E", Locale.KOREAN);
+        return sdf.format(date.getTime());
     }
 
     public static List<MyMeetupRoom> getMyMeetupRooms() {

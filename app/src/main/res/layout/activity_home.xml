@@ -217,7 +217,7 @@
                 </FrameLayout>
             </LinearLayout>
 
-            <!-- 이번 주 가능한 날 -->
+            <!-- 이번주 약속 현황 -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -229,7 +229,7 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="이번 주 가능한 날 ?"
+                    android:text="이번주 약속 현황"
                     android:textColor="#242438"
                     android:textSize="13sp"
                     android:textStyle="bold" />
