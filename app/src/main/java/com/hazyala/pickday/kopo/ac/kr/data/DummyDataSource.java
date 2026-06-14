@@ -6,6 +6,7 @@ import java.util.List;
 public class DummyDataSource {
 
     private static final List<MyMeetupRoom> createdMeetupRooms = new ArrayList<>();
+    private static final List<String> currentDraftCandidateDates = new ArrayList<>();
 
     public static User getCurrentUser() {
         return new User(
@@ -71,6 +72,34 @@ public class DummyDataSource {
         rooms.addAll(createdMeetupRooms);
 
         return rooms;
+    }
+
+    public static void setCurrentDraftCandidateDates(List<String> candidateDates) {
+        currentDraftCandidateDates.clear();
+
+        if (candidateDates != null) {
+            currentDraftCandidateDates.addAll(candidateDates);
+        }
+    }
+
+    public static List<String> getCurrentDraftCandidateDates() {
+        return new ArrayList<>(currentDraftCandidateDates);
+    }
+
+    public static List<String> getResponseCandidateDates() {
+        if (!currentDraftCandidateDates.isEmpty()) {
+            return getCurrentDraftCandidateDates();
+        }
+
+        List<String> fallbackDates = new ArrayList<>();
+        fallbackDates.add("2026-05-21");
+        fallbackDates.add("2026-05-22");
+        fallbackDates.add("2026-05-23");
+        fallbackDates.add("2026-05-24");
+        fallbackDates.add("2026-05-25");
+        fallbackDates.add("2026-05-26");
+        fallbackDates.add("2026-05-27");
+        return fallbackDates;
     }
 
     public static void addCreatedMeetupRoom(
