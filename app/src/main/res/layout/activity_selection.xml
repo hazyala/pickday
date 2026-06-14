@@ -387,12 +387,13 @@
                         android:textSize="12sp"
                         android:textStyle="bold" />
 
-                    <TextView
+                    <ImageView
                         android:layout_width="54dp"
                         android:layout_height="54dp"
-                        android:gravity="center"
-                        android:text="🗓️"
-                        android:textSize="32sp" />
+                        android:padding="12dp"
+                        android:src="@drawable/icon_calendars"
+                        android:tint="#6A4DFF"
+                        android:scaleType="centerInside" />
                 </LinearLayout>
 
                 <View

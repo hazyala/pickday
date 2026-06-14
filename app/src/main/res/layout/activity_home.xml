@@ -48,7 +48,7 @@
                         android:id="@+id/tvGreeting"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="안녕하세요, 해민님! 👋"
+                        android:text="안녕하세요, 해민님!"
                         android:textColor="#7A7892"
                         android:textSize="10sp"
                         android:includeFontPadding="false"/>
@@ -66,13 +66,14 @@
                         android:includeFontPadding="false"/>
                 </LinearLayout>
 
-                <TextView
+                <ImageView
                     android:id="@+id/btnNotification"
                     android:layout_width="40dp"
-                    android:layout_height="40dp"
-                    android:text="🔔"
-                    android:textSize="20sp"
-                    android:includeFontPadding="false"/>
+                android:layout_height="40dp"
+                android:padding="8dp"
+                android:src="@drawable/icon_notification"
+                android:tint="#252538"
+                android:scaleType="centerInside" />
             </LinearLayout>
 
             <!-- 진행 중인 약속 카드 -->
@@ -118,7 +119,7 @@
                         android:id="@+id/tvMainParticipants"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="👥 참여자 6명"
+                        android:text="참여자 6명"
                         android:textColor="#8A88A0"
                         android:textSize="8sp"
                         android:includeFontPadding="false"
@@ -129,7 +130,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="16dp"
-                        android:text="🕘 마감까지 D-2"
+                        android:text="마감까지 D-2"
                         android:textColor="#8A88A0"
                         android:textSize="8sp"
                         android:includeFontPadding="false"/>
@@ -178,7 +179,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="3dp"
-                            android:text="👥 6명 가능"
+                            android:text="6명 가능"
                             android:textColor="#8A76FF"
                             android:textSize="8sp" />
                     </LinearLayout>
@@ -420,26 +421,56 @@
         android:paddingStart="16dp"
         android:paddingEnd="16dp">
 
-        <TextView
+        <LinearLayout
             android:id="@+id/tabHome"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:gravity="center"
-            android:text="⌂\n홈"
-            android:textColor="#5B4CDB"
-            android:textSize="12sp"
-            android:textStyle="bold" />
+            android:orientation="vertical">
 
-        <TextView
+            <ImageView
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:src="@drawable/icon_home"
+                android:tint="#5B4CDB"
+                android:scaleType="centerInside" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="2dp"
+                android:includeFontPadding="false"
+                android:text="홈"
+                android:textColor="#5B4CDB"
+                android:textSize="10sp"
+                android:textStyle="bold" />
+        </LinearLayout>
+
+        <LinearLayout
             android:id="@+id/tabCalendar"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:gravity="center"
-            android:text="▣\n캘린더"
-            android:textColor="#8A88A0"
-            android:textSize="12sp" />
+            android:orientation="vertical">
+
+            <ImageView
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:src="@drawable/icon_calendars"
+                android:tint="#8A88A0"
+                android:scaleType="centerInside" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="2dp"
+                android:includeFontPadding="false"
+                android:text="캘린더"
+                android:textColor="#8A88A0"
+                android:textSize="10sp" />
+        </LinearLayout>
 
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/btnFab"
@@ -456,25 +487,55 @@
             android:padding="0dp"
             android:includeFontPadding="false"/>
 
-        <TextView
+        <LinearLayout
             android:id="@+id/tabAlarm"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:gravity="center"
-            android:text="♢\n알림"
-            android:textColor="#8A88A0"
-            android:textSize="12sp" />
+            android:orientation="vertical">
 
-        <TextView
+            <ImageView
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:src="@drawable/icon_notification"
+                android:tint="#8A88A0"
+                android:scaleType="centerInside" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="2dp"
+                android:includeFontPadding="false"
+                android:text="알림"
+                android:textColor="#8A88A0"
+                android:textSize="10sp" />
+        </LinearLayout>
+
+        <LinearLayout
             android:id="@+id/tabMy"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:gravity="center"
-            android:text="○\n내 정보"
-            android:textColor="#8A88A0"
-            android:textSize="12sp" />
+            android:orientation="vertical">
+
+            <ImageView
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:src="@drawable/icon_person"
+                android:tint="#8A88A0"
+                android:scaleType="centerInside" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="2dp"
+                android:includeFontPadding="false"
+                android:text="내 정보"
+                android:textColor="#8A88A0"
+                android:textSize="10sp" />
+        </LinearLayout>
 
     </LinearLayout>
 

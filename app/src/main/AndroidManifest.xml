@@ -12,6 +12,15 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.PickDay">
         <activity
+            android:name=".SignupActivity"
+            android:exported="false" />
+        <activity
+            android:name=".MyPageActionActivity"
+            android:exported="false" />
+        <activity
+            android:name=".MyPageActivity"
+            android:exported="false" />
+        <activity
             android:name=".ResponseSelectionActivity"
             android:exported="false" />
         <activity

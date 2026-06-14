@@ -14,10 +14,12 @@
         android:id="@+id/tvRoomIcon"
         android:layout_width="36dp"
         android:layout_height="36dp"
-        android:background="@drawable/pickday_unselected"
+        android:background="@drawable/pickday_card_soft"
         android:gravity="center"
-        android:text="👥"
-        android:textSize="17sp"
+        android:text="팀"
+        android:textColor="#6A4DFF"
+        android:textSize="12sp"
+        android:textStyle="bold"
         android:includeFontPadding="false" />
 
     <LinearLayout

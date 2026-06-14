@@ -281,18 +281,18 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="💡  TIP\n오후, 저녁 시간대가 가장 많은 선택을 받을 확률이 높아요!"
+                    android:text="TIP\n오후, 저녁 시간대가 가장 많은 선택을 받을 확률이 높아요!"
                     android:textColor="#6A4DFF"
                     android:textSize="9sp"
                     android:textStyle="bold" />
 
-                <TextView
+                <ImageView
                     android:layout_width="42dp"
                     android:layout_height="42dp"
-                    android:gravity="center"
-                    android:includeFontPadding="false"
-                    android:text="🗓️"
-                    android:textSize="28sp" />
+                    android:padding="9dp"
+                    android:src="@drawable/icon_calendars"
+                    android:tint="#6A4DFF"
+                    android:scaleType="centerInside" />
             </LinearLayout>
 
             <!-- 제외할 날짜 -->

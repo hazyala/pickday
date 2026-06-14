@@ -1,6 +1,7 @@
 package com.hazyala.pickday.kopo.ac.kr;
 
 import android.graphics.Color;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,6 +13,7 @@ import android.content.Intent;
 import androidx.appcompat.widget.AppCompatButton;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 
 import com.hazyala.pickday.kopo.ac.kr.data.DummyDataSource;
 
@@ -32,6 +34,9 @@ public class HomeActivity extends AppCompatActivity {
     private AppCompatButton btnDetail;
     private AppCompatButton btnFab;
     private AppCompatButton btnCreateSmall;
+    private LinearLayout tabCalendar;
+    private LinearLayout tabAlarm;
+    private LinearLayout tabMy;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,6 +70,9 @@ public class HomeActivity extends AppCompatActivity {
         btnDetail = findViewById(R.id.btnDetail);
         btnFab = findViewById(R.id.btnFab);
         btnCreateSmall = findViewById(R.id.btnCreateSmall);
+        tabCalendar = findViewById(R.id.tabCalendar);
+        tabAlarm = findViewById(R.id.tabAlarm);
+        tabMy = findViewById(R.id.tabMy);
     }
 
     private void setMainMeetupData() {
@@ -76,23 +84,41 @@ public class HomeActivity extends AppCompatActivity {
                 DummyDataSource.getMainMeetup();
 
         tvGreeting.setText(
-                "안녕하세요, " + user.name + "님! 👋"
+                "안녕하세요, " + user.name + "님!"
         );
 
         tvMainTitle.setText(meetup.title);
 
         tvMainParticipants.setText(
-                "👥 참여자 " + meetup.participantCount + "명"
+                "참여자 " + meetup.participantCount + "명"
+        );
+        setStartIcon(
+                tvMainParticipants,
+                R.drawable.icon_group,
+                10,
+                tvMainParticipants.getCurrentTextColor()
         );
 
         tvMainDday.setText(
-                "🕘 마감까지 " + meetup.dDay
+                "마감까지 " + meetup.dDay
+        );
+        setStartIcon(
+                tvMainDday,
+                R.drawable.icon_calendars,
+                10,
+                tvMainDday.getCurrentTextColor()
         );
 
         tvBestDate.setText(meetup.bestDateTime);
 
         tvBestCount.setText(
-                "👥 " + meetup.availableCount + "명 가능"
+                meetup.availableCount + "명 가능"
+        );
+        setStartIcon(
+                tvBestCount,
+                R.drawable.icon_group,
+                10,
+                tvBestCount.getCurrentTextColor()
         );
     }
 
@@ -136,7 +162,7 @@ public class HomeActivity extends AppCompatActivity {
             tvDayOfWeek.setText("(" + date.dayOfWeek + ")");
 
             tvAvailableCount.setText(
-                    "👥 " + date.availableCount + "명"
+                    date.availableCount + "명"
             );
 
             if (date.selected) {
@@ -153,6 +179,13 @@ public class HomeActivity extends AppCompatActivity {
 
                 tvAvailableCount.setTextColor(Color.WHITE);
             }
+
+            setStartIcon(
+                    tvAvailableCount,
+                    R.drawable.icon_group,
+                    9,
+                    tvAvailableCount.getCurrentTextColor()
+            );
 
             if (date.best) {
 
@@ -206,19 +239,19 @@ public class HomeActivity extends AppCompatActivity {
             switch (room.iconType) {
 
                 case "group":
-                    tvRoomIcon.setText("👥");
+                    tvRoomIcon.setText("팀");
                     break;
 
                 case "cake":
-                    tvRoomIcon.setText("🎂");
+                    tvRoomIcon.setText("생");
                     break;
 
                 case "camp":
-                    tvRoomIcon.setText("⛺");
+                    tvRoomIcon.setText("동");
                     break;
 
                 default:
-                    tvRoomIcon.setText("📅");
+                    tvRoomIcon.setText("일");
                     break;
             }
 
@@ -260,5 +293,64 @@ public class HomeActivity extends AppCompatActivity {
 
             startActivity(intent);
         });
+
+        tabCalendar.setOnClickListener(v -> openActionPage(
+                "캘린더",
+                "참여 중인 약속과 확정된 일정을 한 곳에서 확인해요.",
+                "월별 일정 보기와 약속 필터 기능을 준비 중이에요."
+        ));
+
+        tabAlarm.setOnClickListener(v -> openActionPage(
+                "알림",
+                "초대, 응답 완료, 일정 확정 알림을 확인해요.",
+                "새 알림이 있으면 이 화면에서 가장 먼저 보여줄게요."
+        ));
+
+        tabMy.setOnClickListener(v -> {
+
+            Intent intent =
+                    new Intent(
+                            HomeActivity.this,
+                            MyPageActivity.class
+                    );
+
+            startActivity(intent);
+        });
+    }
+
+    private void openActionPage(String title, String subtitle, String body) {
+
+        Intent intent =
+                new Intent(
+                        HomeActivity.this,
+                        MyPageActionActivity.class
+                );
+
+        intent.putExtra(MyPageActionActivity.EXTRA_TITLE, title);
+        intent.putExtra(MyPageActionActivity.EXTRA_SUBTITLE, subtitle);
+        intent.putExtra(MyPageActionActivity.EXTRA_BODY, body);
+
+        startActivity(intent);
+    }
+
+    private void setStartIcon(
+            TextView textView,
+            int drawableRes,
+            int sizeDp,
+            int tintColor
+    ) {
+        Drawable icon = ContextCompat.getDrawable(this, drawableRes);
+
+        if (icon == null) {
+            return;
+        }
+
+        icon = icon.mutate();
+        icon.setTint(tintColor);
+
+        int sizePx = (int) (sizeDp * getResources().getDisplayMetrics().density);
+        icon.setBounds(0, 0, sizePx, sizePx);
+        textView.setCompoundDrawables(icon, null, null, null);
+        textView.setCompoundDrawablePadding((int) (3 * getResources().getDisplayMetrics().density));
     }
 }
