@@ -23,6 +23,7 @@ public class DummyDataSource {
 
     public static MainMeetup getMainMeetup() {
         return new MainMeetup(
+                "room-mt-2026",
                 "진행 중인 약속",
                 "동아리 MT 일정 정하기",
                 7,
@@ -51,6 +52,7 @@ public class DummyDataSource {
         List<MyMeetupRoom> rooms = new ArrayList<>();
 
         rooms.add(new MyMeetupRoom(
+                "room-team-meeting",
                 "팀플 회의 일정",
                 4,
                 "D-1",
@@ -59,6 +61,7 @@ public class DummyDataSource {
         ));
 
         rooms.add(new MyMeetupRoom(
+                "room-birthday",
                 "지윤이 생일 파티",
                 6,
                 "D-3",
@@ -67,6 +70,7 @@ public class DummyDataSource {
         ));
 
         rooms.add(new MyMeetupRoom(
+                "room-mt-2026",
                 "동아리 MT 일정 정하기",
                 7,
                 "D-2",
@@ -107,6 +111,7 @@ public class DummyDataSource {
     }
 
     public static class MainMeetup {
+        public String id;
         public String statusLabel;
         public String title;
         public int participantCount;
@@ -116,6 +121,7 @@ public class DummyDataSource {
         public int availableCount;
 
         public MainMeetup(
+                String id,
                 String statusLabel,
                 String title,
                 int participantCount,
@@ -124,6 +130,7 @@ public class DummyDataSource {
                 String bestDateTime,
                 int availableCount
         ) {
+            this.id = id;
             this.statusLabel = statusLabel;
             this.title = title;
             this.participantCount = participantCount;
@@ -160,6 +167,7 @@ public class DummyDataSource {
     }
 
     public static class MyMeetupRoom {
+        public String id;
         public String title;
         public int participantCount;
         public String dDay;
@@ -167,12 +175,14 @@ public class DummyDataSource {
         public String statusLabel;
 
         public MyMeetupRoom(
+                String id,
                 String title,
                 int participantCount,
                 String dDay,
                 int responseRate,
                 String statusLabel
         ) {
+            this.id = id;
             this.title = title;
             this.participantCount = participantCount;
             this.dDay = dDay;

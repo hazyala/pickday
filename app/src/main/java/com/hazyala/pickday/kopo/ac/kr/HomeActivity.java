@@ -39,6 +39,7 @@ public class HomeActivity extends AppCompatActivity {
     private AppCompatButton btnDetail;
     private AppCompatButton btnFab;
     private AppCompatButton btnCreateSmall;
+    private String mainMeetupId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -91,6 +92,7 @@ public class HomeActivity extends AppCompatActivity {
         );
 
         if (meetup == null) {
+            mainMeetupId = null;
             cardMainMeetup.setVisibility(View.GONE);
             cardEmptyMeetup.setVisibility(View.VISIBLE);
             return;
@@ -100,6 +102,7 @@ public class HomeActivity extends AppCompatActivity {
         cardEmptyMeetup.setVisibility(View.GONE);
 
         tvMainStatus.setText(meetup.statusLabel);
+        mainMeetupId = meetup.id;
 
         tvMainTitle.setText(meetup.title);
 
@@ -259,6 +262,8 @@ public class HomeActivity extends AppCompatActivity {
                     ColorStateList.valueOf(getRoomTintColor(room.responseRate))
             );
 
+            view.setOnClickListener(v -> openRoomDetail(room.id));
+
             layoutRoomContainer.addView(view);
         }
     }
@@ -301,16 +306,7 @@ public class HomeActivity extends AppCompatActivity {
 
     private void setListeners() {
 
-        btnDetail.setOnClickListener(v -> {
-
-            Intent intent =
-                    new Intent(
-                            HomeActivity.this,
-                            RoomDetailActivity.class
-                    );
-
-            startActivity(intent);
-        });
+        btnDetail.setOnClickListener(v -> openRoomDetail(mainMeetupId));
 
         btnFab.setOnClickListener(v -> {
 
@@ -333,5 +329,19 @@ public class HomeActivity extends AppCompatActivity {
 
             startActivity(intent);
         });
+    }
+
+    private void openRoomDetail(String roomId) {
+        Intent intent =
+                new Intent(
+                        HomeActivity.this,
+                        RoomDetailActivity.class
+                );
+
+        if (roomId != null && roomId.length() > 0) {
+            intent.putExtra("roomId", roomId);
+        }
+
+        startActivity(intent);
     }
 }
