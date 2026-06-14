@@ -32,15 +32,15 @@ PickDay 개발은 기능 단위 브랜치와 PR 기반 병합을 원칙으로 �
 
 커밋은 작게 나누고 구현 단위가 드러나게 작성합니다.
 
-Conventional Commit 형태를 사용합니다.
+Conventional Commit 형태를 사용하되, 메시지 본문은 간단한 한국어로 작성합니다.
 
-- `feat: add local room repository`
-- `fix: preserve selected dates on response edit`
-- `refactor: split schedule scoring from activity`
-- `docs: add UI icon policy`
-- `style: align room detail card spacing`
-- `test: cover schedule tie ranking`
-- `chore: update gradle config`
+- `feat: 로컬 방 저장소 추가`
+- `fix: 응답 수정 시 선택 날짜 유지`
+- `refactor: 일정 점수 계산 분리`
+- `docs: 아이콘 정책 추가`
+- `style: 방 상세 카드 간격 정리`
+- `test: 일정 동점 순위 검증`
+- `chore: 그래들 설정 정리`
 
 동작 변경, 대규모 UI 변경, 문서 정리를 하나의 커밋에 섞지 않습니다. 단, 변경이 분리 불가능할 때만 함께 커밋합니다.
 
