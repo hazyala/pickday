@@ -67,6 +67,7 @@ public class RoomDetailActivity extends AppCompatActivity {
                     RoomDetailActivity.this,
                     ResponseSelectionActivity.class
             );
+            intent.putExtra(EXTRA_ROOM_ID, roomId);
             startActivity(intent);
         });
     }

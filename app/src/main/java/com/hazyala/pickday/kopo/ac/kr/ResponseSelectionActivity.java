@@ -3,6 +3,7 @@ package com.hazyala.pickday.kopo.ac.kr;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -22,8 +23,11 @@ import java.util.Set;
 
 public class ResponseSelectionActivity extends AppCompatActivity {
 
+    public static final String EXTRA_ROOM_ID = RoomDetailActivity.EXTRA_ROOM_ID;
+
     private AppCompatButton btnBack;
     private TextView btnComplete;
+    private String roomId;
 
     private TextView tvDateCount;
     private TextView tvSelectedDateCount;
@@ -53,6 +57,7 @@ public class ResponseSelectionActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_response_selection);
 
+        readRoomData();
         initViews();
         initCandidateDates();
 
@@ -78,8 +83,16 @@ public class ResponseSelectionActivity extends AppCompatActivity {
         responseCalendar = findViewById(R.id.responseCalendar);
     }
 
+    private void readRoomData() {
+        roomId = getIntent().getStringExtra(EXTRA_ROOM_ID);
+
+        if (roomId == null || roomId.isEmpty()) {
+            roomId = DummyDataSource.getCurrentDraftRoomId();
+        }
+    }
+
     private void initCandidateDates() {
-        List<String> candidateDateValues = DummyDataSource.getResponseCandidateDates();
+        List<String> candidateDateValues = DummyDataSource.getResponseCandidateDates(roomId);
         Collections.sort(candidateDateValues);
 
         for (String isoDate : candidateDateValues) {
@@ -251,17 +264,32 @@ public class ResponseSelectionActivity extends AppCompatActivity {
     }
 
     private void setupExcludeOptions() {
-        addExcludeView(R.id.exclude0529, "5.29");
-        addExcludeView(R.id.exclude0530, "5.30");
-        addExcludeView(R.id.exclude0531, "5.31");
-        addExcludeView(R.id.exclude0601, "6.1");
-        addExcludeView(R.id.exclude0602, "6.2");
-        addExcludeView(R.id.exclude0603, "6.3");
-        addExcludeView(R.id.exclude0604, "6.4");
+        int[] excludeViewIds = new int[]{
+                R.id.exclude0529,
+                R.id.exclude0530,
+                R.id.exclude0531,
+                R.id.exclude0601,
+                R.id.exclude0602,
+                R.id.exclude0603,
+                R.id.exclude0604
+        };
+
+        for (int index = 0; index < excludeViewIds.length; index++) {
+            TextView view = findViewById(excludeViewIds[index]);
+
+            if (index < candidateDates.size()) {
+                DateItem item = candidateDates.get(index);
+                view.setVisibility(View.VISIBLE);
+                addExcludeView(view, item.isoDate);
+            } else {
+                view.setVisibility(View.GONE);
+            }
+        }
+
+        updateExcludeState();
     }
 
-    private void addExcludeView(int id, String key) {
-        TextView view = findViewById(id);
+    private void addExcludeView(TextView view, String key) {
         excludeViews.add(view);
 
         view.setOnClickListener(v -> {
@@ -276,20 +304,15 @@ public class ResponseSelectionActivity extends AppCompatActivity {
     }
 
     private void updateExcludeState() {
-        updateSingleExcludeState(R.id.exclude0529, "5.29", "5.29\n목");
-        updateSingleExcludeState(R.id.exclude0530, "5.30", "5.30\n금");
-        updateSingleExcludeState(R.id.exclude0531, "5.31", "5.31\n토");
-        updateSingleExcludeState(R.id.exclude0601, "6.1", "6.1\n일");
-        updateSingleExcludeState(R.id.exclude0602, "6.2", "6.2\n월");
-        updateSingleExcludeState(R.id.exclude0603, "6.3", "6.3\n화");
-        updateSingleExcludeState(R.id.exclude0604, "6.4", "6.4\n수");
+        for (int index = 0; index < excludeViews.size(); index++) {
+            DateItem item = candidateDates.get(index);
+            updateSingleExcludeState(excludeViews.get(index), item.isoDate, item.label + "\n" + item.week);
+        }
 
         tvExcludeCount.setText(excludedDates.size() + "개 선택  ˅");
     }
 
-    private void updateSingleExcludeState(int id, String key, String label) {
-        TextView view = findViewById(id);
-
+    private void updateSingleExcludeState(TextView view, String key, String label) {
         if (excludedDates.contains(key)) {
             view.setText(label + "\n✓");
             view.setTextColor(PURPLE);
@@ -318,6 +341,7 @@ public class ResponseSelectionActivity extends AppCompatActivity {
             Toast.makeText(this, "응답이 저장되었습니다", Toast.LENGTH_SHORT).show();
 
             Intent intent = new Intent(ResponseSelectionActivity.this, RoomDetailActivity.class);
+            intent.putExtra(RoomDetailActivity.EXTRA_ROOM_ID, roomId);
             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
             startActivity(intent);
             finish();

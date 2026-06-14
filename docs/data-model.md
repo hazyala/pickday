@@ -219,6 +219,8 @@ Create Meetup에서 생성한 방의 `roomId`는 Host Selection과 Invite Member
 
 Room Detail 기본 정보는 선택된 `roomId`의 로컬 방 데이터에서 제목, 상태, 마감일/마감 시간, 참여 인원, 응답률, 확정 일정 또는 미정 상태를 표시합니다. 후보 날짜별 가능 인원, 가장 유력한 날짜, 시간대별 선호도, 응답 완료/대기 비율은 roomId별 `AvailabilityResponse` 더미 데이터에서 계산합니다.
 
+Participant Response Selection은 Room Detail에서 전달받은 `roomId`의 후보 날짜를 기준으로 달력과 제외 날짜 칩을 표시하고, 완료 후 같은 방 상세로 돌아갑니다. 현재 선택 결과를 `AvailabilityResponse`에 반영하는 저장 흐름은 실제 로컬 저장소/백엔드 연동 단계에서 추가합니다.
+
 통계 렌더링:
 
 - 참여 완료율 = 제출 완료 참여자 수 / 전체 참여자 수
