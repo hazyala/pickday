@@ -212,6 +212,8 @@ public class CalendarActivity extends AppCompatActivity {
         item.setMinimumHeight(dp(104));
         item.setPadding(dp(14), dp(14), dp(12), dp(14));
         item.setBackgroundResource(R.drawable.pickday_card_white);
+        item.setClickable(true);
+        item.setFocusable(true);
 
         LinearLayout.LayoutParams itemParams = new LinearLayout.LayoutParams(
                 LinearLayout.LayoutParams.MATCH_PARENT,
@@ -299,6 +301,11 @@ public class CalendarActivity extends AppCompatActivity {
         item.addView(content);
         item.addView(status);
         item.addView(arrow);
+        item.setOnClickListener(v -> {
+            Intent intent = new Intent(CalendarActivity.this, RoomDetailActivity.class);
+            intent.putExtra(ChatDetailActivity.EXTRA_ROOM_TITLE, meetup.title);
+            startActivity(intent);
+        });
 
         return item;
     }
