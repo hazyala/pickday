@@ -209,12 +209,13 @@ public class CalendarActivity extends AppCompatActivity {
         LinearLayout item = new LinearLayout(this);
         item.setGravity(Gravity.CENTER_VERTICAL);
         item.setOrientation(LinearLayout.HORIZONTAL);
-        item.setPadding(dp(14), dp(12), dp(12), dp(12));
+        item.setMinimumHeight(dp(104));
+        item.setPadding(dp(14), dp(14), dp(12), dp(14));
         item.setBackgroundResource(R.drawable.pickday_card_white);
 
         LinearLayout.LayoutParams itemParams = new LinearLayout.LayoutParams(
                 LinearLayout.LayoutParams.MATCH_PARENT,
-                dp(104)
+                LinearLayout.LayoutParams.WRAP_CONTENT
         );
         itemParams.setMargins(0, 0, 0, dp(10));
         item.setLayoutParams(itemParams);
@@ -236,26 +237,41 @@ public class CalendarActivity extends AppCompatActivity {
         content.setLayoutParams(contentParams);
 
         TextView title = new TextView(this);
+        title.setLayoutParams(new LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.MATCH_PARENT,
+                LinearLayout.LayoutParams.WRAP_CONTENT
+        ));
         title.setText(meetup.title);
         title.setTextColor(DARK_TEXT);
         title.setTextSize(16);
         title.setTypeface(null, Typeface.BOLD);
-        title.setIncludeFontPadding(false);
+        title.setIncludeFontPadding(true);
+        title.setSingleLine(false);
 
         TextView time = new TextView(this);
+        time.setLayoutParams(new LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.MATCH_PARENT,
+                LinearLayout.LayoutParams.WRAP_CONTENT
+        ));
         time.setText(formatScheduleDate(meetup.dateIso) + " " + meetup.timeText);
         time.setTextColor(Color.parseColor(meetup.accentColor));
         time.setTextSize(13);
         time.setTypeface(null, Typeface.BOLD);
-        time.setIncludeFontPadding(false);
-        time.setPadding(0, dp(7), 0, 0);
+        time.setIncludeFontPadding(true);
+        time.setSingleLine(false);
+        time.setPadding(0, dp(5), 0, 0);
 
         TextView participants = new TextView(this);
+        participants.setLayoutParams(new LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.MATCH_PARENT,
+                LinearLayout.LayoutParams.WRAP_CONTENT
+        ));
         participants.setText("참여자 " + meetup.participantCount + "명");
         participants.setTextColor(Color.parseColor("#6E6C86"));
         participants.setTextSize(12);
-        participants.setIncludeFontPadding(false);
-        participants.setPadding(0, dp(6), 0, 0);
+        participants.setIncludeFontPadding(true);
+        participants.setSingleLine(false);
+        participants.setPadding(0, dp(4), 0, 0);
 
         content.addView(title);
         content.addView(time);
@@ -272,7 +288,7 @@ public class CalendarActivity extends AppCompatActivity {
         status.setBackgroundResource(R.drawable.bg_calendar_pill);
 
         TextView arrow = new TextView(this);
-        arrow.setLayoutParams(new LinearLayout.LayoutParams(dp(24), LinearLayout.LayoutParams.MATCH_PARENT));
+        arrow.setLayoutParams(new LinearLayout.LayoutParams(dp(24), LinearLayout.LayoutParams.WRAP_CONTENT));
         arrow.setGravity(Gravity.CENTER);
         arrow.setText("›");
         arrow.setTextColor(DARK_TEXT);
