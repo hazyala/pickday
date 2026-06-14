@@ -1,12 +1,17 @@
 package com.hazyala.pickday.kopo.ac.kr.data;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
-import java.text.SimpleDateFormat;
 
 public class DummyDataSource {
+
+    public static final String ROOM_ID_TEAM_MEETING = "room-team-meeting";
+    public static final String ROOM_ID_BIRTHDAY_PARTY = "room-birthday-party";
+    public static final String ROOM_ID_CAMP_MT = "room-club-mt";
+    public static final String DEFAULT_ROOM_ID = ROOM_ID_CAMP_MT;
 
     private static final List<MyMeetupRoom> createdMeetupRooms = new ArrayList<>();
     private static final List<String> currentDraftCandidateDates = new ArrayList<>();
@@ -20,13 +25,16 @@ public class DummyDataSource {
     }
 
     public static MainMeetup getMainMeetup() {
+        MyMeetupRoom room = getMeetupRoomById(DEFAULT_ROOM_ID);
+
         return new MainMeetup(
+                room.roomId,
                 "진행 중인 약속",
-                "동아리 MT 일정 정하기",
-                7,
-                "D-2",
-                78,
-                "5월 25일 (일) 오후 2시",
+                room.title,
+                room.participantCount,
+                room.dDay,
+                room.responseRate,
+                "7월 4일 (토) 오후 2시",
                 5
         );
     }
@@ -68,6 +76,7 @@ public class DummyDataSource {
             boolean hasMeetupStatus = false;
 
             dates.add(new AvailableDate(
+                    DEFAULT_ROOM_ID,
                     label,
                     formatMonthDay(date),
                     formatWeekday(date),
@@ -99,57 +108,32 @@ public class DummyDataSource {
     public static List<CalendarMeetup> getCalendarMeetups() {
         List<CalendarMeetup> meetups = new ArrayList<>();
 
-        meetups.add(new CalendarMeetup(
-                "팀플 회의 일정",
-                "2026-05-24",
-                "오후 11:59",
-                4,
-                "응답 마감일",
-                "#FF9338",
-                "팀"
-        ));
-        meetups.add(new CalendarMeetup(
-                "지윤이 생일 파티",
-                "2026-05-25",
-                "오후 6:00 ~ 9:00",
-                6,
-                "확정된 약속일",
-                "#4EBD73",
-                "생"
-        ));
-        meetups.add(new CalendarMeetup(
-                "동아리 MT 일정 정하기",
-                "2026-05-25",
-                "오후 11:59",
-                7,
-                "응답 마감일",
-                "#FF9338",
-                "동"
-        ));
-        meetups.add(new CalendarMeetup(
-                "동아리 MT 일정 정하기",
-                "2026-05-30",
-                "오후 2:00",
-                7,
-                "확정된 약속일",
-                "#4EBD73",
-                "동"
-        ));
-
-        for (MyMeetupRoom room : createdMeetupRooms) {
-            if (room.deadlineDateIso == null || room.deadlineDateIso.trim().isEmpty()) {
-                continue;
+        for (MyMeetupRoom room : getMyMeetupRooms()) {
+            if (room.deadlineDateIso != null && !room.deadlineDateIso.trim().isEmpty()) {
+                meetups.add(new CalendarMeetup(
+                        room.roomId,
+                        room.title,
+                        room.deadlineDateIso,
+                        room.deadlineTimeText,
+                        room.participantCount,
+                        "응답 마감일",
+                        "#FF9338",
+                        room.iconText
+                ));
             }
 
-            meetups.add(new CalendarMeetup(
-                    room.title,
-                    room.deadlineDateIso,
-                    room.deadlineTimeText,
-                    room.participantCount,
-                    "응답 마감일",
-                    "#FF9338",
-                    "마"
-            ));
+            if (room.confirmedDateIso != null && !room.confirmedDateIso.trim().isEmpty()) {
+                meetups.add(new CalendarMeetup(
+                        room.roomId,
+                        room.title,
+                        room.confirmedDateIso,
+                        room.confirmedTimeText,
+                        room.participantCount,
+                        "확정된 약속일",
+                        "#4EBD73",
+                        room.iconText
+                ));
+            }
         }
 
         return meetups;
@@ -157,34 +141,34 @@ public class DummyDataSource {
 
     public static List<MyMeetupRoom> getMyMeetupRooms() {
         List<MyMeetupRoom> rooms = new ArrayList<>();
-
-        rooms.add(new MyMeetupRoom(
-                "팀플 회의 일정",
-                4,
-                "D-1",
-                100,
-                "group"
-        ));
-
-        rooms.add(new MyMeetupRoom(
-                "지윤이 생일 파티",
-                6,
-                "D-3",
-                83,
-                "cake"
-        ));
-
-        rooms.add(new MyMeetupRoom(
-                "동아리 MT 일정 정하기",
-                7,
-                "D-2",
-                78,
-                "camp"
-        ));
-
+        rooms.addAll(getDefaultMeetupRooms());
         rooms.addAll(createdMeetupRooms);
 
         return rooms;
+    }
+
+    public static MyMeetupRoom getMeetupRoomById(String roomId) {
+        if (roomId != null) {
+            for (MyMeetupRoom room : getMyMeetupRooms()) {
+                if (room.roomId.equals(roomId)) {
+                    return room;
+                }
+            }
+        }
+
+        return getDefaultMeetupRooms().get(2);
+    }
+
+    public static MyMeetupRoom getMeetupRoomByTitle(String title) {
+        if (title != null) {
+            for (MyMeetupRoom room : getMyMeetupRooms()) {
+                if (room.title.equals(title)) {
+                    return room;
+                }
+            }
+        }
+
+        return getMeetupRoomById(DEFAULT_ROOM_ID);
     }
 
     public static void setCurrentDraftCandidateDates(List<String> candidateDates) {
@@ -200,18 +184,25 @@ public class DummyDataSource {
     }
 
     public static List<String> getResponseCandidateDates() {
+        return getResponseCandidateDates(DEFAULT_ROOM_ID);
+    }
+
+    public static List<String> getResponseCandidateDates(String roomId) {
+        MyMeetupRoom room = getMeetupRoomById(roomId);
+
+        if (!room.candidateDateIsos.isEmpty()) {
+            return new ArrayList<>(room.candidateDateIsos);
+        }
+
         if (!currentDraftCandidateDates.isEmpty()) {
             return getCurrentDraftCandidateDates();
         }
 
         List<String> fallbackDates = new ArrayList<>();
-        fallbackDates.add("2026-05-21");
-        fallbackDates.add("2026-05-22");
-        fallbackDates.add("2026-05-23");
-        fallbackDates.add("2026-05-24");
-        fallbackDates.add("2026-05-25");
-        fallbackDates.add("2026-05-26");
-        fallbackDates.add("2026-05-27");
+        fallbackDates.add("2026-06-20");
+        fallbackDates.add("2026-06-21");
+        fallbackDates.add("2026-06-28");
+        fallbackDates.add("2026-07-04");
         return fallbackDates;
     }
 
@@ -227,39 +218,41 @@ public class DummyDataSource {
         }
 
         String normalizedTitle = title.trim();
+        String roomId = createCreatedRoomId(normalizedTitle);
+        List<String> candidateDates = getCurrentDraftCandidateDates();
 
-        for (int index = 0; index < createdMeetupRooms.size(); index++) {
-            MyMeetupRoom room = createdMeetupRooms.get(index);
-
-            if (room.title.equals(normalizedTitle)) {
-                createdMeetupRooms.set(index, new MyMeetupRoom(
-                        normalizedTitle,
-                        participantCount,
-                        dDay,
-                        0,
-                        "default",
-                        deadlineDateIso,
-                        deadlineTimeText
-                ));
-                return;
-            }
-        }
-
-        createdMeetupRooms.add(new MyMeetupRoom(
+        MyMeetupRoom createdRoom = new MyMeetupRoom(
+                roomId,
                 normalizedTitle,
                 participantCount,
                 dDay,
                 0,
                 "default",
                 deadlineDateIso,
-                deadlineTimeText
-        ));
+                deadlineTimeText,
+                candidateDates,
+                "",
+                "",
+                "마"
+        );
+
+        for (int index = 0; index < createdMeetupRooms.size(); index++) {
+            MyMeetupRoom room = createdMeetupRooms.get(index);
+
+            if (room.roomId.equals(roomId)) {
+                createdMeetupRooms.set(index, createdRoom);
+                return;
+            }
+        }
+
+        createdMeetupRooms.add(createdRoom);
     }
 
     public static List<Notification> getNotifications() {
         List<Notification> notifications = new ArrayList<>();
 
         notifications.add(new Notification(
+                ROOM_ID_CAMP_MT,
                 "오늘",
                 "현우님이 응답했어요",
                 "동아리 MT 일정 정하기",
@@ -269,6 +262,7 @@ public class DummyDataSource {
         ));
 
         notifications.add(new Notification(
+                ROOM_ID_CAMP_MT,
                 "오늘",
                 "지윤님이 응답했어요",
                 "동아리 MT 일정 정하기",
@@ -278,6 +272,7 @@ public class DummyDataSource {
         ));
 
         notifications.add(new Notification(
+                ROOM_ID_CAMP_MT,
                 "이번 주",
                 "마감이 1일 남았어요",
                 "동아리 MT 일정 정하기",
@@ -287,15 +282,17 @@ public class DummyDataSource {
         ));
 
         notifications.add(new Notification(
+                ROOM_ID_CAMP_MT,
                 "이번 주",
                 "일정이 확정되었어요!",
                 "동아리 MT 일정 정하기",
-                "5월 24일 (토) 오후 12:00",
+                "7월 4일 (토) 오후 2:00",
                 "어제",
                 "#61D48A"
         ));
 
         notifications.add(new Notification(
+                "room-semicolon-dinner",
                 "이번 주",
                 "새로운 초대장이 도착했어요",
                 "세미콜론 종강 회식",
@@ -305,6 +302,7 @@ public class DummyDataSource {
         ));
 
         notifications.add(new Notification(
+                ROOM_ID_TEAM_MEETING,
                 "이번 주",
                 "수용님이 댓글을 남겼어요",
                 "팀플 회의 일정",
@@ -314,6 +312,7 @@ public class DummyDataSource {
         ));
 
         notifications.add(new Notification(
+                ROOM_ID_BIRTHDAY_PARTY,
                 "이전",
                 "민재님이 응답했어요",
                 "지윤이 생일 파티",
@@ -326,52 +325,119 @@ public class DummyDataSource {
     }
 
     public static List<ChatMessage> getChatMessages(String roomTitle) {
+        return getChatMessagesByRoomId(getMeetupRoomByTitle(roomTitle).roomId);
+    }
+
+    public static List<ChatMessage> getChatMessagesByRoomId(String roomId) {
         List<ChatMessage> messages = new ArrayList<>();
 
-        if ("팀플 회의 일정".equals(roomTitle)) {
-            messages.add(new ChatMessage("수용", "회의 끝나고 뭐 먹을까요?", "오후 6:12", false, false));
-            messages.add(new ChatMessage("김해민", "짜장면 괜찮아요. 학교 앞에 새로 생긴 중국집도 있어요.", "오후 6:13", true, false));
-            messages.add(new ChatMessage("지윤", "거기 탕수육도 괜찮대요.", "오후 6:15", false, false));
-            messages.add(new ChatMessage("김해민", "그럼 중국집이랑 분식집 두 군데 후보로 적어둘게요.", "오후 6:16", true, false));
+        if (ROOM_ID_TEAM_MEETING.equals(roomId)) {
+            messages.add(new ChatMessage(roomId, "수용", "회의 끝나고 뭐 먹을까요?", "오후 6:12", false, false));
+            messages.add(new ChatMessage(roomId, "김해민", "짜장면 괜찮아요. 학교 앞에 새로 생긴 중국집도 있어요.", "오후 6:13", true, false));
+            messages.add(new ChatMessage(roomId, "지윤", "거기 탕수육도 괜찮대요.", "오후 6:15", false, false));
+            messages.add(new ChatMessage(roomId, "김해민", "그럼 중국집이랑 분식집 두 군데 후보로 적어둘게요.", "오후 6:16", true, false));
             return messages;
         }
 
-        if ("지윤이 생일 파티".equals(roomTitle)) {
-            messages.add(new ChatMessage("민재", "케이크는 초코가 좋을까요?", "오후 3:25", false, false));
-            messages.add(new ChatMessage("김해민", "초코 좋고, 음식은 파스타나 피자 쪽이 무난할 것 같아요.", "오후 3:27", true, false));
-            messages.add(new ChatMessage("서연", "맛집 알아요? 너무 시끄럽지 않은 곳이면 좋겠어요.", "오후 3:30", false, false));
-            messages.add(new ChatMessage("김해민", "조용한 파스타집 하나 찾아보고 후보에 넣어둘게요.", "오후 3:32", true, false));
+        if (ROOM_ID_BIRTHDAY_PARTY.equals(roomId)) {
+            messages.add(new ChatMessage(roomId, "민재", "케이크는 초코가 좋을까요?", "오후 3:25", false, false));
+            messages.add(new ChatMessage(roomId, "김해민", "초코 좋고, 음식은 파스타나 피자 쪽이 무난할 것 같아요.", "오후 3:27", true, false));
+            messages.add(new ChatMessage(roomId, "서연", "맛집 알아요? 너무 시끄럽지 않은 곳이면 좋겠어요.", "오후 3:30", false, false));
+            messages.add(new ChatMessage(roomId, "김해민", "조용한 파스타집 하나 찾아보고 후보에 넣어둘게요.", "오후 3:32", true, false));
             return messages;
         }
 
-        messages.add(new ChatMessage("현우", "MT 가면 저녁은 뭐 먹을까요?", "오후 9:12", false, false));
-        messages.add(new ChatMessage("김해민", "고기 구워 먹는 것도 좋고, 비 오는 날이면 전골도 괜찮을 것 같아요.", "오후 9:13", true, false));
-        messages.add(new ChatMessage("지윤", "근처 맛집 알아요?", "오후 9:15", false, false));
-        messages.add(new ChatMessage("김해민", "숙소 근처 식당 몇 군데 찾아보고 후보로 정리해볼게요.", "오후 9:17", true, false));
+        if (ROOM_ID_CAMP_MT.equals(roomId)) {
+            messages.add(new ChatMessage(roomId, "현우", "MT 가면 저녁은 뭐 먹을까요?", "오후 9:12", false, false));
+            messages.add(new ChatMessage(roomId, "김해민", "고기 구워 먹는 것도 좋고, 비 오는 날이면 전골도 괜찮을 것 같아요.", "오후 9:13", true, false));
+            messages.add(new ChatMessage(roomId, "지윤", "근처 맛집 알아요?", "오후 9:15", false, false));
+            messages.add(new ChatMessage(roomId, "김해민", "숙소 근처 식당 몇 군데 찾아보고 후보로 정리해볼게요.", "오후 9:17", true, false));
+        }
 
         return messages;
     }
 
     public static ChatRoomStatus getChatRoomStatus(String roomTitle) {
-        for (MyMeetupRoom room : getMyMeetupRooms()) {
-            if (room.title.equals(roomTitle)) {
-                return new ChatRoomStatus(
-                        room.title,
-                        room.participantCount,
-                        room.dDay,
-                        room.responseRate
-                );
-            }
-        }
+        return getChatRoomStatusByRoomId(getMeetupRoomByTitle(roomTitle).roomId);
+    }
 
-        MainMeetup meetup = getMainMeetup();
+    public static ChatRoomStatus getChatRoomStatusByRoomId(String roomId) {
+        MyMeetupRoom room = getMeetupRoomById(roomId);
 
         return new ChatRoomStatus(
-                meetup.title,
-                meetup.participantCount,
-                meetup.dDay,
-                meetup.responseRate
+                room.roomId,
+                room.title,
+                room.participantCount,
+                room.dDay,
+                room.responseRate
         );
+    }
+
+    private static List<MyMeetupRoom> getDefaultMeetupRooms() {
+        List<MyMeetupRoom> rooms = new ArrayList<>();
+
+        List<String> teamDates = new ArrayList<>();
+        teamDates.add("2026-05-22");
+        teamDates.add("2026-05-24");
+        teamDates.add("2026-05-27");
+        rooms.add(new MyMeetupRoom(
+                ROOM_ID_TEAM_MEETING,
+                "팀플 회의 일정",
+                4,
+                "마감",
+                100,
+                "group",
+                "2026-05-24",
+                "오후 11:59",
+                teamDates,
+                "",
+                "",
+                "팀"
+        ));
+
+        List<String> birthdayDates = new ArrayList<>();
+        birthdayDates.add("2026-06-19");
+        birthdayDates.add("2026-06-20");
+        birthdayDates.add("2026-06-21");
+        rooms.add(new MyMeetupRoom(
+                ROOM_ID_BIRTHDAY_PARTY,
+                "지윤이 생일 파티",
+                6,
+                "D-5",
+                83,
+                "cake",
+                "2026-06-18",
+                "오후 11:59",
+                birthdayDates,
+                "2026-06-20",
+                "오후 6:00 ~ 9:00",
+                "생"
+        ));
+
+        List<String> campDates = new ArrayList<>();
+        campDates.add("2026-06-28");
+        campDates.add("2026-07-04");
+        campDates.add("2026-07-05");
+        rooms.add(new MyMeetupRoom(
+                ROOM_ID_CAMP_MT,
+                "동아리 MT 일정 정하기",
+                7,
+                "D-10",
+                78,
+                "camp",
+                "2026-06-25",
+                "오후 11:59",
+                campDates,
+                "2026-07-04",
+                "오후 2:00",
+                "동"
+        ));
+
+        return rooms;
+    }
+
+    private static String createCreatedRoomId(String title) {
+        return "room-created-" + Integer.toHexString(title.hashCode());
     }
 
     public static class User {
@@ -387,6 +453,7 @@ public class DummyDataSource {
     }
 
     public static class MainMeetup {
+        public String roomId;
         public String statusLabel;
         public String title;
         public int participantCount;
@@ -396,6 +463,7 @@ public class DummyDataSource {
         public int availableCount;
 
         public MainMeetup(
+                String roomId,
                 String statusLabel,
                 String title,
                 int participantCount,
@@ -404,6 +472,7 @@ public class DummyDataSource {
                 String bestDateTime,
                 int availableCount
         ) {
+            this.roomId = roomId;
             this.statusLabel = statusLabel;
             this.title = title;
             this.participantCount = participantCount;
@@ -415,6 +484,7 @@ public class DummyDataSource {
     }
 
     public static class AvailableDate {
+        public String roomId;
         public String label;
         public String date;
         public String dayOfWeek;
@@ -424,6 +494,7 @@ public class DummyDataSource {
         public boolean hasMeetupStatus;
 
         public AvailableDate(
+                String roomId,
                 String label,
                 String date,
                 String dayOfWeek,
@@ -432,6 +503,7 @@ public class DummyDataSource {
                 boolean best,
                 boolean hasMeetupStatus
         ) {
+            this.roomId = roomId;
             this.label = label;
             this.date = date;
             this.dayOfWeek = dayOfWeek;
@@ -443,6 +515,7 @@ public class DummyDataSource {
     }
 
     public static class CalendarMeetup {
+        public String roomId;
         public String title;
         public String dateIso;
         public String timeText;
@@ -452,6 +525,7 @@ public class DummyDataSource {
         public String iconText;
 
         public CalendarMeetup(
+                String roomId,
                 String title,
                 String dateIso,
                 String timeText,
@@ -460,6 +534,7 @@ public class DummyDataSource {
                 String accentColor,
                 String iconText
         ) {
+            this.roomId = roomId;
             this.title = title;
             this.dateIso = dateIso;
             this.timeText = timeText;
@@ -471,6 +546,7 @@ public class DummyDataSource {
     }
 
     public static class MyMeetupRoom {
+        public String roomId;
         public String title;
         public int participantCount;
         public String dDay;
@@ -478,26 +554,38 @@ public class DummyDataSource {
         public String iconType;
         public String deadlineDateIso;
         public String deadlineTimeText;
+        public List<String> candidateDateIsos;
+        public String confirmedDateIso;
+        public String confirmedTimeText;
+        public String iconText;
 
         public MyMeetupRoom(
+                String roomId,
                 String title,
                 int participantCount,
                 String dDay,
                 int responseRate,
                 String iconType
         ) {
-            this(title, participantCount, dDay, responseRate, iconType, "", "");
+            this(roomId, title, participantCount, dDay, responseRate, iconType, "",
+                    "", new ArrayList<>(), "", "", "");
         }
 
         public MyMeetupRoom(
+                String roomId,
                 String title,
                 int participantCount,
                 String dDay,
                 int responseRate,
                 String iconType,
                 String deadlineDateIso,
-                String deadlineTimeText
+                String deadlineTimeText,
+                List<String> candidateDateIsos,
+                String confirmedDateIso,
+                String confirmedTimeText,
+                String iconText
         ) {
+            this.roomId = roomId;
             this.title = title;
             this.participantCount = participantCount;
             this.dDay = dDay;
@@ -505,10 +593,15 @@ public class DummyDataSource {
             this.iconType = iconType;
             this.deadlineDateIso = deadlineDateIso;
             this.deadlineTimeText = deadlineTimeText;
+            this.candidateDateIsos = new ArrayList<>(candidateDateIsos);
+            this.confirmedDateIso = confirmedDateIso;
+            this.confirmedTimeText = confirmedTimeText;
+            this.iconText = iconText;
         }
     }
 
     public static class Notification {
+        public String roomId;
         public String section;
         public String title;
         public String roomTitle;
@@ -517,6 +610,7 @@ public class DummyDataSource {
         public String accentColor;
 
         public Notification(
+                String roomId,
                 String section,
                 String title,
                 String roomTitle,
@@ -524,6 +618,7 @@ public class DummyDataSource {
                 String time,
                 String accentColor
         ) {
+            this.roomId = roomId;
             this.section = section;
             this.title = title;
             this.roomTitle = roomTitle;
@@ -534,6 +629,7 @@ public class DummyDataSource {
     }
 
     public static class ChatMessage {
+        public String roomId;
         public String senderName;
         public String message;
         public String time;
@@ -547,6 +643,18 @@ public class DummyDataSource {
                 boolean mine,
                 boolean notice
         ) {
+            this(DEFAULT_ROOM_ID, senderName, message, time, mine, notice);
+        }
+
+        public ChatMessage(
+                String roomId,
+                String senderName,
+                String message,
+                String time,
+                boolean mine,
+                boolean notice
+        ) {
+            this.roomId = roomId;
             this.senderName = senderName;
             this.message = message;
             this.time = time;
@@ -556,17 +664,20 @@ public class DummyDataSource {
     }
 
     public static class ChatRoomStatus {
+        public String roomId;
         public String title;
         public int participantCount;
         public String dDay;
         public int responseRate;
 
         public ChatRoomStatus(
+                String roomId,
                 String title,
                 int participantCount,
                 String dDay,
                 int responseRate
         ) {
+            this.roomId = roomId;
             this.title = title;
             this.participantCount = participantCount;
             this.dDay = dDay;
