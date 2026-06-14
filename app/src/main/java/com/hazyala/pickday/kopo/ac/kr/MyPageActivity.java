@@ -76,49 +76,42 @@ public class MyPageActivity extends AppCompatActivity {
 
         configureRow(
                 rowCreatedRooms,
-                "방",
                 "내가 만든 방",
                 "내가 만든 약속 방 목록을 확인해요"
         );
 
         configureRow(
                 rowJoinedRooms,
-                "참",
                 "참여한 방",
                 "내가 참여 중인 약속 방 목록이에요"
         );
 
         configureRow(
                 rowConfirmedSchedules,
-                "일",
                 "확정된 일정",
                 "최종 확정된 일정들을 모아봤어요"
         );
 
         configureRow(
                 rowNotificationSettings,
-                "알",
                 "알림 설정",
                 "푸시 알림을 설정할 수 있어요"
         );
 
         configureRow(
                 rowThemeSettings,
-                "색",
                 "테마 설정",
                 "앱 테마와 색상을 변경할 수 있어요"
         );
 
         configureRow(
                 rowServiceInfo,
-                "정",
                 "서비스 소개",
                 "픽데이에 대해 더 알아봐요"
         );
 
         configureRow(
                 rowLogout,
-                "나",
                 "로그아웃",
                 "계정에서 로그아웃해요"
         );
@@ -126,16 +119,13 @@ public class MyPageActivity extends AppCompatActivity {
 
     private void configureRow(
             LinearLayout row,
-            String iconText,
             String title,
             String subtitle
     ) {
 
-        TextView tvRowIcon = row.findViewById(R.id.tvRowIcon);
         TextView tvRowTitle = row.findViewById(R.id.tvRowTitle);
         TextView tvRowSubtitle = row.findViewById(R.id.tvRowSubtitle);
 
-        tvRowIcon.setText(iconText);
         tvRowTitle.setText(title);
         tvRowSubtitle.setText(subtitle);
     }
