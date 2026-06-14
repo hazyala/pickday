@@ -268,7 +268,7 @@ public class CalendarActivity extends AppCompatActivity {
         content.addView(participants);
 
         TextView status = new TextView(this);
-        LinearLayout.LayoutParams statusParams = new LinearLayout.LayoutParams(dp(66), dp(28));
+        LinearLayout.LayoutParams statusParams = new LinearLayout.LayoutParams(dp(88), dp(28));
         status.setLayoutParams(statusParams);
         status.setGravity(Gravity.CENTER);
         status.setText(meetup.statusText);

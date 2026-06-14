@@ -96,18 +96,45 @@ public class DummyDataSource {
         return sdf.format(date.getTime());
     }
 
-    private static String formatIsoDate(Calendar date) {
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd", Locale.KOREAN);
-        return sdf.format(date.getTime());
-    }
-
     public static List<CalendarMeetup> getCalendarMeetups() {
         List<CalendarMeetup> meetups = new ArrayList<>();
-        Calendar month = Calendar.getInstance();
 
-        meetups.add(createCalendarMeetup(month, 20, "세미콜론 동아리 모임", "오후 12:00 ~ 15:00", 6, "참여 예정", "#5B2DFF", "동"));
-        meetups.add(createCalendarMeetup(month, 24, "팀플 회의 일정", "오후 2:00 ~ 4:00", 4, "D-3", "#3367E8", "팀"));
-        meetups.add(createCalendarMeetup(month, 27, "스터디 그룹", "오후 7:00 ~ 9:00", 3, "확정", "#4EBD73", "스"));
+        meetups.add(new CalendarMeetup(
+                "팀플 회의 일정",
+                "2026-05-24",
+                "오후 11:59",
+                4,
+                "응답 마감일",
+                "#FF9338",
+                "팀"
+        ));
+        meetups.add(new CalendarMeetup(
+                "지윤이 생일 파티",
+                "2026-05-25",
+                "오후 6:00 ~ 9:00",
+                6,
+                "확정된 약속일",
+                "#4EBD73",
+                "생"
+        ));
+        meetups.add(new CalendarMeetup(
+                "동아리 MT 일정 정하기",
+                "2026-05-25",
+                "오후 11:59",
+                7,
+                "응답 마감일",
+                "#FF9338",
+                "동"
+        ));
+        meetups.add(new CalendarMeetup(
+                "동아리 MT 일정 정하기",
+                "2026-05-30",
+                "오후 2:00",
+                7,
+                "확정된 약속일",
+                "#4EBD73",
+                "동"
+        ));
 
         for (MyMeetupRoom room : createdMeetupRooms) {
             if (room.deadlineDateIso == null || room.deadlineDateIso.trim().isEmpty()) {
@@ -117,40 +144,15 @@ public class DummyDataSource {
             meetups.add(new CalendarMeetup(
                     room.title,
                     room.deadlineDateIso,
-                    "마감 " + room.deadlineTimeText,
+                    room.deadlineTimeText,
                     room.participantCount,
-                    room.dDay,
+                    "응답 마감일",
                     "#FF9338",
                     "마"
             ));
         }
 
         return meetups;
-    }
-
-    private static CalendarMeetup createCalendarMeetup(
-            Calendar month,
-            int day,
-            String title,
-            String timeText,
-            int participantCount,
-            String statusText,
-            String accentColor,
-            String iconText
-    ) {
-        Calendar date = (Calendar) month.clone();
-        int lastDay = date.getActualMaximum(Calendar.DAY_OF_MONTH);
-        date.set(Calendar.DAY_OF_MONTH, Math.min(day, lastDay));
-
-        return new CalendarMeetup(
-                title,
-                formatIsoDate(date),
-                timeText,
-                participantCount,
-                statusText,
-                accentColor,
-                iconText
-        );
     }
 
     public static List<MyMeetupRoom> getMyMeetupRooms() {
