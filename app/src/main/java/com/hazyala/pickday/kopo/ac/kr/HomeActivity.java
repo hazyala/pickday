@@ -1,6 +1,7 @@
 package com.hazyala.pickday.kopo.ac.kr;
 
 import android.graphics.Color;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,6 +13,7 @@ import android.content.Intent;
 import androidx.appcompat.widget.AppCompatButton;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 
 import com.hazyala.pickday.kopo.ac.kr.data.DummyDataSource;
 
@@ -76,23 +78,41 @@ public class HomeActivity extends AppCompatActivity {
                 DummyDataSource.getMainMeetup();
 
         tvGreeting.setText(
-                "안녕하세요, " + user.name + "님! 👋"
+                "안녕하세요, " + user.name + "님!"
         );
 
         tvMainTitle.setText(meetup.title);
 
         tvMainParticipants.setText(
-                "👥 참여자 " + meetup.participantCount + "명"
+                "참여자 " + meetup.participantCount + "명"
+        );
+        setStartIcon(
+                tvMainParticipants,
+                R.drawable.icon_group,
+                10,
+                tvMainParticipants.getCurrentTextColor()
         );
 
         tvMainDday.setText(
-                "🕘 마감까지 " + meetup.dDay
+                "마감까지 " + meetup.dDay
+        );
+        setStartIcon(
+                tvMainDday,
+                R.drawable.icon_calendars,
+                10,
+                tvMainDday.getCurrentTextColor()
         );
 
         tvBestDate.setText(meetup.bestDateTime);
 
         tvBestCount.setText(
-                "👥 " + meetup.availableCount + "명 가능"
+                meetup.availableCount + "명 가능"
+        );
+        setStartIcon(
+                tvBestCount,
+                R.drawable.icon_group,
+                10,
+                tvBestCount.getCurrentTextColor()
         );
     }
 
@@ -136,7 +156,7 @@ public class HomeActivity extends AppCompatActivity {
             tvDayOfWeek.setText("(" + date.dayOfWeek + ")");
 
             tvAvailableCount.setText(
-                    "👥 " + date.availableCount + "명"
+                    date.availableCount + "명"
             );
 
             if (date.selected) {
@@ -153,6 +173,13 @@ public class HomeActivity extends AppCompatActivity {
 
                 tvAvailableCount.setTextColor(Color.WHITE);
             }
+
+            setStartIcon(
+                    tvAvailableCount,
+                    R.drawable.icon_group,
+                    9,
+                    tvAvailableCount.getCurrentTextColor()
+            );
 
             if (date.best) {
 
@@ -206,19 +233,19 @@ public class HomeActivity extends AppCompatActivity {
             switch (room.iconType) {
 
                 case "group":
-                    tvRoomIcon.setText("👥");
+                    tvRoomIcon.setText("팀");
                     break;
 
                 case "cake":
-                    tvRoomIcon.setText("🎂");
+                    tvRoomIcon.setText("생");
                     break;
 
                 case "camp":
-                    tvRoomIcon.setText("⛺");
+                    tvRoomIcon.setText("동");
                     break;
 
                 default:
-                    tvRoomIcon.setText("📅");
+                    tvRoomIcon.setText("일");
                     break;
             }
 
@@ -260,5 +287,26 @@ public class HomeActivity extends AppCompatActivity {
 
             startActivity(intent);
         });
+    }
+
+    private void setStartIcon(
+            TextView textView,
+            int drawableRes,
+            int sizeDp,
+            int tintColor
+    ) {
+        Drawable icon = ContextCompat.getDrawable(this, drawableRes);
+
+        if (icon == null) {
+            return;
+        }
+
+        icon = icon.mutate();
+        icon.setTint(tintColor);
+
+        int sizePx = (int) (sizeDp * getResources().getDisplayMetrics().density);
+        icon.setBounds(0, 0, sizePx, sizePx);
+        textView.setCompoundDrawables(icon, null, null, null);
+        textView.setCompoundDrawablePadding((int) (3 * getResources().getDisplayMetrics().density));
     }
 }
