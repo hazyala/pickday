@@ -22,7 +22,7 @@ import java.util.List;
 
 public class HomeActivity extends AppCompatActivity {
 
-    private static final int ROOM_PREVIEW_LIMIT = 1;
+    private static final int ROOM_PREVIEW_LIMIT = 5;
 
     private TextView tvGreeting;
     private TextView tvMainTitle;

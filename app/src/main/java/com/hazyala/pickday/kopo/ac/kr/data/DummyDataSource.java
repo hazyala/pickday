@@ -80,6 +80,12 @@ public class DummyDataSource {
         Calendar today = Calendar.getInstance();
         Calendar weekStart = Calendar.getInstance();
         weekStart.set(Calendar.DAY_OF_WEEK, Calendar.SUNDAY);
+        List<CalendarMeetup> calendarMeetups = getCalendarMeetups();
+        Map<String, Integer> availableCountsByDate = getAvailableCountsByDate();
+        String bestDateIso = getBestDateIsoForWeek(
+                weekStart,
+                availableCountsByDate
+        );
 
         int todayIndex = 0;
 
@@ -110,20 +116,116 @@ public class DummyDataSource {
             }
 
             boolean hasMeetupStatus = false;
+            String dateIso = formatIsoDate(date);
+            int availableCount = getAvailableCountForDate(
+                    dateIso,
+                    availableCountsByDate,
+                    calendarMeetups
+            );
+
+            if (availableCount > 0 || hasCalendarMeetup(dateIso, calendarMeetups)) {
+                hasMeetupStatus = true;
+            }
 
             dates.add(new AvailableDate(
                     DEFAULT_ROOM_ID,
                     label,
                     formatMonthDay(date),
                     formatWeekday(date),
-                    0,
+                    availableCount,
                     index == todayIndex,
-                    false,
+                    dateIso.equals(bestDateIso),
                     hasMeetupStatus
             ));
         }
 
         return dates;
+    }
+
+    private static int getAvailableCountForDate(
+            String dateIso,
+            Map<String, Integer> availableCountsByDate,
+            List<CalendarMeetup> calendarMeetups
+    ) {
+        int availableCount = 0;
+
+        if (availableCountsByDate.containsKey(dateIso)) {
+            availableCount = availableCountsByDate.get(dateIso);
+        }
+
+        for (CalendarMeetup meetup : calendarMeetups) {
+            if (dateIso.equals(meetup.dateIso)) {
+                availableCount = Math.max(availableCount, meetup.participantCount);
+            }
+        }
+
+        return availableCount;
+    }
+
+    private static boolean hasCalendarMeetup(
+            String dateIso,
+            List<CalendarMeetup> calendarMeetups
+    ) {
+        for (CalendarMeetup meetup : calendarMeetups) {
+            if (dateIso.equals(meetup.dateIso)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    private static Map<String, Integer> getAvailableCountsByDate() {
+        Map<String, Integer> countsByDate = new HashMap<>();
+
+        for (MyMeetupRoom room : getMyMeetupRooms()) {
+            List<AvailabilityResponse> responses = getAvailabilityResponses(room.roomId);
+
+            for (String dateIso : room.candidateDateIsos) {
+                int availableCount = 0;
+
+                for (AvailabilityResponse response : responses) {
+                    if (response.submitted && response.availableDateIsos.contains(dateIso)) {
+                        availableCount++;
+                    }
+                }
+
+                int currentCount = countsByDate.containsKey(dateIso)
+                        ? countsByDate.get(dateIso)
+                        : 0;
+                countsByDate.put(dateIso, Math.max(currentCount, availableCount));
+            }
+        }
+
+        return countsByDate;
+    }
+
+    private static String getBestDateIsoForWeek(
+            Calendar weekStart,
+            Map<String, Integer> availableCountsByDate
+    ) {
+        String bestDateIso = "";
+        int bestCount = 0;
+
+        for (int index = 0; index < 7; index++) {
+            Calendar date = (Calendar) weekStart.clone();
+            date.add(Calendar.DAY_OF_MONTH, index);
+            String dateIso = formatIsoDate(date);
+            int availableCount = availableCountsByDate.containsKey(dateIso)
+                    ? availableCountsByDate.get(dateIso)
+                    : 0;
+
+            if (availableCount > bestCount
+                    || (availableCount == bestCount
+                    && availableCount > 0
+                    && !bestDateIso.isEmpty()
+                    && dateIso.compareTo(bestDateIso) < 0)) {
+                bestDateIso = dateIso;
+                bestCount = availableCount;
+            }
+        }
+
+        return bestDateIso;
     }
 
     private static boolean isSameDay(Calendar first, Calendar second) {
@@ -138,6 +240,11 @@ public class DummyDataSource {
 
     private static String formatWeekday(Calendar date) {
         SimpleDateFormat sdf = new SimpleDateFormat("E", Locale.KOREAN);
+        return sdf.format(date.getTime());
+    }
+
+    private static String formatIsoDate(Calendar date) {
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd", Locale.KOREAN);
         return sdf.format(date.getTime());
     }
 
@@ -342,32 +449,35 @@ public class DummyDataSource {
 
     public static List<Notification> getNotifications() {
         List<Notification> notifications = new ArrayList<>();
+        MyMeetupRoom teamRoom = getMeetupRoomById(ROOM_ID_TEAM_MEETING);
+        MyMeetupRoom birthdayRoom = getMeetupRoomById(ROOM_ID_BIRTHDAY_PARTY);
+        MyMeetupRoom campRoom = getMeetupRoomById(ROOM_ID_CAMP_MT);
 
         notifications.add(new Notification(
-                ROOM_ID_CAMP_MT,
+                birthdayRoom.roomId,
                 "오늘",
-                "현우님이 응답했어요",
-                "동아리 MT 일정 정하기",
-                "",
+                "민재님이 응답했어요",
+                birthdayRoom.title,
+                "현재 응답률 " + getRoomAvailabilitySummary(birthdayRoom.roomId).responseRate + "%",
                 "방금 전",
                 "#5B4CDB"
         ));
 
         notifications.add(new Notification(
-                ROOM_ID_CAMP_MT,
+                birthdayRoom.roomId,
                 "오늘",
-                "지윤님이 응답했어요",
-                "동아리 MT 일정 정하기",
-                "",
+                "일정이 확정되었어요",
+                birthdayRoom.title,
+                formatConfirmedSchedule(birthdayRoom),
                 "10분 전",
-                "#5B4CDB"
+                "#61D48A"
         ));
 
         notifications.add(new Notification(
                 ROOM_ID_CAMP_MT,
                 "이번 주",
-                "마감이 1일 남았어요",
-                "동아리 MT 일정 정하기",
+                "마감이 다가오고 있어요",
+                campRoom.title,
                 "응답하지 않은 2명이 있어요",
                 "오늘",
                 "#FFC21A"
@@ -376,44 +486,77 @@ public class DummyDataSource {
         notifications.add(new Notification(
                 ROOM_ID_CAMP_MT,
                 "이번 주",
-                "일정이 확정되었어요!",
-                "동아리 MT 일정 정하기",
-                "7월 4일 (토) 오후 2:00",
+                "지윤님이 응답했어요",
+                campRoom.title,
+                "현재 응답률 " + getRoomAvailabilitySummary(campRoom.roomId).responseRate + "%",
                 "어제",
-                "#61D48A"
+                "#5B4CDB"
         ));
 
         notifications.add(new Notification(
-                "room-semicolon-dinner",
+                ROOM_ID_CAMP_MT,
                 "이번 주",
-                "새로운 초대장이 도착했어요",
-                "세미콜론 종강 회식",
-                "참여 여부를 선택해주세요",
+                "일정이 확정되었어요",
+                campRoom.title,
+                formatConfirmedSchedule(campRoom),
                 "2일 전",
-                "#FF7DA8"
+                "#61D48A"
         ));
 
         notifications.add(new Notification(
                 ROOM_ID_TEAM_MEETING,
                 "이번 주",
-                "수용님이 댓글을 남겼어요",
-                "팀플 회의 일정",
-                "\"저녁 7시 이후는 어떤가요?\"",
+                "응답 수집이 마감되었어요",
+                teamRoom.title,
+                getRoomAvailabilitySummary(teamRoom.roomId).completedResponseCount + "명이 응답했어요",
                 "3일 전",
-                "#5B4CDB"
+                "#FFC21A"
+        ));
+
+        notifications.add(new Notification(
+                ROOM_ID_TEAM_MEETING,
+                "이전",
+                "팀플 회의 후보가 정리되었어요",
+                teamRoom.title,
+                getRoomAvailabilitySummary(teamRoom.roomId).bestDateTime,
+                "5일 전",
+                "#61D48A"
         ));
 
         notifications.add(new Notification(
                 ROOM_ID_BIRTHDAY_PARTY,
                 "이전",
-                "민재님이 응답했어요",
-                "지윤이 생일 파티",
-                "",
-                "5일 전",
+                "서연님이 응답했어요",
+                birthdayRoom.title,
+                "가능한 날짜가 추가되었어요",
+                "6일 전",
                 "#5B4CDB"
         ));
 
         return notifications;
+    }
+
+    private static String formatConfirmedSchedule(MyMeetupRoom room) {
+        if (room.confirmedDateIso == null || room.confirmedDateIso.trim().isEmpty()) {
+            return "확정 일정을 확인해 주세요";
+        }
+
+        String dateText = room.confirmedDateIso;
+
+        try {
+            SimpleDateFormat parser = new SimpleDateFormat("yyyy-MM-dd", Locale.KOREAN);
+            Date date = parser.parse(room.confirmedDateIso);
+            SimpleDateFormat formatter = new SimpleDateFormat("M월 d일 (E)", Locale.KOREAN);
+            dateText = formatter.format(date);
+        } catch (Exception e) {
+            dateText = room.confirmedDateIso;
+        }
+
+        if (room.confirmedTimeText == null || room.confirmedTimeText.trim().isEmpty()) {
+            return dateText;
+        }
+
+        return dateText + " " + room.confirmedTimeText;
     }
 
     public static List<ChatMessage> getChatMessages(String roomTitle) {
