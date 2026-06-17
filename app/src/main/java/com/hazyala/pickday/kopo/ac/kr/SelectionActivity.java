@@ -25,9 +25,12 @@ import java.util.Set;
 
 public class SelectionActivity extends AppCompatActivity {
 
+    public static final String EXTRA_ROOM_ID = "extra_room_id";
+
     private View btnBack;
     private TextView btnNext;
     private View selectionCalendar;
+    private String roomId;
 
     private TextView tvDateCount, tvExcludeCount;
     private LinearLayout layoutCandidateDates;
@@ -60,6 +63,11 @@ public class SelectionActivity extends AppCompatActivity {
     private void initViews() {
         btnBack = findViewById(R.id.btnBack);
         btnNext = findViewById(R.id.btnNext);
+        roomId = getIntent().getStringExtra(EXTRA_ROOM_ID);
+
+        if (roomId == null || roomId.isEmpty()) {
+            roomId = DummyDataSource.getCurrentDraftRoomId();
+        }
 
         selectionCalendar = findViewById(R.id.selectionCalendar);
         layoutCandidateDates = findViewById(R.id.layoutCandidateDates);
@@ -86,9 +94,11 @@ public class SelectionActivity extends AppCompatActivity {
                 return;
             }
 
-            DummyDataSource.setCurrentDraftCandidateDates(getSortedSelectedDates());
+            DummyDataSource.setDraftCandidateDates(roomId, getSortedSelectedDates());
+            DummyDataSource.updateCreatedRoomCandidateDates(roomId, getSortedSelectedDates());
 
             Intent intent = new Intent(SelectionActivity.this, InviteMembersActivity.class);
+            intent.putExtra(InviteMembersActivity.EXTRA_ROOM_ID, roomId);
             startActivity(intent);
         });
 
@@ -96,7 +106,7 @@ public class SelectionActivity extends AppCompatActivity {
     }
 
     private void initDateChips() {
-        selectedDates.addAll(DummyDataSource.getCurrentDraftCandidateDates());
+        selectedDates.addAll(DummyDataSource.getDraftCandidateDates(roomId));
 
         selectionCalendarController = PickDayDatePicker.attachCalendar(
                 selectionCalendar,
@@ -282,9 +292,18 @@ public class SelectionActivity extends AppCompatActivity {
                 exclude0601, exclude0605, exclude0606
         };
 
-        for (TextView excludeView : excludeViews) {
+        Calendar excludeDate = PickDayDatePicker.today();
+
+        for (int index = 0; index < excludeViews.length; index++) {
+            TextView excludeView = excludeViews[index];
+            excludeDate.add(Calendar.DAY_OF_MONTH, index == 0 ? 0 : 1);
+            excludeView.setText(formatExcludeDateLabel(excludeDate));
             excludeView.setOnClickListener(v -> toggleExcludeChip((TextView) v));
         }
+    }
+
+    private String formatExcludeDateLabel(Calendar date) {
+        return PickDayDatePicker.formatChipDate(date) + "\n" + PickDayDatePicker.formatWeek(date);
     }
 
     private void toggleExcludeChip(TextView excludeView) {

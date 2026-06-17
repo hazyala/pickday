@@ -16,20 +16,27 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.hazyala.pickday.kopo.ac.kr.data.DummyDataSource;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 public class ChatDetailActivity extends AppCompatActivity {
 
+    public static final String EXTRA_ROOM_ID = "extra_room_id";
     public static final String EXTRA_ROOM_TITLE = "extra_room_title";
 
     private ImageView btnBack;
     private TextView tvChatDetailTitle;
     private TextView tvChatNoticeTitle;
     private TextView tvChatNoticeMeta;
+    private TextView tvChatEmptyState;
     private ScrollView scrollChatMessages;
     private LinearLayout layoutChatMessageContainer;
     private EditText etMessageInput;
     private AppCompatButton btnSendMessage;
+    private String roomId;
     private String roomTitle;
 
     @Override
@@ -38,7 +45,7 @@ public class ChatDetailActivity extends AppCompatActivity {
         setContentView(R.layout.activity_chat_detail);
 
         initViews();
-        setRoomTitle();
+        setRoomData();
         loadMessages();
         setListeners();
     }
@@ -48,19 +55,26 @@ public class ChatDetailActivity extends AppCompatActivity {
         tvChatDetailTitle = findViewById(R.id.tvChatDetailTitle);
         tvChatNoticeTitle = findViewById(R.id.tvChatNoticeTitle);
         tvChatNoticeMeta = findViewById(R.id.tvChatNoticeMeta);
+        tvChatEmptyState = findViewById(R.id.tvChatEmptyState);
         scrollChatMessages = findViewById(R.id.scrollChatMessages);
         layoutChatMessageContainer = findViewById(R.id.layoutChatMessageContainer);
         etMessageInput = findViewById(R.id.etMessageInput);
         btnSendMessage = findViewById(R.id.btnSendMessage);
     }
 
-    private void setRoomTitle() {
+    private void setRoomData() {
+        roomId = getIntent().getStringExtra(EXTRA_ROOM_ID);
         roomTitle = getIntent().getStringExtra(EXTRA_ROOM_TITLE);
 
+        if (roomId == null || roomId.isEmpty()) {
+            roomId = DummyDataSource.getMeetupRoomByTitle(roomTitle).roomId;
+        }
+
+        DummyDataSource.MyMeetupRoom room =
+                DummyDataSource.getMeetupRoomById(roomId);
+
         if (roomTitle == null || roomTitle.isEmpty()) {
-            roomTitle = "채팅";
-            tvChatDetailTitle.setText("채팅");
-            return;
+            roomTitle = room.title;
         }
 
         tvChatDetailTitle.setText(roomTitle);
@@ -70,7 +84,9 @@ public class ChatDetailActivity extends AppCompatActivity {
         setNoticeStatus();
 
         List<DummyDataSource.ChatMessage> messages =
-                DummyDataSource.getChatMessages(roomTitle);
+                DummyDataSource.getChatMessagesByRoomId(roomId);
+
+        tvChatEmptyState.setVisibility(messages.isEmpty() ? View.VISIBLE : View.GONE);
 
         for (DummyDataSource.ChatMessage message : messages) {
             addMessageView(message);
@@ -136,7 +152,7 @@ public class ChatDetailActivity extends AppCompatActivity {
 
     private void setNoticeStatus() {
         DummyDataSource.ChatRoomStatus status =
-                DummyDataSource.getChatRoomStatus(roomTitle);
+                DummyDataSource.getChatRoomStatusByRoomId(roomId);
 
         tvChatNoticeTitle.setText(
                 "현재 방 현황: 참여자 " +
@@ -146,7 +162,27 @@ public class ChatDetailActivity extends AppCompatActivity {
                         "%"
         );
 
-        tvChatNoticeMeta.setText("마감까지 " + status.dDay);
+        tvChatNoticeMeta.setText(
+                "마감 " +
+                        formatDate(status.deadlineDateIso) +
+                        " " +
+                        status.deadlineTimeText
+        );
+    }
+
+    private String formatDate(String dateIso) {
+        if (dateIso == null || dateIso.isEmpty()) {
+            return "미정";
+        }
+
+        try {
+            SimpleDateFormat parser = new SimpleDateFormat("yyyy-MM-dd", Locale.KOREAN);
+            Date date = parser.parse(dateIso);
+            SimpleDateFormat formatter = new SimpleDateFormat("M.d (E)", Locale.KOREAN);
+            return formatter.format(date);
+        } catch (ParseException e) {
+            return dateIso;
+        }
     }
 
     private String getInitial(String senderName) {
@@ -169,7 +205,9 @@ public class ChatDetailActivity extends AppCompatActivity {
             return;
         }
 
+        tvChatEmptyState.setVisibility(View.GONE);
         addMessageView(new DummyDataSource.ChatMessage(
+                roomId,
                 "김해민",
                 message,
                 "방금 전",

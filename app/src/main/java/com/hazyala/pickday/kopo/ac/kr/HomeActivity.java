@@ -22,12 +22,15 @@ import java.util.List;
 
 public class HomeActivity extends AppCompatActivity {
 
+    private static final int ROOM_PREVIEW_LIMIT = 5;
+
     private TextView tvGreeting;
     private TextView tvMainTitle;
     private TextView tvMainParticipants;
     private TextView tvMainDday;
     private TextView tvBestDate;
     private TextView tvBestCount;
+    private String mainRoomId = DummyDataSource.DEFAULT_ROOM_ID;
 
     private LinearLayout layoutDateContainer;
     private LinearLayout layoutRoomContainer;
@@ -35,6 +38,8 @@ public class HomeActivity extends AppCompatActivity {
     private AppCompatButton btnDetail;
     private AppCompatButton btnFab;
     private AppCompatButton btnCreateSmall;
+    private AppCompatButton btnViewAllDates;
+    private AppCompatButton btnViewAllRooms;
     private ImageView btnNotification;
     private LinearLayout tabCalendar;
     private LinearLayout tabChat;
@@ -72,6 +77,8 @@ public class HomeActivity extends AppCompatActivity {
         btnDetail = findViewById(R.id.btnDetail);
         btnFab = findViewById(R.id.btnFab);
         btnCreateSmall = findViewById(R.id.btnCreateSmall);
+        btnViewAllDates = findViewById(R.id.btnViewAllDates);
+        btnViewAllRooms = findViewById(R.id.btnViewAllRooms);
         btnNotification = findViewById(R.id.btnNotification);
         tabCalendar = findViewById(R.id.tabCalendar);
         tabChat = findViewById(R.id.tabChat);
@@ -85,6 +92,8 @@ public class HomeActivity extends AppCompatActivity {
 
         DummyDataSource.MainMeetup meetup =
                 DummyDataSource.getMainMeetup();
+
+        mainRoomId = meetup.roomId;
 
         tvGreeting.setText(
                 "안녕하세요, " + user.name + "님!"
@@ -214,7 +223,10 @@ public class HomeActivity extends AppCompatActivity {
 
         LayoutInflater inflater = LayoutInflater.from(this);
 
-        for (DummyDataSource.MyMeetupRoom room : rooms) {
+        int visibleRoomCount = Math.min(ROOM_PREVIEW_LIMIT, rooms.size());
+
+        for (int index = 0; index < visibleRoomCount; index++) {
+            DummyDataSource.MyMeetupRoom room = rooms.get(index);
 
             View view = inflater.inflate(
                     R.layout.item_meetup_room,
@@ -266,6 +278,16 @@ public class HomeActivity extends AppCompatActivity {
                     break;
             }
 
+            view.setOnClickListener(v -> {
+                Intent intent = new Intent(
+                        HomeActivity.this,
+                        RoomDetailActivity.class
+                );
+                intent.putExtra(RoomDetailActivity.EXTRA_ROOM_ID, room.roomId);
+                intent.putExtra(RoomDetailActivity.EXTRA_ROOM_TITLE, room.title);
+                startActivity(intent);
+            });
+
             layoutRoomContainer.addView(view);
         }
     }
@@ -280,6 +302,7 @@ public class HomeActivity extends AppCompatActivity {
                             RoomDetailActivity.class
                     );
 
+            intent.putExtra(RoomDetailActivity.EXTRA_ROOM_ID, mainRoomId);
             startActivity(intent);
         });
 
@@ -311,6 +334,26 @@ public class HomeActivity extends AppCompatActivity {
                     new Intent(
                             HomeActivity.this,
                             NotificationActivity.class
+                    );
+
+            startActivity(intent);
+        });
+
+        btnViewAllDates.setOnClickListener(v -> {
+            Intent intent =
+                    new Intent(
+                            HomeActivity.this,
+                            CalendarActivity.class
+                    );
+
+            startActivity(intent);
+        });
+
+        btnViewAllRooms.setOnClickListener(v -> {
+            Intent intent =
+                    new Intent(
+                            HomeActivity.this,
+                            AllMeetupRoomsActivity.class
                     );
 
             startActivity(intent);

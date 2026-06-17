@@ -6,26 +6,37 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.widget.LinearLayout;
-import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.SwitchCompat;
+
+import com.hazyala.pickday.kopo.ac.kr.data.DummyDataSource;
+
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
 
 public class InviteMembersActivity extends AppCompatActivity {
+
+    public static final String EXTRA_ROOM_ID = "extra_room_id";
 
     private TextView btnBack;
     private TextView btnRoomInfo;
     private TextView btnCopy;
     private TextView btnInviteDone;
     private TextView tvInviteLink;
+    private TextView tvInviteRoomTitle;
+    private TextView tvInviteDeadline;
+    private TextView tvInviteParticipants;
+    private String roomId;
+    private String inviteLink;
 
     private LinearLayout btnKakaoShare;
 
-    private Switch switchNotify;
-
-    private final String inviteLink =
-            "https://pickday.app/room/Abc123";
+    private SwitchCompat switchNotify;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,6 +56,9 @@ public class InviteMembersActivity extends AppCompatActivity {
         btnInviteDone = findViewById(R.id.btnInviteDone);
 
         tvInviteLink = findViewById(R.id.tvInviteLink);
+        tvInviteRoomTitle = findViewById(R.id.tvInviteRoomTitle);
+        tvInviteDeadline = findViewById(R.id.tvInviteDeadline);
+        tvInviteParticipants = findViewById(R.id.tvInviteParticipants);
 
         btnKakaoShare = findViewById(R.id.btnKakaoShare);
 
@@ -52,8 +66,23 @@ public class InviteMembersActivity extends AppCompatActivity {
     }
 
     private void setDummyData() {
+        roomId = getIntent().getStringExtra(EXTRA_ROOM_ID);
+
+        if (roomId == null || roomId.isEmpty()) {
+            roomId = DummyDataSource.getCurrentDraftRoomId();
+        }
+
+        DummyDataSource.MyMeetupRoom room =
+                DummyDataSource.getMeetupRoomById(roomId);
+
+        inviteLink = DummyDataSource.getInviteLink(roomId);
 
         tvInviteLink.setText(inviteLink);
+        tvInviteRoomTitle.setText(room.title);
+        tvInviteDeadline.setText(
+                "마감일 " + formatDate(room.deadlineDateIso) + " " + room.deadlineTimeText
+        );
+        tvInviteParticipants.setText("인원 " + room.participantCount + "명");
 
         switchNotify.setChecked(true);
     }
@@ -70,6 +99,7 @@ public class InviteMembersActivity extends AppCompatActivity {
                     new Intent(InviteMembersActivity.this,
                             RoomDetailActivity.class);
 
+            intent.putExtra(RoomDetailActivity.EXTRA_ROOM_ID, roomId);
             startActivity(intent);
         });
 
@@ -146,5 +176,20 @@ public class InviteMembersActivity extends AppCompatActivity {
 
             finish();
         });
+    }
+
+    private String formatDate(String dateIso) {
+        if (dateIso == null || dateIso.isEmpty()) {
+            return "미정";
+        }
+
+        try {
+            SimpleDateFormat parser = new SimpleDateFormat("yyyy-MM-dd", Locale.KOREAN);
+            Date date = parser.parse(dateIso);
+            SimpleDateFormat formatter = new SimpleDateFormat("M.d (E)", Locale.KOREAN);
+            return formatter.format(date);
+        } catch (ParseException e) {
+            return dateIso;
+        }
     }
 }

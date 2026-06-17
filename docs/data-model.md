@@ -164,7 +164,13 @@
 - `DEADLINE_SOON`
 - `SCHEDULE_CONFIRMED`
 
-현재 Android 더미 데이터는 화면 렌더링용으로 `section`, `title`, `roomTitle`, `message`, `time`, `accentColor`만 사용합니다. `id`, `roomId`, `type`, `isRead`, `createdAt`은 Repository/API 연동 시 정식 모델로 확장합니다.
+현재 Android 더미 데이터는 `DummyDataSource` 내부에서 `roomId`를 로컬 기준키로 사용합니다. 기본 방 3개와 런타임 생성 방은 안정적인 `roomId`를 가지고, 후보 날짜, 마감/확정 캘린더 일정, 채팅 메시지, 채팅 공지 상태, 알림 더미 데이터가 같은 `roomId`를 참조합니다.
+
+화면 이동은 Home 방 목록과 Calendar 일정 목록에서 `RoomDetailActivity.EXTRA_ROOM_ID`, Chat 방 목록에서 `ChatDetailActivity.EXTRA_ROOM_ID`를 전달합니다. 기존 화면 호환을 위해 일부 조회 함수와 title extra는 잠시 유지하되, 내부 조회 기준은 `roomId`입니다.
+
+Chat Detail은 전달받은 `roomId`로 메시지와 채팅 공지 상태를 조회합니다. 메시지 fixture가 없는 생성 방은 같은 방 데이터로 공지 카드를 표시하고, 메시지 영역에는 빈 채팅 상태를 표시합니다.
+
+Create Meetup에서 생성한 방의 `roomId`는 Host Selection과 Invite Members로 이어집니다. Host Selection에서 고른 후보 날짜는 같은 생성 방 데이터의 `candidateDateIsos`에 반영되고, Invite Members는 같은 roomId의 제목, 마감, 참여 인원, 초대 링크를 표시합니다.
 
 ### UserSettings
 
@@ -210,6 +216,10 @@
 ## 화면 렌더링 규칙
 
 화면은 하드코딩된 문자열이 아니라 모델 상태를 기반으로 렌더링합니다.
+
+Room Detail 기본 정보는 선택된 `roomId`의 로컬 방 데이터에서 제목, 상태, 마감일/마감 시간, 참여 인원, 응답률, 확정 일정 또는 미정 상태를 표시합니다. 후보 날짜별 가능 인원, 가장 유력한 날짜, 시간대별 선호도, 응답 완료/대기 비율은 roomId별 `AvailabilityResponse` 더미 데이터에서 계산합니다.
+
+Participant Response Selection은 Room Detail에서 전달받은 `roomId`의 후보 날짜를 기준으로 달력과 제외 날짜 칩을 표시하고, 완료 후 같은 방 상세로 돌아갑니다. 현재 선택 결과를 `AvailabilityResponse`에 반영하는 저장 흐름은 실제 로컬 저장소/백엔드 연동 단계에서 추가합니다.
 
 통계 렌더링:
 

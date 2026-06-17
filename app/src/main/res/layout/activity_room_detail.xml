@@ -5,6 +5,12 @@
     android:layout_height="match_parent"
     android:background="#F8F7FF">
 
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:clipToPadding="false"
+        android:paddingBottom="96dp">
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -48,6 +54,7 @@
                     android:scaleType="fitCenter" />
 
                 <TextView
+                    android:id="@+id/tvRoomStatus"
                     android:layout_width="72dp"
                     android:layout_height="28dp"
                     android:layout_marginTop="55dp"
@@ -60,16 +67,18 @@
                     android:textStyle="bold" />
 
                 <TextView
+                    android:id="@+id/tvRoomTitle"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="80dp"
-                    android:text="동아리 MT"
+                    android:text="-"
                     android:textColor="#202033"
                     android:textSize="25sp"
                     android:textStyle="bold"
                     android:includeFontPadding="false" />
 
                 <TextView
+                    android:id="@+id/tvRoomSubtitle"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="120dp"
@@ -87,18 +96,20 @@
                     android:gravity="center_vertical">
 
                     <TextView
+                        android:id="@+id/tvDeadline"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="▣  마감일 5.27 (화) 오후 11:59"
+                        android:text="마감일 -"
                         android:textColor="#5B4CDB"
                         android:textSize="13sp"
                         android:textStyle="bold" />
 
                     <TextView
+                        android:id="@+id/tvParticipantSummary"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="18dp"
-                        android:text="♙  인원 2~20명"
+                        android:text="인원 -"
                         android:textColor="#5B4CDB"
                         android:textSize="13sp"
                         android:textStyle="bold" />
@@ -134,9 +145,10 @@
                         android:textStyle="bold" />
 
                     <TextView
+                        android:id="@+id/tvProgressUpdatedAt"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="5.23 (금) 오후 8:30 기준"
+                        android:text="-"
                         android:includeFontPadding="false"
                         android:textColor="#8B8AA8"
                         android:textSize="10sp"
@@ -149,41 +161,45 @@
                     android:orientation="horizontal">
 
                     <TextView
+                        android:id="@+id/tvParticipantProgress"
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
                         android:layout_weight="1"
                         android:gravity="center"
-                        android:text="참여자\n6명/ 12명"
+                        android:text="참여자\n-"
                         android:textColor="#202033"
                         android:textSize="12sp"
                         android:textStyle="bold" />
 
                     <TextView
+                        android:id="@+id/tvResponseCompleted"
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
                         android:layout_weight="1"
                         android:gravity="center"
-                        android:text="응답 완료\n4명 (66%)"
+                        android:text="응답 완료\n-"
                         android:textColor="#202033"
                         android:textSize="12sp"
                         android:textStyle="bold" />
 
                     <TextView
+                        android:id="@+id/tvResponseWaiting"
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
                         android:layout_weight="1"
                         android:gravity="center"
-                        android:text="응답 대기\n2명 (34%)"
+                        android:text="응답 대기\n-"
                         android:textColor="#202033"
                         android:textSize="12sp"
                         android:textStyle="bold" />
 
                     <TextView
+                        android:id="@+id/tvConfirmedSchedule"
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
                         android:layout_weight="1"
                         android:gravity="center"
-                        android:text="최종 확정\n미정"
+                        android:text="최종 확정\n-"
                         android:textColor="#202033"
                         android:textSize="12sp"
                         android:textStyle="bold" />
@@ -204,22 +220,25 @@
                         android:orientation="horizontal">
 
                         <View
+                            android:id="@+id/viewProgressComplete"
                             android:layout_width="0dp"
                             android:layout_height="match_parent"
-                            android:layout_weight="66"
+                            android:layout_weight="1"
                             android:background="@drawable/pickday_button_primary" />
 
                         <View
+                            android:id="@+id/viewProgressWaiting"
                             android:layout_width="0dp"
                             android:layout_height="match_parent"
-                            android:layout_weight="34" />
+                            android:layout_weight="1" />
                     </LinearLayout>
 
                     <TextView
+                        android:id="@+id/tvProgressRate"
                         android:layout_width="44dp"
                         android:layout_height="wrap_content"
                         android:gravity="end"
-                        android:text="66%"
+                        android:text="-"
                         android:textColor="#202033"
                         android:textSize="14sp"
                         android:textStyle="bold" />
@@ -259,44 +278,48 @@
                         android:orientation="horizontal">
 
                         <TextView
+                            android:id="@+id/tvCandidateDate1"
                             android:layout_width="100dp"
                             android:layout_height="match_parent"
                             android:layout_marginEnd="12dp"
                             android:background="@drawable/pickday_selected"
                             android:gravity="center"
-                            android:text="5.24 (토)   1순위\n6명\n100%\n● ● ● ● ● ●"
+                            android:text="-"
                             android:textColor="#5B4CDB"
                             android:textSize="10sp"
                             android:textStyle="bold" />
 
                         <TextView
+                            android:id="@+id/tvCandidateDate2"
                             android:layout_width="100dp"
                             android:layout_height="match_parent"
                             android:layout_marginEnd="12dp"
                             android:background="@drawable/pickday_unselected"
                             android:gravity="center"
-                            android:text="5.25 (일)\n4명\n67%\n● ● ● ● ○ ○"
+                            android:text="-"
                             android:textColor="#77748E"
                             android:textSize="10sp"
                             android:textStyle="bold" />
 
                         <TextView
+                            android:id="@+id/tvCandidateDate3"
                             android:layout_width="100dp"
                             android:layout_height="match_parent"
                             android:layout_marginEnd="12dp"
                             android:background="@drawable/pickday_unselected"
                             android:gravity="center"
-                            android:text="5.26 (월)\n3명\n50%\n● ● ● ○ ○ ○"
+                            android:text="-"
                             android:textColor="#77748E"
                             android:textSize="10sp"
                             android:textStyle="bold" />
 
                         <TextView
+                            android:id="@+id/tvCandidateDate4"
                             android:layout_width="100dp"
                             android:layout_height="match_parent"
                             android:background="@drawable/pickday_unselected"
                             android:gravity="center"
-                            android:text="5.27 (화)\n1명\n17%\n● ○ ○ ○ ○ ○"
+                            android:text="-"
                             android:textColor="#77748E"
                             android:textSize="10sp"
                             android:textStyle="bold" />
@@ -326,43 +349,48 @@
                     android:layout_marginBottom="10dp"/>
 
                 <TextView
+                    android:id="@+id/tvTimePreference1"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="오후 (12:00~15:00)\t\t\t\t\t\t\t\t\t\t━━━━━━━━━━━━━  \t\t\t5명"
+                    android:text="-"
                     android:textColor="#77748E"
                     android:textSize="10sp"
                     android:includeFontPadding="false"
                     android:textStyle="bold" />
 
                 <TextView
+                    android:id="@+id/tvTimePreference2"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="저녁 (18:00~21:00)\t\t\t\t\t\t\t\t\t\t━━━━━━━━━━  \t\t\t4명"
+                    android:text="-"
                     android:textColor="#77748E"
                     android:textSize="10sp"
                     android:textStyle="bold" />
 
                 <TextView
+                    android:id="@+id/tvTimePreference3"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="늦은 오후 (15:00~18:00)\t\t\t\t\t\t\t━━━━━  \t\t\t2명"
+                    android:text="-"
                     android:textColor="#77748E"
                     android:includeFontPadding="false"
                     android:textSize="10sp"
                     android:textStyle="bold" />
 
                 <TextView
+                    android:id="@+id/tvTimePreference4"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="오전 (09:00~12:00)\t\t\t\t\t\t\t\t\t\t━━━  \t\t\t1명"
+                    android:text="-"
                     android:textColor="#77748E"
                     android:textSize="10sp"
                     android:textStyle="bold" />
 
                 <TextView
+                    android:id="@+id/tvTimePreference5"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="상관없음\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t━━━  \t\t\t1명"
+                    android:text="-"
                     android:textColor="#C9C6D8"
                     android:includeFontPadding="false"
                     android:textSize="10sp"
@@ -385,21 +413,26 @@
                     android:orientation="horizontal">
 
                     <TextView
+                        android:id="@+id/tvParticipantSectionTitle"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:text="참여자 (6/12)"
+                        android:text="참여자 (-)"
                         android:textColor="#5B4CDB"
                         android:textSize="15sp"
                         android:textStyle="bold" />
 
                     <TextView
+                        android:id="@+id/btnViewAllParticipants"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:clickable="true"
+                        android:focusable="true"
                         android:text="전체 보기  ›"
                         android:textColor="#6A4DFF"
                         android:textSize="10sp"
                         android:textStyle="bold" />
+
                 </LinearLayout>
 
                 <HorizontalScrollView
@@ -408,22 +441,15 @@
                     android:scrollbars="none">
 
                     <LinearLayout
+                        android:id="@+id/layoutParticipantContainer"
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
-                        android:orientation="horizontal">
-
-                        <TextView android:layout_width="60dp" android:layout_height="match_parent" android:gravity="center" android:text="나\n나 \n미응답" android:textSize="12sp" android:textStyle="bold" android:textColor="#77748E"/>
-                        <TextView android:layout_width="60dp" android:layout_height="match_parent" android:gravity="center" android:text="지\n지우\n응답 완료" android:textSize="12sp" android:textStyle="bold" android:textColor="#77748E"/>
-                        <TextView android:layout_width="60dp" android:layout_height="match_parent" android:gravity="center" android:text="현\n현우\n응답 완료" android:textSize="12sp" android:textStyle="bold" android:textColor="#77748E"/>
-                        <TextView android:layout_width="60dp" android:layout_height="match_parent" android:gravity="center" android:text="수\n수빈\n응답 완료" android:textSize="12sp" android:textStyle="bold" android:textColor="#77748E"/>
-                        <TextView android:layout_width="60dp" android:layout_height="match_parent" android:gravity="center" android:text="민\n민재\n응답 대기" android:textSize="12sp" android:textStyle="bold" android:textColor="#77748E"/>
-                        <TextView android:layout_width="60dp" android:layout_height="match_parent" android:gravity="center" android:text="서\n서연\n응답 대기" android:textSize="12sp" android:textStyle="bold" android:textColor="#77748E"/>
-
-                    </LinearLayout>
+                        android:orientation="horizontal" />
                 </HorizontalScrollView>
             </LinearLayout>
 
         </LinearLayout>
+    </ScrollView>
 
     <!-- 하단 고정 버튼 -->
     <TextView

@@ -15,6 +15,7 @@ import com.hazyala.pickday.kopo.ac.kr.data.DummyDataSource;
 import com.hazyala.pickday.kopo.ac.kr.ui.PickDayDatePicker;
 
 import java.util.Calendar;
+import java.util.Locale;
 
 public class CreateMeetupActivity extends AppCompatActivity {
 
@@ -96,7 +97,7 @@ public class CreateMeetupActivity extends AppCompatActivity {
                 return;
             }
 
-            DummyDataSource.addCreatedMeetupRoom(
+            String roomId = DummyDataSource.addCreatedMeetupRoom(
                     meetupTitle,
                     peopleCount,
                     getDeadlineDDay(),
@@ -105,6 +106,7 @@ public class CreateMeetupActivity extends AppCompatActivity {
             );
 
             Intent intent = new Intent(CreateMeetupActivity.this, SelectionActivity.class);
+            intent.putExtra(SelectionActivity.EXTRA_ROOM_ID, roomId);
             startActivity(intent);
         });
     }
@@ -121,7 +123,8 @@ public class CreateMeetupActivity extends AppCompatActivity {
                             hour = 12;
                         }
 
-                        tvDeadlineTime.setText(String.format("%s %d:%02d", amPm, hour, minute));
+                        tvDeadlineTime.setText(String.format(Locale.KOREAN,
+                                "%s %d:%02d", amPm, hour, minute));
                     },
                     23,
                     59,

@@ -111,10 +111,9 @@
                         android:textStyle="bold" />
 
                     <TextView
-                        android:layout_width="0dp"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="10dp"
-                        android:layout_weight="1"
                         android:includeFontPadding="false"
                         android:text="양일 이상을 선택할수록\n더 좋은 날짜를 찾을 확률이 높아져요!"
                         android:textColor="#6A4DFF"
@@ -159,77 +158,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
                         android:gravity="center_vertical"
-                        android:orientation="horizontal">
-
-                        <LinearLayout
-                            android:id="@+id/date0521"
-                            style="@style/PickDayDateChip"
-                            android:background="@drawable/pickday_card_soft">
-
-                            <TextView style="@style/PickDayDateTopText" android:text="오늘" />
-                            <TextView style="@style/PickDayDateMainText" android:text="5.21" />
-                            <TextView style="@style/PickDayDateSubText" android:text="수" />
-                        </LinearLayout>
-
-                        <LinearLayout
-                            android:id="@+id/date0522"
-                            style="@style/PickDayDateChip">
-
-                            <TextView style="@style/PickDayDateTopText" android:text="내일" />
-                            <TextView style="@style/PickDayDateMainText" android:text="5.22" />
-                            <TextView style="@style/PickDayDateSubText" android:text="목" />
-                        </LinearLayout>
-
-                        <LinearLayout
-                            android:id="@+id/date0523"
-                            style="@style/PickDayDateChip">
-
-                            <TextView style="@style/PickDayDateTopText" android:text="" />
-                            <TextView style="@style/PickDayDateMainText" android:text="5.23" />
-                            <TextView style="@style/PickDayDateSubText" android:text="금" />
-                        </LinearLayout>
-
-                        <LinearLayout
-                            android:id="@+id/date0524"
-                            style="@style/PickDayDateChip"
-                            android:background="@drawable/pickday_unselected">
-
-                            <TextView style="@style/PickDayDateTopTextSelected" android:text="" />
-                            <TextView style="@style/PickDayDateMainText" android:text="5.24" />
-                            <TextView style="@style/PickDayDateSubText" android:text="토" />
-                        </LinearLayout>
-
-                        <LinearLayout
-                            android:id="@+id/date0525"
-                            style="@style/PickDayDateChip">
-
-                            <TextView style="@style/PickDayDateTopText" android:text="" />
-                            <TextView style="@style/PickDayDateMainText" android:text="5.25" />
-                            <TextView style="@style/PickDayDateSubText" android:text="일" />
-                        </LinearLayout>
-
-                        <LinearLayout
-                            android:id="@+id/date0526"
-                            style="@style/PickDayDateChip">
-
-                            <TextView style="@style/PickDayDateTopText" android:text="" />
-                            <TextView style="@style/PickDayDateMainText" android:text="5.26" />
-                            <TextView style="@style/PickDayDateSubText" android:text="월" />
-                        </LinearLayout>
-
-                        <LinearLayout
-                            android:id="@+id/date0527"
-                            style="@style/PickDayDateChip"
-                            android:background="@drawable/pickday_selected"
-                            android:layout_marginEnd="0dp">
-
-                            <TextView style="@style/PickDayDateTopTextSelected" android:text="" />
-                            <TextView style="@style/PickDayDateMainTextSelected" android:text="5.27" />
-                            <TextView style="@style/PickDayDateSubTextSelected" android:text="화" />
-                            <TextView style="@style/PickDayDateCheckText" android:text="✓" />
-                        </LinearLayout>
-
-                    </LinearLayout>
+                        android:orientation="horizontal" />
                 </HorizontalScrollView>
 
                 <include
@@ -378,7 +307,7 @@
                         android:layout_height="54dp"
                         android:padding="12dp"
                         android:src="@drawable/icon_calendars"
-                        android:tint="#6A4DFF"
+                        app:tint="#6A4DFF"
                         android:scaleType="centerInside" />
                 </LinearLayout>
 
@@ -435,12 +364,12 @@
                         android:layout_height="match_parent"
                         android:orientation="horizontal">
 
-                        <TextView android:id="@+id/exclude0529" style="@style/PickDayExcludeDateChip" android:text="5.29\n목" />
-                        <TextView android:id="@+id/exclude0530" style="@style/PickDayExcludeDateChip" android:text="5.30\n금" />
-                        <TextView android:id="@+id/exclude0531" style="@style/PickDayExcludeDateChip" android:text="5.31\n토" />
-                        <TextView android:id="@+id/exclude0601" style="@style/PickDayExcludeDateChip" android:text="6.1\n일" />
-                        <TextView android:id="@+id/exclude0605" style="@style/PickDayExcludeDateChip" android:text="6.5\n목" />
-                        <TextView android:id="@+id/exclude0606" style="@style/PickDayExcludeDateChip" android:text="6.6\n금" />
+                        <TextView android:id="@+id/exclude0529" style="@style/PickDayExcludeDateChip" android:text="-" />
+                        <TextView android:id="@+id/exclude0530" style="@style/PickDayExcludeDateChip" android:text="-" />
+                        <TextView android:id="@+id/exclude0531" style="@style/PickDayExcludeDateChip" android:text="-" />
+                        <TextView android:id="@+id/exclude0601" style="@style/PickDayExcludeDateChip" android:text="-" />
+                        <TextView android:id="@+id/exclude0605" style="@style/PickDayExcludeDateChip" android:text="-" />
+                        <TextView android:id="@+id/exclude0606" style="@style/PickDayExcludeDateChip" android:text="-" />
                     </LinearLayout>
                 </HorizontalScrollView>
 

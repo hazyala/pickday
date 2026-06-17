@@ -36,7 +36,7 @@
             android:ellipsize="end"
             android:includeFontPadding="false"
             android:singleLine="true"
-            android:text="팀플 회의 일정"
+            android:text="-"
             android:textColor="#252538"
             android:textSize="17sp"
             android:textStyle="bold" />
@@ -61,7 +61,7 @@
             android:ellipsize="end"
             android:includeFontPadding="false"
             android:singleLine="true"
-            android:text="참여자 4명  |  마감까지 D-1"
+            android:text="참여자 -  |  마감 -"
             android:textColor="#6A4DFF"
             android:textSize="12sp" />
     </LinearLayout>
@@ -86,7 +86,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="4dp"
             android:includeFontPadding="false"
-            android:text="100%"
+            android:text="-"
             android:textColor="#5B4CDB"
             android:textSize="15sp"
             android:textStyle="bold" />

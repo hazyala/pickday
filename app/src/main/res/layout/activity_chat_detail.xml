@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#F8F7FF">
@@ -26,7 +27,7 @@
                 android:padding="8dp"
                 android:scaleType="centerInside"
                 android:src="@drawable/ic_arrow_back"
-                android:tint="#252538" />
+                app:tint="#252538" />
 
             <TextView
                 android:id="@+id/tvChatDetailTitle"
@@ -60,7 +61,7 @@
                 android:padding="9dp"
                 android:scaleType="centerInside"
                 android:src="@drawable/icon_annotation"
-                android:tint="#5B4CDB" />
+                app:tint="#5B4CDB" />
 
             <LinearLayout
                 android:layout_width="0dp"
@@ -74,7 +75,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:includeFontPadding="false"
-                    android:text="현재 방 현황: 참여자 4명 · 응답률 100%"
+                    android:text="현재 방 현황"
                     android:textColor="#252538"
                     android:textSize="15sp"
                     android:textStyle="bold" />
@@ -85,7 +86,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8dp"
                     android:includeFontPadding="false"
-                    android:text="마감까지 D-1"
+                    android:text="마감 -"
                     android:textColor="#77748E"
                     android:textSize="13sp" />
             </LinearLayout>
@@ -104,7 +105,19 @@
                 android:id="@+id/layoutChatMessageContainer"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical" />
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/tvChatEmptyState"
+                    android:layout_width="match_parent"
+                    android:layout_height="220dp"
+                    android:gravity="center"
+                    android:includeFontPadding="false"
+                    android:text="아직 채팅이 없습니다"
+                    android:textColor="#8A88A0"
+                    android:textSize="14sp"
+                    android:textStyle="bold" />
+            </LinearLayout>
         </ScrollView>
 
         <LinearLayout

@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#F8F7FF">
@@ -72,7 +73,7 @@
                 android:layout_height="40dp"
                 android:padding="8dp"
                 android:src="@drawable/icon_notification"
-                android:tint="#252538"
+                app:tint="#252538"
                 android:scaleType="centerInside" />
             </LinearLayout>
 
@@ -235,6 +236,7 @@
                     android:textStyle="bold" />
 
                 <androidx.appcompat.widget.AppCompatButton
+                    android:id="@+id/btnViewAllDates"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:background="@android:color/transparent"
@@ -319,6 +321,7 @@
                     android:textStyle="bold" />
 
                 <androidx.appcompat.widget.AppCompatButton
+                    android:id="@+id/btnViewAllRooms"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:background="@android:color/transparent"
@@ -336,7 +339,7 @@
             <LinearLayout
                 android:id="@+id/layoutRoomContainer"
                 android:layout_width="match_parent"
-                android:layout_height="59dp"
+                android:layout_height="wrap_content"
                 android:layout_marginTop="11dp"
                 android:orientation="vertical" />
 
@@ -433,7 +436,7 @@
                 android:layout_width="20dp"
                 android:layout_height="20dp"
                 android:src="@drawable/icon_home"
-                android:tint="#5B4CDB"
+                app:tint="#5B4CDB"
                 android:scaleType="centerInside" />
 
             <TextView
@@ -459,7 +462,7 @@
                 android:layout_width="20dp"
                 android:layout_height="20dp"
                 android:src="@drawable/icon_calendars"
-                android:tint="#8A88A0"
+                app:tint="#8A88A0"
                 android:scaleType="centerInside" />
 
             <TextView
@@ -499,7 +502,7 @@
                 android:layout_width="20dp"
                 android:layout_height="20dp"
                 android:src="@drawable/icon_message"
-                android:tint="#8A88A0"
+                app:tint="#8A88A0"
                 android:scaleType="centerInside" />
 
             <TextView
@@ -524,7 +527,7 @@
                 android:layout_width="20dp"
                 android:layout_height="20dp"
                 android:src="@drawable/icon_person"
-                android:tint="#8A88A0"
+                app:tint="#8A88A0"
                 android:scaleType="centerInside" />
 
             <TextView

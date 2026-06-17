@@ -42,7 +42,7 @@
                 android:layout_marginTop="50dp"
                 android:includeFontPadding="false"
                 android:text="방 만들기 🎉"
-                android:layout_marginLeft="20dp"
+                android:layout_marginStart="20dp"
                 android:textColor="#232336"
                 android:textSize="22sp"
                 android:textStyle="bold" />
@@ -53,7 +53,7 @@
                 android:layout_marginTop="90dp"
                 android:includeFontPadding="false"
                 android:text="모두가 가능한 최고의 날을 찾아보세요"
-                android:layout_marginLeft="20dp"
+                android:layout_marginStart="20dp"
                 android:textColor="#8D8AA5"
                 android:textSize="12sp"
                 android:textStyle="bold" />
@@ -70,269 +70,279 @@
                 android:src="@drawable/createmeetup_character" />
         </FrameLayout>
 
-        <LinearLayout
+        <ScrollView
             android:layout_width="match_parent"
-            android:layout_height="519dp"
+            android:layout_height="0dp"
             android:layout_weight="1"
-            android:background="@drawable/pickday_card_white"
-            android:orientation="vertical"
-            android:padding="15dp">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="모임명 *"
-                android:textColor="#232336"
-                android:textSize="15sp"
-                android:textStyle="bold" />
-
-            <FrameLayout
-                android:layout_width="match_parent"
-                android:layout_height="38dp"
-                android:layout_marginTop="8dp"
-                android:background="@drawable/pickday_unselected">
-
-                <EditText
-                    android:id="@+id/edtMeetupName"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:background="@android:color/transparent"
-                    android:gravity="center_vertical"
-                    android:hint="예) 동아리 MT, 팀플 회의"
-                    android:includeFontPadding="false"
-                    android:maxLength="30"
-                    android:paddingStart="12dp"
-                    android:paddingEnd="48dp"
-                    android:singleLine="true"
-                    android:textColor="#232336"
-                    android:textColorHint="#A19DB8"
-                    android:textSize="9sp"
-                    android:textStyle="bold" />
-
-                <TextView
-                    android:id="@+id/tvNameCount"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical|end"
-                    android:layout_marginEnd="10dp"
-                    android:includeFontPadding="false"
-                    android:text="0/30"
-                    android:textColor="#8A88A0"
-                    android:textSize="8sp"
-                    android:textStyle="bold" />
-            </FrameLayout>
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="12dp"
-                android:text="모임 설명 (선택)"
-                android:textColor="#232336"
-                android:textSize="15sp"
-                android:textStyle="bold" />
-
-            <FrameLayout
-                android:layout_width="match_parent"
-                android:layout_height="38dp"
-                android:layout_marginTop="8dp"
-                android:background="@drawable/pickday_unselected">
-
-                <EditText
-                    android:id="@+id/edtMeetupDesc"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:background="@android:color/transparent"
-                    android:gravity="center_vertical"
-                    android:hint="모임에 대해 간단히 설명해 주세요"
-                    android:includeFontPadding="false"
-                    android:maxLength="100"
-                    android:paddingStart="12dp"
-                    android:paddingEnd="52dp"
-                    android:singleLine="true"
-                    android:textColor="#232336"
-                    android:textColorHint="#A19DB8"
-                    android:textSize="9sp"
-                    android:textStyle="bold" />
-
-                <TextView
-                    android:id="@+id/tvDescCount"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical|end"
-                    android:layout_marginEnd="10dp"
-                    android:includeFontPadding="false"
-                    android:text="0/100"
-                    android:textColor="#8A88A0"
-                    android:textSize="8sp"
-                    android:textStyle="bold" />
-            </FrameLayout>
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="12dp"
-                android:text="응답 마감일 *"
-                android:textColor="#232336"
-                android:textSize="15sp"
-                android:textStyle="bold" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="4dp"
-                android:includeFontPadding="false"
-                android:text="마감일 이후에는 응답을 받지 않아요"
-                android:textColor="#8D8AA5"
-                android:textSize="10sp"
-                android:textStyle="bold" />
+            android:clipToPadding="false"
+            android:fillViewport="true"
+            android:overScrollMode="ifContentScrolls">
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="38dp"
-                android:layout_marginTop="8dp"
-                android:orientation="horizontal">
+                android:layout_height="wrap_content"
+                android:background="@drawable/pickday_card_white"
+                android:orientation="vertical"
+                android:padding="15dp">
 
-                <LinearLayout
-                    android:id="@+id/btnDatePicker"
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1.4"
-                    android:background="@drawable/pickday_unselected"
-                    android:clickable="true"
-                    android:focusable="true"
-                    android:gravity="center_vertical"
-                    android:orientation="horizontal"
-                    android:paddingStart="10dp"
-                    android:paddingEnd="8dp">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="모임명 *"
+                    android:textColor="#232336"
+                    android:textSize="15sp"
+                    android:textStyle="bold" />
 
-                    <TextView
-                        android:layout_width="16dp"
-                        android:layout_height="16dp"
-                        android:gravity="center"
+                <FrameLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="38dp"
+                    android:layout_marginTop="8dp"
+                    android:background="@drawable/pickday_unselected">
+
+                    <EditText
+                        android:id="@+id/edtMeetupName"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:background="@android:color/transparent"
+                        android:gravity="center_vertical"
+                        android:hint="예) 동아리 MT, 팀플 회의"
                         android:includeFontPadding="false"
-                        android:text="▣"
-                        android:textColor="#6A4DFF"
-                        android:textSize="8sp" />
-
-                    <TextView
-                        android:id="@+id/tvDeadlineDate"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="7dp"
-                        android:layout_weight="1"
-                        android:includeFontPadding="false"
-                        android:text="마감일 선택"
+                        android:maxLength="30"
+                        android:paddingStart="12dp"
+                        android:paddingEnd="48dp"
+                        android:singleLine="true"
                         android:textColor="#232336"
-                        android:textSize="15sp"
-                        android:textStyle="bold" />
-                </LinearLayout>
-
-                <Space
-                    android:layout_width="6dp"
-                    android:layout_height="match_parent" />
-
-                <LinearLayout
-                    android:id="@+id/btnTimePicker"
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:background="@drawable/pickday_unselected"
-                    android:clickable="true"
-                    android:focusable="true"
-                    android:gravity="center_vertical"
-                    android:orientation="horizontal"
-                    android:paddingStart="10dp"
-                    android:paddingEnd="8dp">
-
-                    <TextView
-                        android:id="@+id/tvDeadlineTime"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:includeFontPadding="false"
-                        android:text="오후 11:59"
-                        android:textColor="#232336"
-                        android:textSize="15sp"
+                        android:textColorHint="#A19DB8"
+                        android:textSize="9sp"
                         android:textStyle="bold" />
 
                     <TextView
+                        android:id="@+id/tvNameCount"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical|end"
+                        android:layout_marginEnd="10dp"
                         android:includeFontPadding="false"
-                        android:text="⌄"
-                        android:textColor="#232336"
-                        android:textSize="10sp" />
-                </LinearLayout>
-            </LinearLayout>
-
-            <include
-                android:id="@+id/deadlineCalendar"
-                layout="@layout/view_pickday_calendar"
-                android:layout_width="match_parent"
-                android:layout_height="190dp"
-                android:layout_marginTop="12dp" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:text="인원 *"
-                android:textColor="#232336"
-                android:textSize="15sp"
-                android:textStyle="bold" />
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="38dp"
-                android:layout_marginTop="8dp"
-                android:background="@drawable/pickday_unselected"
-                android:gravity="center_vertical"
-                android:orientation="horizontal"
-                android:paddingStart="10dp"
-                android:paddingEnd="10dp">
+                        android:text="0/30"
+                        android:textColor="#8A88A0"
+                        android:textSize="8sp"
+                        android:textStyle="bold" />
+                </FrameLayout>
 
                 <TextView
-                    android:id="@+id/btnMinusPeople"
-                    android:layout_width="28dp"
-                    android:layout_height="28dp"
-                    android:background="@drawable/pickday_card_soft"
-                    android:clickable="true"
-                    android:focusable="true"
-                    android:gravity="center"
-                    android:includeFontPadding="false"
-                    android:text="−"
-                    android:textColor="#6A4DFF"
-                    android:textSize="14sp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="12dp"
+                    android:text="모임 설명 (선택)"
+                    android:textColor="#232336"
+                    android:textSize="15sp"
                     android:textStyle="bold" />
 
+                <FrameLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="38dp"
+                    android:layout_marginTop="8dp"
+                    android:background="@drawable/pickday_unselected">
+
+                    <EditText
+                        android:id="@+id/edtMeetupDesc"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:background="@android:color/transparent"
+                        android:gravity="center_vertical"
+                        android:hint="모임에 대해 간단히 설명해 주세요"
+                        android:includeFontPadding="false"
+                        android:maxLength="100"
+                        android:paddingStart="12dp"
+                        android:paddingEnd="52dp"
+                        android:singleLine="true"
+                        android:textColor="#232336"
+                        android:textColorHint="#A19DB8"
+                        android:textSize="9sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/tvDescCount"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical|end"
+                        android:layout_marginEnd="10dp"
+                        android:includeFontPadding="false"
+                        android:text="0/100"
+                        android:textColor="#8A88A0"
+                        android:textSize="8sp"
+                        android:textStyle="bold" />
+                </FrameLayout>
+
                 <TextView
-                    android:id="@+id/tvPeopleCount"
-                    android:layout_width="0dp"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:gravity="center"
-                    android:includeFontPadding="false"
-                    android:text="2명 ~ 20명"
-                    android:textColor="#8A88A0"
+                    android:layout_marginTop="12dp"
+                    android:text="응답 마감일 *"
+                    android:textColor="#232336"
                     android:textSize="15sp"
                     android:textStyle="bold" />
 
                 <TextView
-                    android:id="@+id/btnPlusPeople"
-                    android:layout_width="28dp"
-                    android:layout_height="28dp"
-                    android:background="@drawable/pickday_card_soft"
-                    android:clickable="true"
-                    android:focusable="true"
-                    android:gravity="center"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
                     android:includeFontPadding="false"
-                    android:text="+"
-                    android:textColor="#6A4DFF"
-                    android:textSize="14sp"
+                    android:text="마감일 이후에는 응답을 받지 않아요"
+                    android:textColor="#8D8AA5"
+                    android:textSize="10sp"
                     android:textStyle="bold" />
-            </LinearLayout>
 
-        </LinearLayout>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="38dp"
+                    android:layout_marginTop="8dp"
+                    android:orientation="horizontal">
+
+                    <FrameLayout
+                        android:id="@+id/btnDatePicker"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1.4"
+                        android:background="@drawable/pickday_unselected"
+                        android:clickable="true"
+                        android:focusable="true"
+                        android:paddingStart="10dp"
+                        android:paddingEnd="8dp">
+
+                        <TextView
+                            android:layout_width="16dp"
+                            android:layout_height="16dp"
+                            android:layout_gravity="start|center_vertical"
+                            android:gravity="center"
+                            android:includeFontPadding="false"
+                            android:text="▣"
+                            android:textColor="#6A4DFF"
+                            android:textSize="8sp" />
+
+                        <TextView
+                            android:id="@+id/tvDeadlineDate"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
+                            android:layout_marginStart="23dp"
+                            android:ellipsize="end"
+                            android:includeFontPadding="false"
+                            android:maxLines="1"
+                            android:text="마감일 선택"
+                            android:textColor="#232336"
+                            android:textSize="15sp"
+                            android:textStyle="bold" />
+                    </FrameLayout>
+
+                    <Space
+                        android:layout_width="6dp"
+                        android:layout_height="match_parent" />
+
+                    <FrameLayout
+                        android:id="@+id/btnTimePicker"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:background="@drawable/pickday_unselected"
+                        android:clickable="true"
+                        android:focusable="true"
+                        android:paddingStart="10dp"
+                        android:paddingEnd="8dp">
+
+                        <TextView
+                            android:id="@+id/tvDeadlineTime"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
+                            android:layout_marginEnd="16dp"
+                            android:ellipsize="end"
+                            android:includeFontPadding="false"
+                            android:maxLines="1"
+                            android:text="오후 11:59"
+                            android:textColor="#232336"
+                            android:textSize="15sp"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="end|center_vertical"
+                            android:includeFontPadding="false"
+                            android:text="⌄"
+                            android:textColor="#232336"
+                            android:textSize="10sp" />
+                    </FrameLayout>
+                </LinearLayout>
+
+                <include
+                    android:id="@+id/deadlineCalendar"
+                    layout="@layout/view_pickday_calendar"
+                    android:layout_width="match_parent"
+                    android:layout_height="190dp"
+                    android:layout_marginTop="12dp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:text="인원 *"
+                    android:textColor="#232336"
+                    android:textSize="15sp"
+                    android:textStyle="bold" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="38dp"
+                    android:layout_marginTop="8dp"
+                    android:background="@drawable/pickday_unselected"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:paddingStart="10dp"
+                    android:paddingEnd="10dp">
+
+                    <TextView
+                        android:id="@+id/btnMinusPeople"
+                        android:layout_width="28dp"
+                        android:layout_height="28dp"
+                        android:background="@drawable/pickday_card_soft"
+                        android:clickable="true"
+                        android:focusable="true"
+                        android:gravity="center"
+                        android:includeFontPadding="false"
+                        android:text="−"
+                        android:textColor="#6A4DFF"
+                        android:textSize="14sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/tvPeopleCount"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:gravity="center"
+                        android:includeFontPadding="false"
+                        android:text="2명 ~ 20명"
+                        android:textColor="#8A88A0"
+                        android:textSize="15sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/btnPlusPeople"
+                        android:layout_width="28dp"
+                        android:layout_height="28dp"
+                        android:background="@drawable/pickday_card_soft"
+                        android:clickable="true"
+                        android:focusable="true"
+                        android:gravity="center"
+                        android:includeFontPadding="false"
+                        android:text="+"
+                        android:textColor="#6A4DFF"
+                        android:textSize="14sp"
+                        android:textStyle="bold" />
+                </LinearLayout>
+            </LinearLayout>
+        </ScrollView>
     </LinearLayout>
 
     <TextView
