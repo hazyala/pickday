@@ -1,3 +1,7 @@
+> `dev`의 실제 동작은 [CURRENT_IMPLEMENTATION.md](CURRENT_IMPLEMENTATION.md)에서 확인한다. 아래 문서는 설계·목표 또는 테스트 절차를 포함하며 모든 항목의 구현/검증 완료를 뜻하지 않는다.
+
+> `dev`의 실제 동작은 [CURRENT_IMPLEMENTATION.md](CURRENT_IMPLEMENTATION.md)에서 확인한다. 아래 문서는 설계·목표 또는 테스트 절차를 포함하며 모든 항목의 구현/검증 완료를 뜻하지 않는다.
+
 # 데이터 모델
 
 이 문서는 백엔드 연동 전 Android 앱에서 사용할 로컬 모델 방향을 정의합니다.
