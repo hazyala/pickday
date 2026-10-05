@@ -31,7 +31,7 @@ app/src/main/
 docs/                   현재 상태, 설계 초안, 테스트·개발 규칙
 ```
 
-화면 전환은 Intent로 연결한다. `DummyDataSource`는 서버 Repository가 아니라 앱 프로세스 안의 샘플 데이터다. 캐릭터 이미지와 화면 리소스는 `res/`에서 사용하며 실행 스크린샷으로 소개하지 않는다.
+화면 전환은 Intent로 연결한다. `DummyDataSource`는 서버 Repository가 아니라 앱 프로세스 안의 샘플 데이터다. 캐릭터 이미지와 화면 리소스는 `res/`에 있다.
 
 ## Android Studio에서 실행
 
@@ -41,7 +41,7 @@ docs/                   현재 상태, 설계 초안, 테스트·개발 규칙
 ./gradlew :app:assembleDebug
 ```
 
-wrapper 실행 권한이 없으면 `bash gradlew :app:assembleDebug`로 실행한다. 연결된 에뮬레이터/기기에 Android Studio Run으로 설치하고 Splash부터 확인한다. 앱 API 키나 `.env`는 필요하지 않다. 이 안내는 설정과 manifest 대조 기준이며 Android SDK 없이 빌드 성공을 검증한 것으로 보지 않는다.
+wrapper 실행 권한이 없으면 `bash gradlew :app:assembleDebug`로 실행한다. 연결된 에뮬레이터/기기에 Android Studio Run으로 설치하고 Splash부터 확인한다. 앱 API 키나 `.env`는 필요하지 않다.
 
 ## 개발 기록
 
