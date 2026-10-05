@@ -1,3 +1,7 @@
+> `main`의 실제 동작은 [CURRENT_IMPLEMENTATION.md](CURRENT_IMPLEMENTATION.md)에서 확인한다. 아래 문서는 설계·목표 또는 테스트 절차를 포함하며 모든 항목의 구현/검증 완료를 뜻하지 않는다.
+
+> `main`의 실제 동작은 [CURRENT_IMPLEMENTATION.md](CURRENT_IMPLEMENTATION.md)에서 확인한다. 아래 문서는 설계·목표 또는 테스트 절차를 포함하며 모든 항목의 구현/검증 완료를 뜻하지 않는다.
+
 # 수동 테스트 케이스
 
 앱이 목업에서 서버-ready 로컬 동작으로 이동하는 동안 이 문서를 계속 업데이트합니다.

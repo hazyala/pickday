@@ -1,3 +1,7 @@
+> `main`의 실제 동작은 [CURRENT_IMPLEMENTATION.md](CURRENT_IMPLEMENTATION.md)에서 확인한다. 아래 문서는 설계·목표 또는 테스트 절차를 포함하며 모든 항목의 구현/검증 완료를 뜻하지 않는다.
+
+> `main`의 실제 동작은 [CURRENT_IMPLEMENTATION.md](CURRENT_IMPLEMENTATION.md)에서 확인한다. 아래 문서는 설계·목표 또는 테스트 절차를 포함하며 모든 항목의 구현/검증 완료를 뜻하지 않는다.
+
 # 화면 흐름
 
 이 문서는 서버 연동 직전 Android 앱의 목표 화면 흐름을 정의합니다.

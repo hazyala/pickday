@@ -1,3 +1,7 @@
+# PickDay 개발 방향 기록
+
+기존 README에 작성한 브랜치·커밋 규칙과 UI 방향을 보관한다. 목표·완료 기준을 설명한 문서이며 현재 구현은 [CURRENT_IMPLEMENTATION.md](CURRENT_IMPLEMENTATION.md)를 따른다.
+
 # PickDay
 
 단체 약속의 날짜·시간·장소 선택 화면을 연결한 Android MVP 스냅샷.
@@ -11,7 +15,7 @@ PickDay는 단체 약속을 잡을 때 날짜·시간·장소를 함께 정하�
 - 방 만들기 → 날짜 선택 → 초대 화면, 방 상세 → 응답 선택 화면을 탐색한다.
 - 초대 링크를 복사하거나 Android 공유 chooser로 전달한다. 링크 값은 고정 샘플이다.
 
-현재 백엔드·OAuth·push·실시간 채팅·영구 DB 저장은 없다. [API 계약 초안](docs/api-contract-draft.md)은 서버 구현 문서가 아니라 계획이다. 화면의 생성·응답·확정 동작과 실제 저장 여부는 [현재 구현](docs/CURRENT_IMPLEMENTATION.md)에 구분했다.
+현재 백엔드·OAuth·push·실시간 채팅·영구 DB 저장은 없다. [API 계약 초안](api-contract-draft.md)은 서버 구현 문서가 아니라 계획이다. 화면의 생성·응답·확정 동작과 실제 저장 여부는 [현재 구현](CURRENT_IMPLEMENTATION.md)에 구분했다.
 
 ## 앱 구성
 
@@ -41,6 +45,6 @@ wrapper 실행 권한이 없으면 `bash gradlew :app:assembleDebug`로 실행�
 
 ## 개발 기록
 
-[현재 구현](docs/CURRENT_IMPLEMENTATION.md) · [화면 흐름](docs/screen-flow.md) · [데이터 모델 설계](docs/data-model.md) · [수동 테스트](docs/manual-test-cases.md)
+[현재 구현](CURRENT_IMPLEMENTATION.md) · [화면 흐름](screen-flow.md) · [데이터 모델 설계](data-model.md) · [수동 테스트](manual-test-cases.md)
 
-[개발 방향과 브랜치·커밋 규칙](docs/project-direction.md) · [워크플로우](docs/development-workflow.md) · [UI 기준](docs/ui-guidelines.md) · [기존 로드맵](docs/roadmap.md)
+[개발 방향과 브랜치·커밋 규칙](project-direction.md) · [워크플로우](development-workflow.md) · [UI 기준](ui-guidelines.md) · [기존 로드맵](roadmap.md)
