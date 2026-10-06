@@ -1,8 +1,8 @@
 # main 구현 상태
 
-Home은 `DummyDataSource`의 고정 데이터를 읽는다. Login은 Home으로 Intent를 보내고 사용자 인증을 하지 않는다. 방 생성·응답 선택·상세 화면의 UI는 연결되어 있지만 이를 영구 저장하는 Repository나 서버가 없다. InviteMembers의 링크는 `https://pickday.app/room/Abc123` 고정 문자열이다. 실제 서비스 주소나 동작하는 초대 endpoint로 보지 않는다.
+Home은 `DummyDataSource`의 고정 데이터를 읽는다. Login은 Home으로 Intent를 보내고 사용자 인증을 하지 않는다. 방 생성·응답 선택·상세 화면의 UI는 연결되어 있지만 이를 영구 저장하는 Repository나 서버가 없다. InviteMembers의 링크는 `https://pickday.app/room/Abc123` 고정 문자열이다. 초대 화면의 링크는 서버에 연결되지 않는 샘플이다.
 
-`dev`의 달력·채팅·알림·roomId 연결은 이 브랜치에 구현된 것으로 소개하지 않는다.
+달력·채팅·알림·roomId 연계 구현은 `dev`에 있다.
 
 ## 설계 문서와 코드의 관계
 
