@@ -1,50 +1,19 @@
-# PickDay 개발 방향 기록
+# PickDay 개발 방향
 
-기존 README에 작성한 브랜치·커밋 규칙과 UI 방향을 보관한다. 목표·완료 기준을 설명한 문서이며 현재 구현은 [CURRENT_IMPLEMENTATION.md](CURRENT_IMPLEMENTATION.md)를 따른다.
+단체 약속의 후보 날짜·시간·장소를 한 방에서 정리하는 앱을 만든다. Java Activity와 XML 화면을 유지하면서, 고정 달력과 화면 내부 샘플 값을 방 데이터·참여 응답에 연결하는 것이 개발 방향이다.
 
-# PickDay
+## 화면과 데이터 기준
 
-방 ID를 기준으로 방 생성·후보 날짜·상세 통계·달력·채팅 목록을 연결한 로컬 Android 프로토타입.
+- Home, Splash/Login, 방 만들기와 초대에는 PickDay 캐릭터 asset을 사용한다.
+- 카드·버튼·칩은 파스텔 퍼플, 공통 곡률과 글꼴을 사용한다. 세부 기준은 [UI 가이드](ui-guidelines.md)에 있다.
+- 방 이름·참여자·후보 날짜·마감일은 방 데이터를 통해 전달한다. 빈 목록은 빈 상태와 방 만들기 동작으로 표시하는 방향이다.
+- 응답률·BEST 날짜·시간 선호도는 참여 응답에서 계산하는 것이 목표다. 현재 샘플 데이터와 저장 범위는 [현재 구현](CURRENT_IMPLEMENTATION.md)에 정리했다.
+- 서버 API, Google/Kakao 로그인, push, 캘린더 Provider는 [API 계약 초안](api-contract-draft.md)과 [로드맵](roadmap.md)의 후속 작업이다.
 
-## 화면에서 확인할 수 있는 것
+## 브랜치·커밋 규칙
 
-PickDay는 단체 약속을 잡을 때 날짜·시간·장소를 함께 정하기 위한 앱이다. 이 README는 `dev`의 구현을 설명한다. `main`은 MVP 스냅샷, `dev`는 통합 개발 브랜치이며 서로 같은 기능 상태가 아니다.
+`main`은 MVP 스냅샷, `dev`는 통합 개발 브랜치다. 기능 브랜치는 `dev`에서 분기하고 PR로 `dev`에 병합한다. 브랜치 접두사는 `feat/`, `fix/`, `refactor/`, `docs/`, `style/`, `test/`, `chore/`를 사용한다.
 
-- 런타임 생성 방과 기본 fixture 방을 `roomId`로 조회한다.
-- 후보 날짜 선택을 생성 방 데이터에 반영하고 초대 화면에 전달한다.
-- 방별 fixture 응답으로 가능 날짜·시간대·응답률을 계산한다.
-- 월간 달력, 참여자 목록, 알림, 채팅·내 정보 화면을 연다.
+커밋은 `type: 간단한 한국어 요약`으로 작성하며 동작·화면·데이터가 바뀌면 관련 문서를 함께 갱신한다. 주석은 한국어로 의도와 예외를 설명하고, 클래스·변수·함수 이름은 Java 관례를 따른다.
 
-현재 백엔드·OAuth·push·실시간 채팅·영구 DB 저장은 없다. [API 계약 초안](api-contract-draft.md)은 서버 구현 문서가 아니라 계획이다. 화면의 생성·응답·확정 동작과 실제 저장 여부는 [현재 구현](CURRENT_IMPLEMENTATION.md)에 구분했다.
-
-## 앱 구성
-
-Java Activity와 XML layout을 사용한다. AndroidX AppCompat·ConstraintLayout·Activity, Material Components가 화면을 구성하며 Compose나 Retrofit은 의존성에 없다.
-
-```text
-app/src/main/
-├── java/com/hazyala/pickday/kopo/ac/kr/
-│   ├── *Activity.java   화면과 이동·입력 처리
-│   ├── data/           DummyDataSource와 내부 데이터 객체
-│   └── ui/             PickDayDatePicker
-└── res/                layout, drawable, 문자열·테마
-docs/                   현재 상태, 설계 초안, 테스트·개발 규칙
-```
-
-화면 전환은 Intent로 연결한다. `DummyDataSource`는 서버 Repository가 아니라 앱 프로세스 안의 샘플 데이터다. 캐릭터 이미지와 화면 리소스는 `res/`에 있다.
-
-## Android Studio에서 실행
-
-저장소 루트를 Gradle 프로젝트로 연다. `app/build.gradle.kts` 기준 minSdk 26, targetSdk 36, compileSdk 36의 minor API 1이며 Android Gradle Plugin은 `gradle/libs.versions.toml`의 9.2.1이다. 해당 SDK와 프로젝트 Gradle JDK가 필요하다. Java 소스 호환성 11과 Gradle 실행 JDK는 별개의 설정이다.
-
-```bash
-./gradlew :app:assembleDebug
-```
-
-wrapper 실행 권한이 없으면 `bash gradlew :app:assembleDebug`로 실행한다. 연결된 에뮬레이터/기기에 Android Studio Run으로 설치하고 Splash부터 확인한다. 앱 API 키나 `.env`는 필요하지 않다.
-
-## 개발 기록
-
-[현재 구현](CURRENT_IMPLEMENTATION.md) · [화면 흐름](screen-flow.md) · [데이터 모델 설계](data-model.md) · [수동 테스트](manual-test-cases.md)
-
-[개발 방향과 브랜치·커밋 규칙](project-direction.md) · [워크플로우](development-workflow.md) · [UI 기준](ui-guidelines.md) · [기존 로드맵](roadmap.md)
+[개발 워크플로우](development-workflow.md) · [화면 흐름](screen-flow.md) · [과제 구현 정리](assignment-report-prep.md)
