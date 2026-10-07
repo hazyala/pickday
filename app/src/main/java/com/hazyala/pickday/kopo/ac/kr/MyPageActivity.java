@@ -1,16 +1,19 @@
 package com.hazyala.pickday.kopo.ac.kr;
 
+import com.hazyala.pickday.kopo.ac.kr.model.User;
+import com.hazyala.pickday.kopo.ac.kr.model.UserRoomStats;
+
 import android.content.Intent;
 import android.os.Bundle;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import androidx.appcompat.app.AppCompatActivity;
+import com.hazyala.pickday.kopo.ac.kr.ui.PickDayActivity;
 import androidx.appcompat.widget.AppCompatButton;
 
-import com.hazyala.pickday.kopo.ac.kr.data.DummyDataSource;
+import com.hazyala.pickday.kopo.ac.kr.data.LocalMeetupRepository;
 
-public class MyPageActivity extends AppCompatActivity {
+public class MyPageActivity extends PickDayActivity {
 
     private TextView tvUserName;
     private TextView tvUserSummary;
@@ -28,7 +31,7 @@ public class MyPageActivity extends AppCompatActivity {
     private LinearLayout rowLogout;
     private LinearLayout tabHome;
     private LinearLayout tabCalendar;
-    private LinearLayout tabAlarm;
+    private LinearLayout tabChat;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,6 +42,12 @@ public class MyPageActivity extends AppCompatActivity {
         bindUser();
         bindRows();
         setListeners();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        bindUser();
     }
 
     private void initViews() {
@@ -60,60 +69,65 @@ public class MyPageActivity extends AppCompatActivity {
 
         tabHome = findViewById(R.id.tabHome);
         tabCalendar = findViewById(R.id.tabCalendar);
-        tabAlarm = findViewById(R.id.tabAlarm);
+        tabChat = findViewById(R.id.tabChat);
     }
 
     private void bindUser() {
 
-        DummyDataSource.User user =
-                DummyDataSource.getCurrentUser();
+        User user =
+                LocalMeetupRepository.getCurrentUser();
 
-        tvUserName.setText(user.name + "님");
-        tvUserSummary.setText("PickDay로 약속 3개를 조율 중이에요!");
+        UserRoomStats stats = LocalMeetupRepository.getUserRoomStats();
+        ((TextView) findViewById(R.id.tvActiveRoomsCount)).setText(getString(R.string.rooms_count, stats.activeRooms));
+        ((TextView) findViewById(R.id.tvSubmittedRoomsCount)).setText(getString(R.string.rooms_count, stats.submittedRooms));
+        ((TextView) findViewById(R.id.tvConfirmedRoomsCount)).setText(getString(R.string.rooms_count, stats.confirmedRooms));
+        ((TextView) findViewById(R.id.tvTotalRoomsCount)).setText(getString(R.string.rooms_count, stats.totalRooms));
+        tvUserName.setText(getString(R.string.my_page_user_name_format, user.name));
+        tvUserSummary.setText(getString(R.string.my_page_user_summary_format, stats.totalRooms));
     }
 
     private void bindRows() {
 
         configureRow(
                 rowCreatedRooms,
-                "내가 만든 방",
-                "내가 만든 약속 방 목록을 확인해요"
+                getString(R.string.my_page_bind_rows_text),
+                getString(R.string.my_page_bind_rows_text_2)
         );
 
         configureRow(
                 rowJoinedRooms,
-                "참여한 방",
-                "내가 참여 중인 약속 방 목록이에요"
+                getString(R.string.my_page_bind_rows_text_3),
+                getString(R.string.my_page_bind_rows_text_4)
         );
 
         configureRow(
                 rowConfirmedSchedules,
-                "확정된 일정",
-                "최종 확정된 일정들을 모아봤어요"
+                getString(R.string.my_page_label_text_5),
+                getString(R.string.my_page_bind_rows_text_5)
         );
 
         configureRow(
                 rowNotificationSettings,
-                "알림 설정",
-                "푸시 알림을 설정할 수 있어요"
+                getString(R.string.my_page_bind_rows_text_6),
+                getString(R.string.my_page_bind_rows_text_7)
         );
 
         configureRow(
                 rowThemeSettings,
-                "테마 설정",
-                "앱 테마와 색상을 변경할 수 있어요"
+                getString(R.string.my_page_bind_rows_text_8),
+                getString(R.string.my_page_bind_rows_text_9)
         );
 
         configureRow(
                 rowServiceInfo,
-                "서비스 소개",
-                "픽데이에 대해 더 알아봐요"
+                getString(R.string.my_page_bind_rows_text_10),
+                getString(R.string.my_page_bind_rows_text_11)
         );
 
         configureRow(
                 rowLogout,
-                "로그아웃",
-                "계정에서 로그아웃해요"
+                getString(R.string.my_page_bind_rows_text_12),
+                getString(R.string.my_page_bind_rows_text_13)
         );
     }
 
@@ -133,51 +147,43 @@ public class MyPageActivity extends AppCompatActivity {
     private void setListeners() {
 
         btnProfileEdit.setOnClickListener(v -> openActionPage(
-                "프로필 편집",
-                "이름과 프로필 이미지를 수정해요.",
-                "프로필 사진, 표시 이름, 소개 문구를 변경하는 화면입니다."
+                getString(R.string.my_page_profile_edit_text),
+                getString(R.string.my_page_set_listeners_text),
+                getString(R.string.my_page_set_listeners_text_2)
         ));
 
         btnSettings.setOnClickListener(v -> openActionPage(
-                "앱 설정",
-                "PickDay 사용 환경을 관리해요.",
-                "알림, 테마, 계정 설정을 한 곳에서 조정할 수 있어요."
+                getString(R.string.my_page_label_text_12),
+                getString(R.string.my_page_set_listeners_text_3),
+                getString(R.string.my_page_set_listeners_text_4)
         ));
 
-        rowCreatedRooms.setOnClickListener(v -> openActionPage(
-                "내가 만든 방",
-                "내가 만든 약속 방 목록을 확인해요.",
-                "동아리 MT 일정 정하기, 팀플 회의 일정 등 직접 만든 방을 모아 보여줍니다."
-        ));
+        rowCreatedRooms.setOnClickListener(v -> startActivity(new Intent(this, AllMeetupRoomsActivity.class)));
 
         rowJoinedRooms.setOnClickListener(v -> openActionPage(
-                "참여한 방",
-                "내가 참여 중인 약속 방 목록이에요.",
-                "초대받아 참여한 약속과 아직 응답하지 않은 방을 확인할 수 있어요."
+                getString(R.string.my_page_bind_rows_text_3),
+                getString(R.string.my_page_set_listeners_text_5),
+                getString(R.string.my_page_set_listeners_text_6)
         ));
 
-        rowConfirmedSchedules.setOnClickListener(v -> openActionPage(
-                "확정된 일정",
-                "최종 확정된 일정들을 모아봤어요.",
-                "확정된 약속 시간, 장소, 참여 멤버를 빠르게 확인하는 화면입니다."
-        ));
+        rowConfirmedSchedules.setOnClickListener(v -> startActivity(new Intent(this, CalendarActivity.class)));
 
         rowNotificationSettings.setOnClickListener(v -> openActionPage(
-                "알림 설정",
-                "푸시 알림을 설정할 수 있어요.",
-                "초대, 마감 임박, 일정 확정 알림을 켜고 끄는 화면입니다."
+                getString(R.string.my_page_bind_rows_text_6),
+                getString(R.string.my_page_set_listeners_text_7),
+                getString(R.string.my_page_set_listeners_text_8)
         ));
 
         rowThemeSettings.setOnClickListener(v -> openActionPage(
-                "테마 설정",
-                "앱 테마와 색상을 변경할 수 있어요.",
-                "PickDay의 기본 보라색 테마와 밝은 화면 설정을 관리합니다."
+                getString(R.string.my_page_bind_rows_text_8),
+                getString(R.string.my_page_set_listeners_text_9),
+                getString(R.string.my_page_set_listeners_text_10)
         ));
 
         rowServiceInfo.setOnClickListener(v -> openActionPage(
-                "서비스 소개",
-                "PickDay에 대해 더 알아봐요.",
-                "여러 사람의 가능한 시간을 모아 가장 좋은 약속 시간을 고르는 서비스입니다."
+                getString(R.string.my_page_bind_rows_text_10),
+                getString(R.string.my_page_set_listeners_text_11),
+                getString(R.string.my_page_set_listeners_text_12)
         ));
 
         rowLogout.setOnClickListener(v -> {
@@ -188,7 +194,7 @@ public class MyPageActivity extends AppCompatActivity {
                             LoginActivity.class
                     );
 
-            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
             startActivity(intent);
             finish();
         });
@@ -227,11 +233,7 @@ public class MyPageActivity extends AppCompatActivity {
             startActivity(intent);
         });
 
-        tabAlarm.setOnClickListener(v -> openActionPage(
-                "알림",
-                "초대, 응답 완료, 일정 확정 알림을 확인해요.",
-                "새 알림이 있으면 이 화면에서 가장 먼저 보여줄게요."
-        ));
+        tabChat.setOnClickListener(v -> startActivity(new Intent(this, ChatActivity.class)));
     }
 
     private void openActionPage(String title, String subtitle, String body) {
@@ -244,7 +246,8 @@ public class MyPageActivity extends AppCompatActivity {
 
         intent.putExtra(MyPageActionActivity.EXTRA_TITLE, title);
         intent.putExtra(MyPageActionActivity.EXTRA_SUBTITLE, subtitle);
-        intent.putExtra(MyPageActionActivity.EXTRA_BODY, body);
+        intent.putExtra(MyPageActionActivity.EXTRA_BODY,
+                title.equals(getString(R.string.my_page_bind_rows_text_10)) ? body : getString(R.string.feature_unavailable_body, body));
 
         startActivity(intent);
     }

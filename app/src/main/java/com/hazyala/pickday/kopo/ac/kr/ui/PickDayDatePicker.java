@@ -102,6 +102,8 @@ public class PickDayDatePicker {
                 }
 
                 dayView.setText(String.valueOf(cellDate.get(Calendar.DAY_OF_MONTH)));
+                dayView.setContentDescription(new SimpleDateFormat("yyyy.MM.dd EEEE", Locale.KOREAN)
+                        .format(cellDate.getTime()));
 
                 boolean enabled = dateRule == null || dateRule.isEnabled(cloneCalendar(cellDate));
                 boolean selected = dateRule != null && dateRule.isSelected(cloneCalendar(cellDate));
@@ -279,7 +281,7 @@ public class PickDayDatePicker {
         ViewGroup.LayoutParams params = dayView.getLayoutParams();
 
         if (params instanceof ViewGroup.MarginLayoutParams) {
-            int margin = (int) (4 * dayView.getResources().getDisplayMetrics().density + 0.5f);
+            int margin = 0;
             ((ViewGroup.MarginLayoutParams) params).setMargins(margin, margin, margin, margin);
             dayView.setLayoutParams(params);
         }
@@ -287,7 +289,7 @@ public class PickDayDatePicker {
         dayView.setBackgroundColor(Color.TRANSPARENT);
         dayView.setTextColor(DARK_TEXT);
         dayView.setTypeface(null, Typeface.BOLD);
-        dayView.setTextSize(12);
+        dayView.setTextSize(14);
         dayView.setGravity(android.view.Gravity.CENTER);
         dayView.setIncludeFontPadding(false);
         dayView.setOnClickListener(null);

@@ -1,5 +1,7 @@
 package com.hazyala.pickday.kopo.ac.kr;
 
+import com.hazyala.pickday.kopo.ac.kr.model.MyMeetupRoom;
+
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -7,14 +9,14 @@ import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import androidx.appcompat.app.AppCompatActivity;
+import com.hazyala.pickday.kopo.ac.kr.ui.PickDayActivity;
 import androidx.appcompat.widget.AppCompatButton;
 
-import com.hazyala.pickday.kopo.ac.kr.data.DummyDataSource;
+import com.hazyala.pickday.kopo.ac.kr.data.LocalMeetupRepository;
 
 import java.util.List;
 
-public class AllMeetupRoomsActivity extends AppCompatActivity {
+public class AllMeetupRoomsActivity extends PickDayActivity {
 
     private AppCompatButton btnBack;
     private TextView btnCreateRoom;
@@ -31,6 +33,12 @@ public class AllMeetupRoomsActivity extends AppCompatActivity {
         setListeners();
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        renderRooms();
+    }
+
     private void initViews() {
         btnBack = findViewById(R.id.btnBack);
         btnCreateRoom = findViewById(R.id.btnCreateRoom);
@@ -39,8 +47,8 @@ public class AllMeetupRoomsActivity extends AppCompatActivity {
     }
 
     private void renderRooms() {
-        List<DummyDataSource.MyMeetupRoom> rooms = DummyDataSource.getMyMeetupRooms();
-        tvRoomCount.setText("전체 " + rooms.size() + "개");
+        List<MyMeetupRoom> rooms = LocalMeetupRepository.getMyMeetupRooms();
+        tvRoomCount.setText(getString(R.string.room_total_count, rooms.size()));
         layoutRoomList.removeAllViews();
 
         if (rooms.isEmpty()) {
@@ -50,14 +58,14 @@ public class AllMeetupRoomsActivity extends AppCompatActivity {
 
         LayoutInflater inflater = LayoutInflater.from(this);
 
-        for (DummyDataSource.MyMeetupRoom room : rooms) {
+        for (MyMeetupRoom room : rooms) {
             View item = inflater.inflate(R.layout.item_meetup_room, layoutRoomList, false);
             bindRoomItem(item, room);
             layoutRoomList.addView(item);
         }
     }
 
-    private void bindRoomItem(View item, DummyDataSource.MyMeetupRoom room) {
+    private void bindRoomItem(View item, MyMeetupRoom room) {
         TextView tvRoomIcon = item.findViewById(R.id.tvRoomIcon);
         TextView tvRoomTitle = item.findViewById(R.id.tvRoomTitle);
         TextView tvRoomInfo = item.findViewById(R.id.tvRoomInfo);
@@ -65,8 +73,8 @@ public class AllMeetupRoomsActivity extends AppCompatActivity {
 
         tvRoomIcon.setText(getIconText(room.iconType));
         tvRoomTitle.setText(room.title);
-        tvRoomInfo.setText("참여자 " + room.participantCount + "명 · 마감까지 " + room.dDay);
-        tvRoomRate.setText(room.responseRate + "%");
+        tvRoomInfo.setText(getString(R.string.room_participants_deadline, room.participantCount, room.dDay));
+        tvRoomRate.setText(getString(R.string.percent_value, room.responseRate));
 
         item.setOnClickListener(v -> {
             Intent intent = new Intent(AllMeetupRoomsActivity.this, RoomDetailActivity.class);
@@ -78,23 +86,23 @@ public class AllMeetupRoomsActivity extends AppCompatActivity {
 
     private String getIconText(String iconType) {
         if ("group".equals(iconType)) {
-            return "팀";
+            return getString(R.string.room_badge_team);
         }
 
         if ("cake".equals(iconType)) {
-            return "생";
+            return getString(R.string.room_badge_birthday);
         }
 
         if ("camp".equals(iconType)) {
-            return "동";
+            return getString(R.string.room_badge_club);
         }
 
-        return "일";
+        return getString(R.string.room_badge_default);
     }
 
     private View createEmptyView() {
         TextView emptyView = new TextView(this);
-        emptyView.setText("아직 만들어진 약속 방이 없어요");
+        emptyView.setText(getString(R.string.all_meetup_rooms_create_empty_view_text));
         emptyView.setTextColor(0xFF8D8AA5);
         emptyView.setTextSize(13);
         emptyView.setGravity(android.view.Gravity.CENTER);

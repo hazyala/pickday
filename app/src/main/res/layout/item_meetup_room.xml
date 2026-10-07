@@ -1,94 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/roomRoot"
-    android:layout_width="match_parent"
-    android:layout_height="55dp"
-    android:layout_marginBottom="6dp"
-    android:background="@drawable/pickday_card_white"
-    android:gravity="center_vertical"
-    android:orientation="horizontal"
-    android:paddingStart="9dp"
-    android:paddingEnd="8dp">
-
-    <TextView
-        android:id="@+id/tvRoomIcon"
-        android:layout_width="36dp"
-        android:layout_height="36dp"
-        android:background="@drawable/pickday_card_soft"
-        android:gravity="center"
-        android:text="팀"
-        android:textColor="#6A4DFF"
-        android:textSize="12sp"
-        android:textStyle="bold"
-        android:includeFontPadding="false" />
-
-    <LinearLayout
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="9dp"
-        android:layout_weight="1"
-        android:orientation="vertical">
-
-        <TextView
-            android:id="@+id/tvRoomTitle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="-"
-            android:textColor="#252538"
-            android:textSize="12sp"
-            android:textStyle="bold"
-            android:includeFontPadding="false"
-            android:singleLine="true"
-            android:ellipsize="end" />
-
-        <TextView
-            android:id="@+id/tvRoomInfo"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="4dp"
-            android:text="참여자 - · 마감 -"
-            android:textColor="#77748E"
-            android:textSize="9sp"
-            android:includeFontPadding="false"
-            android:singleLine="true"
-            android:ellipsize="end" />
-
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android" android:id="@+id/roomRoot" android:layout_width="match_parent" android:layout_height="55dp" android:layout_marginBottom="6dp" android:background="@drawable/pickday_card_white" android:gravity="center_vertical" android:orientation="horizontal" android:paddingStart="9dp" android:paddingEnd="8dp">
+    <TextView android:id="@+id/tvRoomIcon" android:layout_width="36dp" android:layout_height="wrap_content" android:background="@drawable/pickday_card_soft" android:gravity="center" android:text="@string/room_badge_team" android:textColor="#6A4DFF" android:textSize="12sp" android:textStyle="bold" android:includeFontPadding="false" android:minHeight="36dp" />
+    <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_marginStart="9dp" android:layout_weight="1" android:orientation="vertical">
+        <TextView android:id="@+id/tvRoomTitle" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/invite_members_invite_room_title_text" android:textColor="#252538" android:textSize="12sp" android:textStyle="bold" android:includeFontPadding="false" android:singleLine="true" android:ellipsize="end" />
+        <TextView android:id="@+id/tvRoomInfo" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="4dp" android:text="@string/meetup_room_room_info_text" android:textColor="#77748E" android:textSize="12sp" android:includeFontPadding="false" android:singleLine="true" android:ellipsize="end" />
     </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="44dp"
-        android:layout_height="wrap_content"
-        android:gravity="end"
-        android:orientation="vertical">
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="응답률"
-            android:textColor="#8A88A0"
-            android:textSize="8sp"
-            android:includeFontPadding="false" />
-
-        <TextView
-            android:id="@+id/tvRoomRate"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="2dp"
-            android:text="-"
-            android:textColor="#5B4CDB"
-            android:textSize="14sp"
-            android:textStyle="bold"
-            android:includeFontPadding="false" />
-
+    <LinearLayout android:layout_width="44dp" android:layout_height="wrap_content" android:gravity="end" android:orientation="vertical">
+        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/chat_room_label_text" android:textColor="#716C87" android:textSize="12sp" android:includeFontPadding="false" />
+        <TextView android:id="@+id/tvRoomRate" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="2dp" android:text="@string/invite_members_invite_room_title_text" android:textColor="#5B4CDB" android:textSize="14sp" android:textStyle="bold" android:includeFontPadding="false" />
     </LinearLayout>
-
-    <TextView
-        android:layout_width="14dp"
-        android:layout_height="wrap_content"
-        android:gravity="center"
-        android:text="›"
-        android:textColor="#9A98B2"
-        android:textSize="22sp"
-        android:includeFontPadding="false" />
-
+    <TextView android:layout_width="14dp" android:layout_height="wrap_content" android:gravity="center" android:text="@string/calendar_next_month_text" android:textColor="#9A98B2" android:textSize="22sp" android:includeFontPadding="false" />
 </LinearLayout>

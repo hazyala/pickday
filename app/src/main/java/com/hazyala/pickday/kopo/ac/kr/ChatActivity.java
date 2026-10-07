@@ -1,5 +1,8 @@
 package com.hazyala.pickday.kopo.ac.kr;
 
+import com.hazyala.pickday.kopo.ac.kr.model.ChatMessage;
+import com.hazyala.pickday.kopo.ac.kr.model.MyMeetupRoom;
+
 import android.graphics.Color;
 import android.content.Intent;
 import android.os.Bundle;
@@ -9,9 +12,9 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import androidx.appcompat.app.AppCompatActivity;
+import com.hazyala.pickday.kopo.ac.kr.ui.PickDayActivity;
 
-import com.hazyala.pickday.kopo.ac.kr.data.DummyDataSource;
+import com.hazyala.pickday.kopo.ac.kr.data.LocalMeetupRepository;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -19,8 +22,9 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
-public class ChatActivity extends AppCompatActivity {
+public class ChatActivity extends PickDayActivity {
 
+    private boolean activeTabSelected = true;
     private ImageView btnBack;
     private LinearLayout layoutChatRoomContainer;
     private LinearLayout layoutClosedRoomEmpty;
@@ -43,6 +47,12 @@ public class ChatActivity extends AppCompatActivity {
         setListeners();
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (activeTabSelected) loadChatRooms();
+    }
+
     private void initViews() {
         btnBack = findViewById(R.id.btnBack);
         layoutChatRoomContainer = findViewById(R.id.layoutChatRoomContainer);
@@ -58,25 +68,25 @@ public class ChatActivity extends AppCompatActivity {
     }
 
     private void loadChatRooms() {
-        List<DummyDataSource.MyMeetupRoom> rooms =
-                DummyDataSource.getMyMeetupRooms();
+        List<MyMeetupRoom> rooms =
+                LocalMeetupRepository.getMyMeetupRooms();
 
         showActiveRooms(rooms);
     }
 
-    private void showActiveRooms(List<DummyDataSource.MyMeetupRoom> rooms) {
+    private void showActiveRooms(List<MyMeetupRoom> rooms) {
         setSelectedTab(true);
 
         layoutClosedRoomEmpty.setVisibility(View.GONE);
         layoutChatRoomContainer.setVisibility(View.VISIBLE);
         layoutChatRoomContainer.removeAllViews();
 
-        tvChatRoomSectionTitle.setText("참여 중인 방");
+        tvChatRoomSectionTitle.setText(getString(R.string.chat_active_room_tab_text));
         tvChatRoomCount.setText(String.valueOf(rooms.size()));
 
         LayoutInflater inflater = LayoutInflater.from(this);
 
-        for (DummyDataSource.MyMeetupRoom room : rooms) {
+        for (MyMeetupRoom room : rooms) {
             View view = inflater.inflate(
                     R.layout.item_chat_room,
                     layoutChatRoomContainer,
@@ -100,31 +110,24 @@ public class ChatActivity extends AppCompatActivity {
 
             tvChatRoomTitle.setText(room.title);
             tvChatRoomMessage.setText(getLastPreviewMessage(room.roomId));
-            tvChatRoomInfo.setText(
-                    "참여자 " +
-                            room.participantCount +
-                            "명  |  마감 " +
-                            formatDate(room.deadlineDateIso) +
-                            " " +
-                            room.deadlineTimeText
-            );
-            tvChatRoomRate.setText(room.responseRate + "%");
+            tvChatRoomInfo.setText(getString(R.string.chat_chat_room_info_format, room.participantCount, formatDate(room.deadlineDateIso), room.deadlineTimeText));
+            tvChatRoomRate.setText(getString(R.string.percent_value, room.responseRate));
 
             switch (room.iconType) {
                 case "group":
-                    tvChatRoomIcon.setText("팀");
+                    tvChatRoomIcon.setText(getString(R.string.room_badge_team));
                     break;
 
                 case "cake":
-                    tvChatRoomIcon.setText("생");
+                    tvChatRoomIcon.setText(getString(R.string.room_badge_birthday));
                     break;
 
                 case "camp":
-                    tvChatRoomIcon.setText("동");
+                    tvChatRoomIcon.setText(getString(R.string.room_badge_club));
                     break;
 
                 default:
-                    tvChatRoomIcon.setText("일");
+                    tvChatRoomIcon.setText(getString(R.string.room_badge_default));
                     break;
             }
 
@@ -145,23 +148,23 @@ public class ChatActivity extends AppCompatActivity {
     }
 
     private String getLastPreviewMessage(String roomId) {
-        List<DummyDataSource.ChatMessage> messages =
-                DummyDataSource.getChatMessagesByRoomId(roomId);
+        List<ChatMessage> messages =
+                LocalMeetupRepository.getChatMessagesByRoomId(roomId);
 
         for (int index = messages.size() - 1; index >= 0; index--) {
-            DummyDataSource.ChatMessage message = messages.get(index);
+            ChatMessage message = messages.get(index);
 
             if (!message.notice) {
                 return message.message;
             }
         }
 
-        return "아직 채팅이 없습니다";
+        return getString(R.string.chat_detail_chat_empty_state_text);
     }
 
     private String formatDate(String dateIso) {
         if (dateIso == null || dateIso.isEmpty()) {
-            return "미정";
+            return getString(R.string.schedule_undecided);
         }
 
         try {
@@ -181,11 +184,12 @@ public class ChatActivity extends AppCompatActivity {
         layoutChatRoomContainer.setVisibility(View.GONE);
         layoutClosedRoomEmpty.setVisibility(View.VISIBLE);
 
-        tvChatRoomSectionTitle.setText("종료된 방");
+        tvChatRoomSectionTitle.setText(getString(R.string.chat_closed_room_tab_text));
         tvChatRoomCount.setText("0");
     }
 
     private void setSelectedTab(boolean activeSelected) {
+        activeTabSelected = activeSelected;
         if (activeSelected) {
             tvActiveRoomTab.setBackgroundResource(R.drawable.pickday_card_glass);
             tvActiveRoomTab.setTextColor(Color.parseColor("#5B4CDB"));
@@ -204,7 +208,7 @@ public class ChatActivity extends AppCompatActivity {
         btnBack.setOnClickListener(v -> finish());
 
         tvActiveRoomTab.setOnClickListener(v -> showActiveRooms(
-                DummyDataSource.getMyMeetupRooms()
+                LocalMeetupRepository.getMyMeetupRooms()
         ));
 
         tvClosedRoomTab.setOnClickListener(v -> showClosedRooms());

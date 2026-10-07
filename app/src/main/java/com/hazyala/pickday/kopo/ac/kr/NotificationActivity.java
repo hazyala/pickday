@@ -1,5 +1,7 @@
 package com.hazyala.pickday.kopo.ac.kr;
 
+import com.hazyala.pickday.kopo.ac.kr.model.Notification;
+
 import android.graphics.Color;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -8,13 +10,13 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import androidx.appcompat.app.AppCompatActivity;
+import com.hazyala.pickday.kopo.ac.kr.ui.PickDayActivity;
 
-import com.hazyala.pickday.kopo.ac.kr.data.DummyDataSource;
+import com.hazyala.pickday.kopo.ac.kr.data.LocalMeetupRepository;
 
 import java.util.List;
 
-public class NotificationActivity extends AppCompatActivity {
+public class NotificationActivity extends PickDayActivity {
 
     private ImageView btnBack;
     private LinearLayout layoutNotificationContainer;
@@ -36,12 +38,12 @@ public class NotificationActivity extends AppCompatActivity {
     }
 
     private void loadNotifications() {
-        List<DummyDataSource.Notification> notifications =
-                DummyDataSource.getNotifications();
+        List<Notification> notifications =
+                LocalMeetupRepository.getNotifications();
 
         LayoutInflater inflater = LayoutInflater.from(this);
 
-        for (DummyDataSource.Notification notification : notifications) {
+        for (Notification notification : notifications) {
             if (!notification.section.equals(currentSection)) {
                 currentSection = notification.section;
                 addSectionTitle(inflater, currentSection);

@@ -1,5 +1,9 @@
 package com.hazyala.pickday.kopo.ac.kr;
 
+import com.hazyala.pickday.kopo.ac.kr.model.ChatMessage;
+import com.hazyala.pickday.kopo.ac.kr.model.ChatRoomStatus;
+import com.hazyala.pickday.kopo.ac.kr.model.MyMeetupRoom;
+
 import android.graphics.Color;
 import android.os.Bundle;
 import android.view.Gravity;
@@ -10,11 +14,12 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.appcompat.widget.AppCompatButton;
-import androidx.appcompat.app.AppCompatActivity;
+import com.hazyala.pickday.kopo.ac.kr.ui.PickDayActivity;
 
-import com.hazyala.pickday.kopo.ac.kr.data.DummyDataSource;
+import com.hazyala.pickday.kopo.ac.kr.data.LocalMeetupRepository;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -22,7 +27,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
-public class ChatDetailActivity extends AppCompatActivity {
+public class ChatDetailActivity extends PickDayActivity {
 
     public static final String EXTRA_ROOM_ID = "extra_room_id";
     public static final String EXTRA_ROOM_TITLE = "extra_room_title";
@@ -45,7 +50,7 @@ public class ChatDetailActivity extends AppCompatActivity {
         setContentView(R.layout.activity_chat_detail);
 
         initViews();
-        setRoomData();
+        if (!setRoomData()) return;
         loadMessages();
         setListeners();
     }
@@ -62,38 +67,44 @@ public class ChatDetailActivity extends AppCompatActivity {
         btnSendMessage = findViewById(R.id.btnSendMessage);
     }
 
-    private void setRoomData() {
+    private boolean setRoomData() {
         roomId = getIntent().getStringExtra(EXTRA_ROOM_ID);
         roomTitle = getIntent().getStringExtra(EXTRA_ROOM_TITLE);
 
         if (roomId == null || roomId.isEmpty()) {
-            roomId = DummyDataSource.getMeetupRoomByTitle(roomTitle).roomId;
+            MyMeetupRoom selected = LocalMeetupRepository.getMeetupRoomByTitle(roomTitle);
+            roomId = selected == null ? "" : selected.roomId;
         }
 
-        DummyDataSource.MyMeetupRoom room =
-                DummyDataSource.getMeetupRoomById(roomId);
+        MyMeetupRoom room =
+                LocalMeetupRepository.getMeetupRoomById(roomId);
 
+        if (room == null) {
+            Toast.makeText(this, getString(R.string.error_room_not_found), Toast.LENGTH_SHORT).show();
+            finish(); return false;
+        }
         if (roomTitle == null || roomTitle.isEmpty()) {
             roomTitle = room.title;
         }
 
         tvChatDetailTitle.setText(roomTitle);
+        return true;
     }
 
     private void loadMessages() {
         setNoticeStatus();
 
-        List<DummyDataSource.ChatMessage> messages =
-                DummyDataSource.getChatMessagesByRoomId(roomId);
+        List<ChatMessage> messages =
+                LocalMeetupRepository.getChatMessagesByRoomId(roomId);
 
         tvChatEmptyState.setVisibility(messages.isEmpty() ? View.VISIBLE : View.GONE);
 
-        for (DummyDataSource.ChatMessage message : messages) {
+        for (ChatMessage message : messages) {
             addMessageView(message);
         }
     }
 
-    private void addMessageView(DummyDataSource.ChatMessage message) {
+    private void addMessageView(ChatMessage message) {
         View view = LayoutInflater.from(this).inflate(
                 R.layout.item_chat_message,
                 layoutChatMessageContainer,
@@ -151,28 +162,17 @@ public class ChatDetailActivity extends AppCompatActivity {
     }
 
     private void setNoticeStatus() {
-        DummyDataSource.ChatRoomStatus status =
-                DummyDataSource.getChatRoomStatusByRoomId(roomId);
+        ChatRoomStatus status =
+                LocalMeetupRepository.getChatRoomStatusByRoomId(roomId);
 
-        tvChatNoticeTitle.setText(
-                "현재 방 현황: 참여자 " +
-                        status.participantCount +
-                        "명 · 응답률 " +
-                        status.responseRate +
-                        "%"
-        );
+        tvChatNoticeTitle.setText(getString(R.string.chat_detail_chat_notice_title_format, status.participantCount, status.responseRate));
 
-        tvChatNoticeMeta.setText(
-                "마감 " +
-                        formatDate(status.deadlineDateIso) +
-                        " " +
-                        status.deadlineTimeText
-        );
+        tvChatNoticeMeta.setText(getString(R.string.chat_detail_chat_notice_meta_format, formatDate(status.deadlineDateIso), status.deadlineTimeText));
     }
 
     private String formatDate(String dateIso) {
         if (dateIso == null || dateIso.isEmpty()) {
-            return "미정";
+            return getString(R.string.schedule_undecided);
         }
 
         try {
@@ -206,14 +206,7 @@ public class ChatDetailActivity extends AppCompatActivity {
         }
 
         tvChatEmptyState.setVisibility(View.GONE);
-        addMessageView(new DummyDataSource.ChatMessage(
-                roomId,
-                "김해민",
-                message,
-                "방금 전",
-                true,
-                false
-        ));
+        addMessageView(LocalMeetupRepository.sendChatMessage(roomId, message));
 
         etMessageInput.setText("");
         scrollChatMessages.post(() -> scrollChatMessages.fullScroll(View.FOCUS_DOWN));

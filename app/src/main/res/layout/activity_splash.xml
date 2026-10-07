@@ -1,76 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent">
-
-    <ImageView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:src="@drawable/splash_background"
-        android:scaleType="centerCrop" />
-
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
-
-        <ImageView
-            android:id="@+id/logoImage"
-            android:layout_width="240dp"
-            android:layout_height="90dp"
-            android:src="@drawable/pickday_logo"
-            android:scaleType="fitCenter"
-            android:scaleX="4"
-            android:scaleY="4"
-            android:adjustViewBounds="true"
-            android:contentDescription="PickDay Logo"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            android:layout_marginTop="120dp" />
-
-        <TextView
-            android:id="@+id/titleText"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="우리의 약속 더 쉽게"
-            android:textColor="@color/pickday_text_primary"
-            android:textSize="16sp"
-            android:fontFamily="@font/notosanskr_medium"
-            app:layout_constraintTop_toBottomOf="@id/logoImage"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            />
-
-        <TextView
-            android:id="@+id/subText"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="약속 잡기가 쉬워지는 날, 픽데이"
-            android:textColor="@color/pickday_text_primary"
-            android:textSize="16sp"
-            android:fontFamily="@font/notosanskr_regular"
-            app:layout_constraintTop_toBottomOf="@id/titleText"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-        />
-
-        <ImageView
-            android:id="@+id/characterImage"
-            android:layout_width="330dp"
-            android:layout_height="330dp"
-            android:src="@drawable/splash_character"
-            android:scaleType="fitCenter"
-            android:scaleX="1.7"
-            android:scaleY="1.7"
-            android:adjustViewBounds="true"
-            android:contentDescription="Splash Character"
-            app:layout_constraintTop_toBottomOf="@id/subText"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            android:layout_marginTop="50dp" />
-
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android" xmlns:app="http://schemas.android.com/apk/res-auto" android:layout_width="match_parent" android:layout_height="match_parent">
+    <ImageView android:layout_width="match_parent" android:layout_height="match_parent" android:src="@drawable/splash_background" android:scaleType="centerCrop" />
+    <androidx.constraintlayout.widget.ConstraintLayout android:layout_width="match_parent" android:layout_height="match_parent">
+        <ImageView android:id="@+id/logoImage" android:layout_width="240dp" android:layout_height="90dp" android:src="@drawable/pickday_logo" android:scaleType="fitCenter" android:scaleX="4" android:scaleY="4" android:adjustViewBounds="true" android:contentDescription="@string/splash_logo_image_content_description" app:layout_constraintTop_toTopOf="parent" app:layout_constraintStart_toStartOf="parent" app:layout_constraintEnd_toEndOf="parent" android:layout_marginTop="120dp" />
+        <TextView android:id="@+id/titleText" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/login_label_text_3" android:textColor="@color/pickday_text_primary" android:textSize="16sp" android:fontFamily="@font/notosanskr_medium" app:layout_constraintTop_toBottomOf="@id/logoImage" app:layout_constraintStart_toStartOf="parent" app:layout_constraintEnd_toEndOf="parent" />
+        <TextView android:id="@+id/subText" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/splash_sub_text_text" android:textColor="@color/pickday_text_primary" android:textSize="16sp" android:fontFamily="@font/notosanskr_regular" app:layout_constraintTop_toBottomOf="@id/titleText" app:layout_constraintStart_toStartOf="parent" app:layout_constraintEnd_toEndOf="parent" />
+        <ImageView android:id="@+id/characterImage" android:layout_width="330dp" android:layout_height="330dp" android:src="@drawable/splash_character" android:scaleType="fitCenter" android:scaleX="1.7" android:scaleY="1.7" android:adjustViewBounds="true" android:contentDescription="@string/splash_character_image_content_description" app:layout_constraintTop_toBottomOf="@id/subText" app:layout_constraintStart_toStartOf="parent" app:layout_constraintEnd_toEndOf="parent" android:layout_marginTop="50dp" />
     </androidx.constraintlayout.widget.ConstraintLayout>
-
 </FrameLayout>

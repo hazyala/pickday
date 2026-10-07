@@ -1,5 +1,7 @@
 package com.hazyala.pickday.kopo.ac.kr;
 
+import com.hazyala.pickday.kopo.ac.kr.model.CalendarMeetup;
+
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.Typeface;
@@ -11,10 +13,10 @@ import android.widget.GridLayout;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import androidx.appcompat.app.AppCompatActivity;
+import com.hazyala.pickday.kopo.ac.kr.ui.PickDayActivity;
 import androidx.appcompat.widget.AppCompatButton;
 
-import com.hazyala.pickday.kopo.ac.kr.data.DummyDataSource;
+import com.hazyala.pickday.kopo.ac.kr.data.LocalMeetupRepository;
 import com.hazyala.pickday.kopo.ac.kr.ui.PickDayDatePicker;
 
 import java.text.SimpleDateFormat;
@@ -25,7 +27,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
-public class CalendarActivity extends AppCompatActivity {
+public class CalendarActivity extends PickDayActivity {
 
     private TextView tvMonthTitle;
     private TextView tvScheduleTitle;
@@ -38,7 +40,7 @@ public class CalendarActivity extends AppCompatActivity {
     private AppCompatButton btnFab;
 
     private final Calendar visibleMonth = Calendar.getInstance();
-    private final List<DummyDataSource.CalendarMeetup> allMeetups = new ArrayList<>();
+    private final List<CalendarMeetup> allMeetups = new ArrayList<>();
 
     private final int DARK_TEXT = Color.parseColor("#20213B");
     private final int MUTED_TEXT = Color.parseColor("#A9A8C2");
@@ -52,10 +54,18 @@ public class CalendarActivity extends AppCompatActivity {
         setContentView(R.layout.activity_calendar);
 
         visibleMonth.set(Calendar.DAY_OF_MONTH, 1);
-        allMeetups.addAll(DummyDataSource.getCalendarMeetups());
+        allMeetups.addAll(LocalMeetupRepository.getCalendarMeetups());
 
         initViews();
         setListeners();
+        renderCalendar();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        allMeetups.clear();
+        allMeetups.addAll(LocalMeetupRepository.getCalendarMeetups());
         renderCalendar();
     }
 
@@ -98,7 +108,7 @@ public class CalendarActivity extends AppCompatActivity {
         tvMonthTitle.setText(formatMonthTitle(visibleMonth));
         monthGrid.removeAllViews();
 
-        Map<String, List<DummyDataSource.CalendarMeetup>> meetupsByDate = getMeetupsByDate();
+        Map<String, List<CalendarMeetup>> meetupsByDate = getMeetupsByDate();
         Calendar cursor = (Calendar) visibleMonth.clone();
         int firstWeekday = cursor.get(Calendar.DAY_OF_WEEK) - Calendar.SUNDAY;
         cursor.add(Calendar.DAY_OF_MONTH, -firstWeekday);
@@ -114,7 +124,7 @@ public class CalendarActivity extends AppCompatActivity {
 
     private View createDayCell(
             Calendar cellDate,
-            Map<String, List<DummyDataSource.CalendarMeetup>> meetupsByDate
+            Map<String, List<CalendarMeetup>> meetupsByDate
     ) {
         LinearLayout cell = new LinearLayout(this);
         cell.setGravity(Gravity.CENTER);
@@ -132,7 +142,7 @@ public class CalendarActivity extends AppCompatActivity {
 
         boolean inMonth = cellDate.get(Calendar.MONTH) == visibleMonth.get(Calendar.MONTH);
         boolean isToday = PickDayDatePicker.isSameDate(cellDate, Calendar.getInstance());
-        List<DummyDataSource.CalendarMeetup> meetups = meetupsByDate.get(PickDayDatePicker.formatIsoDate(cellDate));
+        List<CalendarMeetup> meetups = meetupsByDate.get(PickDayDatePicker.formatIsoDate(cellDate));
         boolean hasMeetup = inMonth && meetups != null && !meetups.isEmpty();
 
         TextView dayText = new TextView(this);
@@ -181,7 +191,7 @@ public class CalendarActivity extends AppCompatActivity {
 
     private void renderMonthSchedules() {
         layoutScheduleContainer.removeAllViews();
-        List<DummyDataSource.CalendarMeetup> monthMeetups = getVisibleMonthMeetups();
+        List<CalendarMeetup> monthMeetups = getVisibleMonthMeetups();
         tvScheduleTitle.setText(formatScheduleTitle(monthMeetups.size()));
 
         if (monthMeetups.isEmpty()) {
@@ -191,7 +201,7 @@ public class CalendarActivity extends AppCompatActivity {
                     dp(80)
             ));
             emptyText.setGravity(Gravity.CENTER);
-            emptyText.setText("이번 달에 등록된 약속이 없어요");
+            emptyText.setText(getString(R.string.calendar_render_month_schedules_text));
             emptyText.setTextColor(MUTED_TEXT);
             emptyText.setTextSize(13);
             emptyText.setTypeface(null, Typeface.BOLD);
@@ -200,12 +210,12 @@ public class CalendarActivity extends AppCompatActivity {
             return;
         }
 
-        for (DummyDataSource.CalendarMeetup meetup : monthMeetups) {
+        for (CalendarMeetup meetup : monthMeetups) {
             layoutScheduleContainer.addView(createScheduleItem(meetup));
         }
     }
 
-    private View createScheduleItem(DummyDataSource.CalendarMeetup meetup) {
+    private View createScheduleItem(CalendarMeetup meetup) {
         LinearLayout item = new LinearLayout(this);
         item.setGravity(Gravity.CENTER_VERTICAL);
         item.setOrientation(LinearLayout.HORIZONTAL);
@@ -255,7 +265,7 @@ public class CalendarActivity extends AppCompatActivity {
                 LinearLayout.LayoutParams.MATCH_PARENT,
                 LinearLayout.LayoutParams.WRAP_CONTENT
         ));
-        time.setText(formatScheduleDate(meetup.dateIso) + " " + meetup.timeText);
+        time.setText(getString(R.string.calendar_time_format, formatScheduleDate(meetup.dateIso), meetup.timeText));
         time.setTextColor(Color.parseColor(meetup.accentColor));
         time.setTextSize(13);
         time.setTypeface(null, Typeface.BOLD);
@@ -268,7 +278,7 @@ public class CalendarActivity extends AppCompatActivity {
                 LinearLayout.LayoutParams.MATCH_PARENT,
                 LinearLayout.LayoutParams.WRAP_CONTENT
         ));
-        participants.setText("참여자 " + meetup.participantCount + "명");
+        participants.setText(getString(R.string.participants_count, meetup.participantCount));
         participants.setTextColor(Color.parseColor("#6E6C86"));
         participants.setTextSize(12);
         participants.setIncludeFontPadding(true);
@@ -332,10 +342,10 @@ public class CalendarActivity extends AppCompatActivity {
         return background;
     }
 
-    private Map<String, List<DummyDataSource.CalendarMeetup>> getMeetupsByDate() {
-        Map<String, List<DummyDataSource.CalendarMeetup>> meetupsByDate = new HashMap<>();
+    private Map<String, List<CalendarMeetup>> getMeetupsByDate() {
+        Map<String, List<CalendarMeetup>> meetupsByDate = new HashMap<>();
 
-        for (DummyDataSource.CalendarMeetup meetup : allMeetups) {
+        for (CalendarMeetup meetup : allMeetups) {
             if (!meetupsByDate.containsKey(meetup.dateIso)) {
                 meetupsByDate.put(meetup.dateIso, new ArrayList<>());
             }
@@ -346,10 +356,10 @@ public class CalendarActivity extends AppCompatActivity {
         return meetupsByDate;
     }
 
-    private List<DummyDataSource.CalendarMeetup> getVisibleMonthMeetups() {
-        List<DummyDataSource.CalendarMeetup> monthMeetups = new ArrayList<>();
+    private List<CalendarMeetup> getVisibleMonthMeetups() {
+        List<CalendarMeetup> monthMeetups = new ArrayList<>();
 
-        for (DummyDataSource.CalendarMeetup meetup : allMeetups) {
+        for (CalendarMeetup meetup : allMeetups) {
             Calendar date = PickDayDatePicker.parseIsoDate(meetup.dateIso);
 
             if (date.get(Calendar.YEAR) == visibleMonth.get(Calendar.YEAR)
@@ -362,18 +372,18 @@ public class CalendarActivity extends AppCompatActivity {
     }
 
     private String formatMonthTitle(Calendar month) {
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy년 M월", Locale.KOREAN);
+        SimpleDateFormat sdf = new SimpleDateFormat(getString(R.string.calendar_format_month_title_text), Locale.KOREAN);
         return sdf.format(month.getTime());
     }
 
     private String formatScheduleTitle(int count) {
-        SimpleDateFormat sdf = new SimpleDateFormat("M월 일정", Locale.KOREAN);
+        SimpleDateFormat sdf = new SimpleDateFormat(getString(R.string.calendar_format_schedule_title_text), Locale.KOREAN);
         return sdf.format(visibleMonth.getTime()) + " (" + count + ")";
     }
 
     private String formatScheduleDate(String isoDate) {
         Calendar date = PickDayDatePicker.parseIsoDate(isoDate);
-        SimpleDateFormat sdf = new SimpleDateFormat("M월 d일 (E)", Locale.KOREAN);
+        SimpleDateFormat sdf = new SimpleDateFormat(getString(R.string.calendar_format_schedule_date_text), Locale.KOREAN);
         return sdf.format(date.getTime());
     }
 

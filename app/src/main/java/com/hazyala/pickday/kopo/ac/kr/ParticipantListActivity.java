@@ -1,6 +1,13 @@
 package com.hazyala.pickday.kopo.ac.kr;
 
+import com.hazyala.pickday.kopo.ac.kr.model.AvailabilityResponse;
+import com.hazyala.pickday.kopo.ac.kr.model.MyMeetupRoom;
+
 import android.graphics.Color;
+import android.content.Intent;
+import android.widget.EditText;
+import android.widget.Toast;
+import androidx.appcompat.app.AlertDialog;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.view.Gravity;
@@ -8,14 +15,14 @@ import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import androidx.appcompat.app.AppCompatActivity;
+import com.hazyala.pickday.kopo.ac.kr.ui.PickDayActivity;
 import androidx.appcompat.widget.AppCompatButton;
 
-import com.hazyala.pickday.kopo.ac.kr.data.DummyDataSource;
+import com.hazyala.pickday.kopo.ac.kr.data.LocalMeetupRepository;
 
 import java.util.List;
 
-public class ParticipantListActivity extends AppCompatActivity {
+public class ParticipantListActivity extends PickDayActivity {
 
     public static final String EXTRA_ROOM_ID = "extra_room_id";
 
@@ -32,7 +39,12 @@ public class ParticipantListActivity extends AppCompatActivity {
 
         initViews();
         readRoomData();
+        if (LocalMeetupRepository.getMeetupRoomById(roomId) == null) {
+            Toast.makeText(this, getString(R.string.error_room_not_found), Toast.LENGTH_SHORT).show();
+            finish(); return;
+        }
         renderParticipants();
+        findViewById(R.id.btnAddParticipant).setOnClickListener(v -> showAddParticipant());
         btnBack.setOnClickListener(v -> finish());
     }
 
@@ -47,17 +59,23 @@ public class ParticipantListActivity extends AppCompatActivity {
         roomId = getIntent().getStringExtra(EXTRA_ROOM_ID);
 
         if (roomId == null || roomId.isEmpty()) {
-            roomId = DummyDataSource.DEFAULT_ROOM_ID;
+            roomId = LocalMeetupRepository.DEFAULT_ROOM_ID;
         }
     }
 
     private void renderParticipants() {
-        DummyDataSource.MyMeetupRoom room = DummyDataSource.getMeetupRoomById(roomId);
-        List<DummyDataSource.AvailabilityResponse> responses =
-                DummyDataSource.getAvailabilityResponses(room.roomId);
+        MyMeetupRoom room = LocalMeetupRepository.getMeetupRoomById(roomId);
+        List<AvailabilityResponse> responses =
+                LocalMeetupRepository.getAvailabilityResponses(room.roomId);
 
-        tvTitle.setText("참여자");
-        tvParticipantCount.setText("전체 " + room.participantCount + "명");
+        tvTitle.setText(getString(R.string.participants_title));
+        tvParticipantCount.setText(getString(R.string.room_participants_capacity, room.participantCount, room.maxParticipants));
+        ((TextView) findViewById(R.id.tvParticipantHelp)).setText(
+                !room.confirmedDateIso.isEmpty() || LocalMeetupRepository.isDeadlinePassed(room)
+                        ? R.string.participants_closed_help : R.string.participants_edit_help);
+        View addButton = findViewById(R.id.btnAddParticipant);
+        addButton.setEnabled(room.confirmedDateIso.isEmpty() && !LocalMeetupRepository.isDeadlinePassed(room) && room.participantCount < room.maxParticipants);
+        addButton.setAlpha(addButton.isEnabled() ? 1f : 0.5f);
         layoutParticipantList.removeAllViews();
 
         if (responses.isEmpty()) {
@@ -65,12 +83,12 @@ public class ParticipantListActivity extends AppCompatActivity {
             return;
         }
 
-        for (DummyDataSource.AvailabilityResponse response : responses) {
+        for (AvailabilityResponse response : responses) {
             layoutParticipantList.addView(createParticipantRow(response));
         }
     }
 
-    private View createParticipantRow(DummyDataSource.AvailabilityResponse response) {
+    private View createParticipantRow(AvailabilityResponse response) {
         LinearLayout row = new LinearLayout(this);
         row.setLayoutParams(new LinearLayout.LayoutParams(
                 LinearLayout.LayoutParams.MATCH_PARENT,
@@ -111,7 +129,10 @@ public class ParticipantListActivity extends AppCompatActivity {
                 LinearLayout.LayoutParams.WRAP_CONTENT
         ));
         status.setIncludeFontPadding(false);
-        status.setText(response.submitted ? "응답 완료" : "응답 대기");
+        MyMeetupRoom room = LocalMeetupRepository.getMeetupRoomById(roomId);
+        boolean closed = !room.confirmedDateIso.isEmpty() || LocalMeetupRepository.isDeadlinePassed(room);
+        status.setText(closed ? response.submitted ? getString(R.string.response_completed) : getString(R.string.participant_list_create_participant_row_text)
+                : response.submitted ? getString(R.string.participant_list_create_participant_row_text_2) : getString(R.string.participant_list_create_participant_row_text_3));
         status.setTextColor(response.submitted
                 ? Color.parseColor("#5B4CDB")
                 : Color.parseColor("#8D8AA5"));
@@ -122,6 +143,20 @@ public class ParticipantListActivity extends AppCompatActivity {
         rowParams.setMargins(0, 0, 0, dp(8));
         row.setLayoutParams(rowParams);
 
+        row.setEnabled(!closed);
+        row.setClickable(!closed);
+        row.setFocusable(true);
+        row.setContentDescription(getString(R.string.participant_response_description, response.participantName));
+        row.setOnClickListener(v -> {
+            if (!LocalMeetupRepository.getMeetupRoomById(roomId).confirmedDateIso.isEmpty()) {
+                Toast.makeText(this, getString(R.string.participant_list_create_participant_row_text_4), Toast.LENGTH_SHORT).show();
+                return;
+            }
+            Intent intent = new Intent(this, ResponseSelectionActivity.class);
+            intent.putExtra(ResponseSelectionActivity.EXTRA_ROOM_ID, roomId);
+            intent.putExtra(ResponseSelectionActivity.EXTRA_PARTICIPANT_NAME, response.participantName);
+            startActivity(intent);
+        });
         row.addView(avatar);
         row.addView(name);
         row.addView(status);
@@ -129,9 +164,35 @@ public class ParticipantListActivity extends AppCompatActivity {
         return row;
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (roomId != null && LocalMeetupRepository.getMeetupRoomById(roomId) != null) renderParticipants();
+    }
+
+    private void showAddParticipant() {
+        EditText input = new EditText(this);
+        input.setHint(getString(R.string.participant_list_show_add_participant_text));
+        input.setSingleLine(true);
+        input.setFilters(new android.text.InputFilter[]{new android.text.InputFilter.LengthFilter(20)});
+        AlertDialog dialog = new AlertDialog.Builder(this).setTitle(getString(R.string.participant_list_add_participant_text))
+                .setMessage(getString(R.string.participant_list_show_add_participant_text_2))
+                .setView(input).setNegativeButton(getString(R.string.action_cancel), null).setPositiveButton(getString(R.string.action_add), null).create();
+        dialog.setOnShowListener(ignored -> dialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener(v -> {
+            try {
+                LocalMeetupRepository.addParticipant(roomId, input.getText().toString());
+                renderParticipants();
+                dialog.dismiss();
+            } catch (IllegalArgumentException error) {
+                input.setError(error.getMessage());
+            }
+        }));
+        dialog.show();
+    }
+
     private View createEmptyView() {
         TextView emptyView = new TextView(this);
-        emptyView.setText("응답 정보 없음\n아직 제출된 참여자 응답이 없어요");
+        emptyView.setText(getString(R.string.participant_list_create_empty_view_text));
         emptyView.setTextColor(Color.parseColor("#8D8AA5"));
         emptyView.setTextSize(13);
         emptyView.setGravity(Gravity.CENTER);

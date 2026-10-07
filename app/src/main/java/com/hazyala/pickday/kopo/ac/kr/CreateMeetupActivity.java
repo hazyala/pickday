@@ -9,15 +9,15 @@ import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.appcompat.app.AppCompatActivity;
+import com.hazyala.pickday.kopo.ac.kr.ui.PickDayActivity;
 
-import com.hazyala.pickday.kopo.ac.kr.data.DummyDataSource;
+import com.hazyala.pickday.kopo.ac.kr.data.LocalMeetupRepository;
 import com.hazyala.pickday.kopo.ac.kr.ui.PickDayDatePicker;
 
 import java.util.Calendar;
 import java.util.Locale;
 
-public class CreateMeetupActivity extends AppCompatActivity {
+public class CreateMeetupActivity extends PickDayActivity {
 
     private TextView tvNameCount;
     private TextView tvDescCount;
@@ -26,6 +26,7 @@ public class CreateMeetupActivity extends AppCompatActivity {
     private TextView tvPeopleCount;
     private TextView edtMeetupName;
 
+    private String draftRoomId;
     private int peopleCount = 2;
     private Calendar selectedDeadlineDate;
     private PickDayDatePicker.CalendarController deadlineCalendarController;
@@ -48,6 +49,24 @@ public class CreateMeetupActivity extends AppCompatActivity {
         setupTimePicker();
         setupPeopleButtons();
         setupCalendar();
+        if (savedInstanceState != null) {
+            draftRoomId = savedInstanceState.getString("draftRoomId");
+            peopleCount = savedInstanceState.getInt("peopleCount", 2);
+            tvDeadlineTime.setText(savedInstanceState.getString("deadlineTime", getString(R.string.create_meet_up_deadline_time_text)));
+            selectedDeadlineDate = PickDayDatePicker.parseIsoDate(savedInstanceState.getString("deadlineDate"));
+            updateDeadlineDateText();
+            deadlineCalendarController.moveTo(selectedDeadlineDate);
+        }
+        updatePeopleText();
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle state) {
+        state.putString("draftRoomId", draftRoomId);
+        state.putInt("peopleCount", peopleCount);
+        state.putString("deadlineTime", tvDeadlineTime.getText().toString());
+        state.putString("deadlineDate", PickDayDatePicker.formatIsoDate(selectedDeadlineDate));
+        super.onSaveInstanceState(state);
     }
 
     private void setupTextCounters() {
@@ -59,7 +78,7 @@ public class CreateMeetupActivity extends AppCompatActivity {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                tvNameCount.setText(s.length() + "/30");
+                tvNameCount.setText(getString(R.string.create_meetup_tv_name_count_format, s.length()));
             }
 
             @Override
@@ -72,7 +91,7 @@ public class CreateMeetupActivity extends AppCompatActivity {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                tvDescCount.setText(s.length() + "/100");
+                tvDescCount.setText(getString(R.string.create_meetup_tv_desc_count_format, s.length()));
             }
 
             @Override
@@ -93,17 +112,20 @@ public class CreateMeetupActivity extends AppCompatActivity {
             String meetupTitle = edtMeetupName.getText().toString().trim();
 
             if (meetupTitle.isEmpty()) {
-                Toast.makeText(this, "모임명을 입력해주세요", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, getString(R.string.create_meetup_setup_next_button_text), Toast.LENGTH_SHORT).show();
                 return;
             }
 
-            String roomId = DummyDataSource.addCreatedMeetupRoom(
-                    meetupTitle,
-                    peopleCount,
-                    getDeadlineDDay(),
-                    PickDayDatePicker.formatIsoDate(selectedDeadlineDate),
-                    tvDeadlineTime.getText().toString()
-            );
+            String roomId;
+            try {
+                roomId = LocalMeetupRepository.saveRoomDraft(draftRoomId, meetupTitle, peopleCount,
+                        PickDayDatePicker.formatIsoDate(selectedDeadlineDate), tvDeadlineTime.getText().toString(),
+                        ((TextView) findViewById(R.id.edtMeetupDesc)).getText().toString());
+                draftRoomId = roomId;
+            } catch (IllegalArgumentException error) {
+                Toast.makeText(this, error.getMessage(), Toast.LENGTH_SHORT).show();
+                return;
+            }
 
             Intent intent = new Intent(CreateMeetupActivity.this, SelectionActivity.class);
             intent.putExtra(SelectionActivity.EXTRA_ROOM_ID, roomId);
@@ -116,7 +138,7 @@ public class CreateMeetupActivity extends AppCompatActivity {
             TimePickerDialog dialog = new TimePickerDialog(
                     CreateMeetupActivity.this,
                     (view, hourOfDay, minute) -> {
-                        String amPm = hourOfDay < 12 ? "오전" : "오후";
+                        String amPm = hourOfDay < 12 ? getString(R.string.time_morning) : getString(R.string.time_afternoon);
                         int hour = hourOfDay % 12;
 
                         if (hour == 0) {
@@ -124,7 +146,7 @@ public class CreateMeetupActivity extends AppCompatActivity {
                         }
 
                         tvDeadlineTime.setText(String.format(Locale.KOREAN,
-                                "%s %d:%02d", amPm, hour, minute));
+                                getString(R.string.time_clock_format), amPm, hour, minute));
                     },
                     23,
                     59,
@@ -141,7 +163,7 @@ public class CreateMeetupActivity extends AppCompatActivity {
                 peopleCount--;
                 updatePeopleText();
             } else {
-                Toast.makeText(this, "최소 인원은 2명입니다", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, getString(R.string.create_meetup_setup_people_buttons_text), Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -150,13 +172,13 @@ public class CreateMeetupActivity extends AppCompatActivity {
                 peopleCount++;
                 updatePeopleText();
             } else {
-                Toast.makeText(this, "최대 인원은 20명입니다", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, getString(R.string.create_meetup_setup_people_buttons_text_2), Toast.LENGTH_SHORT).show();
             }
         });
     }
 
     private void updatePeopleText() {
-        tvPeopleCount.setText(peopleCount + "명");
+        tvPeopleCount.setText(getString(R.string.room_capacity_count, peopleCount));
     }
 
     private void setupCalendar() {
@@ -166,7 +188,7 @@ public class CreateMeetupActivity extends AppCompatActivity {
         findViewById(R.id.btnDatePicker).setOnClickListener(v -> {
             PickDayDatePicker.show(this, selectedDeadlineDate, (selectedDate, displayText, summaryText) -> {
                 if (PickDayDatePicker.isBeforeToday(selectedDate)) {
-                    Toast.makeText(this, "오늘 이후 날짜를 선택해주세요", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this, getString(R.string.create_meetup_setup_calendar_text), Toast.LENGTH_SHORT).show();
                     return;
                 }
 
@@ -202,16 +224,4 @@ public class CreateMeetupActivity extends AppCompatActivity {
         tvDeadlineDate.setText(PickDayDatePicker.formatDeadlineDate(selectedDeadlineDate));
     }
 
-    private String getDeadlineDDay() {
-        Calendar today = PickDayDatePicker.today();
-        Calendar deadline = PickDayDatePicker.parseIsoDate(PickDayDatePicker.formatIsoDate(selectedDeadlineDate));
-        long diffMillis = deadline.getTimeInMillis() - today.getTimeInMillis();
-        long diffDays = diffMillis / (24L * 60L * 60L * 1000L);
-
-        if (diffDays <= 0) {
-            return "D-Day";
-        }
-
-        return "D-" + diffDays;
-    }
 }

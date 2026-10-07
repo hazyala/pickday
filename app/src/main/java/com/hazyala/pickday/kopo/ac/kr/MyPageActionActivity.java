@@ -3,10 +3,10 @@ package com.hazyala.pickday.kopo.ac.kr;
 import android.os.Bundle;
 import android.widget.TextView;
 
-import androidx.appcompat.app.AppCompatActivity;
+import com.hazyala.pickday.kopo.ac.kr.ui.PickDayActivity;
 import androidx.appcompat.widget.AppCompatButton;
 
-public class MyPageActionActivity extends AppCompatActivity {
+public class MyPageActionActivity extends PickDayActivity {
 
     public static final String EXTRA_TITLE = "extra_title";
     public static final String EXTRA_SUBTITLE = "extra_subtitle";

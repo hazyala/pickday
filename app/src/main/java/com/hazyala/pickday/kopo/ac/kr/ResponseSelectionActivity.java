@@ -1,5 +1,7 @@
 package com.hazyala.pickday.kopo.ac.kr;
 
+import com.hazyala.pickday.kopo.ac.kr.model.AvailabilityResponse;
+
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -8,10 +10,10 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.appcompat.app.AppCompatActivity;
+import com.hazyala.pickday.kopo.ac.kr.ui.PickDayActivity;
 import androidx.appcompat.widget.AppCompatButton;
 
-import com.hazyala.pickday.kopo.ac.kr.data.DummyDataSource;
+import com.hazyala.pickday.kopo.ac.kr.data.LocalMeetupRepository;
 import com.hazyala.pickday.kopo.ac.kr.ui.PickDayDatePicker;
 
 import java.util.ArrayList;
@@ -21,13 +23,15 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-public class ResponseSelectionActivity extends AppCompatActivity {
+public class ResponseSelectionActivity extends PickDayActivity {
 
+    public static final String EXTRA_PARTICIPANT_NAME = "extra_participant_name";
     public static final String EXTRA_ROOM_ID = RoomDetailActivity.EXTRA_ROOM_ID;
 
     private AppCompatButton btnBack;
     private TextView btnComplete;
     private String roomId;
+    private String participantName;
 
     private TextView tvDateCount;
     private TextView tvSelectedDateCount;
@@ -59,10 +63,31 @@ public class ResponseSelectionActivity extends AppCompatActivity {
 
         readRoomData();
         initViews();
+        if (LocalMeetupRepository.getMeetupRoomById(roomId) == null) {
+            Toast.makeText(this, getString(R.string.error_room_not_found), Toast.LENGTH_SHORT).show();
+            finish();
+            return;
+        }
         initCandidateDates();
+        participantName = getIntent().getStringExtra(EXTRA_PARTICIPANT_NAME);
+        if (participantName == null) participantName = LocalMeetupRepository.getCurrentUser().name;
+        AvailabilityResponse response = LocalMeetupRepository.getResponse(roomId, participantName);
+        if (response != null) {
+            selectedDates.addAll(response.availableDateIsos);
+            selectedTimes.addAll(response.selectedTimeSlotCodes);
+            excludedDates.addAll(response.excludedDateIsos);
+        }
+        if (savedInstanceState != null) {
+            selectedDates.clear(); selectedTimes.clear(); excludedDates.clear();
+            selectedDates.addAll(savedInstanceState.getStringArrayList("dates"));
+            selectedTimes.addAll(savedInstanceState.getStringArrayList("times"));
+            excludedDates.addAll(savedInstanceState.getStringArrayList("excluded"));
+        }
+        ((TextView) findViewById(R.id.btnComplete)).setText(getString(R.string.response_submit_named, participantName));
 
         setupCalendar();
         setupTimeOptions();
+        updateTimeState();
         setupExcludeOptions();
         updateSelectedDateArea();
 
@@ -87,12 +112,12 @@ public class ResponseSelectionActivity extends AppCompatActivity {
         roomId = getIntent().getStringExtra(EXTRA_ROOM_ID);
 
         if (roomId == null || roomId.isEmpty()) {
-            roomId = DummyDataSource.getCurrentDraftRoomId();
+            roomId = LocalMeetupRepository.getCurrentDraftRoomId();
         }
     }
 
     private void initCandidateDates() {
-        List<String> candidateDateValues = DummyDataSource.getResponseCandidateDates(roomId);
+        List<String> candidateDateValues = LocalMeetupRepository.getResponseCandidateDates(roomId);
         Collections.sort(candidateDateValues);
 
         for (String isoDate : candidateDateValues) {
@@ -150,10 +175,12 @@ public class ResponseSelectionActivity extends AppCompatActivity {
             selectedDates.remove(item.isoDate);
         } else {
             if (selectedDates.size() >= MAX_SELECT_COUNT) {
-                Toast.makeText(this, "최대 10개까지 선택할 수 있어요", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, getString(R.string.response_selection_toggle_date_text), Toast.LENGTH_SHORT).show();
                 return;
             }
             selectedDates.add(item.isoDate);
+            excludedDates.remove(item.isoDate);
+            updateExcludeState();
         }
 
         updateCalendarState();
@@ -178,6 +205,7 @@ public class ResponseSelectionActivity extends AppCompatActivity {
 
     private void updateSelectedDateArea() {
         layoutSelectedDates.removeAllViews();
+        ((View) layoutSelectedDates.getParent()).setVisibility(selectedDates.isEmpty() ? View.GONE : View.VISIBLE);
 
         for (DateItem item : candidateDates) {
             if (selectedDates.contains(item.isoDate)) {
@@ -186,20 +214,20 @@ public class ResponseSelectionActivity extends AppCompatActivity {
             }
         }
 
-        tvDateCount.setText("▣ 최대 10개까지 선택할 수 있어요 (" + selectedDates.size() + "/10)");
-        tvSelectedDateCount.setText(selectedDates.size() + "개 선택  ^");
+        tvDateCount.setText(getString(R.string.response_selection_date_count_format, selectedDates.size()));
+        tvSelectedDateCount.setText(getString(R.string.response_selection_selected_date_count_format, selectedDates.size()));
     }
 
     private TextView createSelectedDateChip(DateItem item) {
         TextView chip = new TextView(this);
 
-        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(dp(58), dp(52));
+        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(dp(72), LinearLayout.LayoutParams.WRAP_CONTENT);
         params.setMargins(0, 0, dp(8), 0);
         chip.setLayoutParams(params);
 
         chip.setGravity(android.view.Gravity.CENTER);
-        chip.setText(item.label + "\n" + item.week + "\n×");
-        chip.setTextSize(11);
+        chip.setText(getString(R.string.response_selection_chip_format, item.label, item.week));
+        chip.setTextSize(14);
         chip.setTextColor(PURPLE);
         chip.setTypeface(null, android.graphics.Typeface.BOLD);
         chip.setBackgroundResource(R.drawable.pickday_unselected);
@@ -217,22 +245,50 @@ public class ResponseSelectionActivity extends AppCompatActivity {
     }
 
     private void setupTimeOptions() {
-        addTimeView(R.id.timeMorning, "오전");
-        addTimeView(R.id.timeAfternoon, "오후");
-        addTimeView(R.id.timeLateAfternoon, "늦은 오후");
-        addTimeView(R.id.timeEvening, "저녁");
-        addTimeView(R.id.timeLateEvening, "늦은 저녁");
-        addTimeView(R.id.timeAny, "상관없음");
+        addTimeView(R.id.timeMorning, "MORNING");
+        addTimeView(R.id.timeAfternoon, "AFTERNOON");
+        addTimeView(R.id.timeLateAfternoon, "LATE_AFTERNOON");
+        addTimeView(R.id.timeEvening, "EVENING");
+        addTimeView(R.id.timeLateEvening, "LATE_EVENING");
+        addTimeView(R.id.timeAny, "ANYTIME");
+        LinearLayout container = findViewById(R.id.layoutTimeOptions);
+        container.removeAllViews();
+        LinearLayout row = null;
+        int visibleIndex = 0;
+        for (TextView time : timeViews) {
+            if (time.getVisibility() == View.GONE) continue;
+            if (visibleIndex % 2 == 0) {
+                row = new LinearLayout(this);
+                row.setOrientation(LinearLayout.HORIZONTAL);
+                row.setBaselineAligned(false);
+                row.setLayoutParams(new LinearLayout.LayoutParams(
+                        LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT));
+                container.addView(row);
+            }
+            LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
+                    0, LinearLayout.LayoutParams.MATCH_PARENT, 1f);
+            params.setMargins(dp(4), dp(4), dp(4), dp(4));
+            time.setLayoutParams(params);
+            time.setMinHeight(dp(72));
+            time.setTextSize(14);
+            row.addView(time);
+            visibleIndex++;
+        }
     }
 
     private void addTimeView(int id, String key) {
         TextView view = findViewById(id);
         timeViews.add(view);
+        if (!key.equals("ANYTIME") && !LocalMeetupRepository.getMeetupRoomById(roomId).allowedTimeSlotCodes.contains(key)) {
+            view.setVisibility(View.GONE);
+        }
 
         view.setOnClickListener(v -> {
             if (selectedTimes.contains(key)) {
                 selectedTimes.remove(key);
             } else {
+                if (key.equals("ANYTIME")) selectedTimes.clear();
+                else selectedTimes.remove("ANYTIME");
                 selectedTimes.add(key);
             }
 
@@ -241,51 +297,47 @@ public class ResponseSelectionActivity extends AppCompatActivity {
     }
 
     private void updateTimeState() {
-        updateSingleTimeState(R.id.timeMorning, "오전", "오전\n09:00~12:00");
-        updateSingleTimeState(R.id.timeAfternoon, "오후", "오후\n12:00~15:00");
-        updateSingleTimeState(R.id.timeLateAfternoon, "늦은 오후", "늦은 오후\n15:00~18:00");
-        updateSingleTimeState(R.id.timeEvening, "저녁", "저녁\n18:00~21:00");
-        updateSingleTimeState(R.id.timeLateEvening, "늦은 저녁", "늦은 저녁\n21:00~24:00");
-        updateSingleTimeState(R.id.timeAny, "상관없음", "상관없음\n하루 종일 가능");
+        updateSingleTimeState(R.id.timeMorning, "MORNING", getString(R.string.response_selection_update_time_state_text));
+        updateSingleTimeState(R.id.timeAfternoon, "AFTERNOON", getString(R.string.response_selection_update_time_state_text_2));
+        updateSingleTimeState(R.id.timeLateAfternoon, "LATE_AFTERNOON", getString(R.string.response_selection_update_time_state_text_3));
+        updateSingleTimeState(R.id.timeEvening, "EVENING", getString(R.string.response_selection_update_time_state_text_4));
+        updateSingleTimeState(R.id.timeLateEvening, "LATE_EVENING", getString(R.string.response_selection_update_time_state_text_5));
+        updateSingleTimeState(R.id.timeAny, "ANYTIME", getString(R.string.response_selection_update_time_state_text_6));
     }
 
     private void updateSingleTimeState(int id, String key, String label) {
-        TextView view = findViewById(id);
+        TextView view = null;
+        for (TextView time : timeViews) {
+            if (time.getId() == id) { view = time; break; }
+        }
+        if (view == null) return;
 
         if (selectedTimes.contains(key)) {
-            view.setText("● " + label);
+            view.setText(getString(R.string.response_selection_view_format_3, label));
             view.setTextColor(PURPLE);
             view.setBackgroundResource(R.drawable.pickday_selected);
         } else {
-            view.setText("○ " + label);
+            view.setText(getString(R.string.response_selection_view_format_2, label));
             view.setTextColor(Color.parseColor("#59566F"));
             view.setBackgroundResource(R.drawable.pickday_unselected);
         }
     }
 
     private void setupExcludeOptions() {
-        int[] excludeViewIds = new int[]{
-                R.id.exclude0529,
-                R.id.exclude0530,
-                R.id.exclude0531,
-                R.id.exclude0601,
-                R.id.exclude0602,
-                R.id.exclude0603,
-                R.id.exclude0604
-        };
-
-        for (int index = 0; index < excludeViewIds.length; index++) {
-            TextView view = findViewById(excludeViewIds[index]);
-
-            if (index < candidateDates.size()) {
-                DateItem item = candidateDates.get(index);
-                view.setVisibility(View.VISIBLE);
-                addExcludeView(view, item.isoDate);
-            } else {
-                view.setVisibility(View.GONE);
-            }
+        layoutExcludeDates.removeAllViews();
+        for (DateItem item : candidateDates) {
+            TextView view = new TextView(this);
+            LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(dp(64), dp(56));
+            params.setMargins(0, 0, dp(8), 0);
+            view.setLayoutParams(params);
+            view.setGravity(android.view.Gravity.CENTER);
+            view.setTextSize(12);
+            view.setClickable(true);
+            view.setFocusable(true);
+            view.setContentDescription(getString(R.string.excluded_date_description, item.label));
+            layoutExcludeDates.addView(view);
+            addExcludeView(view, item.isoDate);
         }
-
         updateExcludeState();
     }
 
@@ -297,6 +349,9 @@ public class ResponseSelectionActivity extends AppCompatActivity {
                 excludedDates.remove(key);
             } else {
                 excludedDates.add(key);
+                selectedDates.remove(key);
+                updateSelectedDateArea();
+                updateCalendarState();
             }
 
             updateExcludeState();
@@ -309,12 +364,12 @@ public class ResponseSelectionActivity extends AppCompatActivity {
             updateSingleExcludeState(excludeViews.get(index), item.isoDate, item.label + "\n" + item.week);
         }
 
-        tvExcludeCount.setText(excludedDates.size() + "개 선택  ˅");
+        tvExcludeCount.setText(getString(R.string.response_selection_exclude_count_format, excludedDates.size()));
     }
 
     private void updateSingleExcludeState(TextView view, String key, String label) {
         if (excludedDates.contains(key)) {
-            view.setText(label + "\n✓");
+            view.setText(getString(R.string.response_selection_view_format, label));
             view.setTextColor(PURPLE);
             view.setBackgroundResource(R.drawable.pickday_selected);
         } else {
@@ -328,17 +383,25 @@ public class ResponseSelectionActivity extends AppCompatActivity {
         btnBack.setOnClickListener(v -> finish());
 
         btnComplete.setOnClickListener(v -> {
-            if (selectedDates.isEmpty()) {
-                Toast.makeText(this, "가능한 날짜를 1개 이상 선택해주세요", Toast.LENGTH_SHORT).show();
+            boolean allExcluded = !candidateDates.isEmpty() && excludedDates.size() == candidateDates.size();
+            if (selectedDates.isEmpty() && !allExcluded) {
+                Toast.makeText(this, getString(R.string.response_selection_set_listeners_text), Toast.LENGTH_SHORT).show();
                 return;
             }
 
-            if (selectedTimes.isEmpty()) {
-                Toast.makeText(this, "가능한 시간대를 1개 이상 선택해주세요", Toast.LENGTH_SHORT).show();
+            if (!selectedDates.isEmpty() && selectedTimes.isEmpty()) {
+                Toast.makeText(this, getString(R.string.response_selection_set_listeners_text_2), Toast.LENGTH_SHORT).show();
                 return;
             }
 
-            Toast.makeText(this, "응답이 저장되었습니다", Toast.LENGTH_SHORT).show();
+            try {
+                LocalMeetupRepository.saveResponse(roomId, participantName, new ArrayList<>(selectedDates),
+                        new ArrayList<>(selectedTimes), new ArrayList<>(excludedDates));
+            } catch (IllegalArgumentException error) {
+                Toast.makeText(this, error.getMessage(), Toast.LENGTH_SHORT).show();
+                return;
+            }
+            Toast.makeText(this, getString(R.string.response_selection_set_listeners_text_3), Toast.LENGTH_SHORT).show();
 
             Intent intent = new Intent(ResponseSelectionActivity.this, RoomDetailActivity.class);
             intent.putExtra(RoomDetailActivity.EXTRA_ROOM_ID, roomId);
@@ -346,6 +409,14 @@ public class ResponseSelectionActivity extends AppCompatActivity {
             startActivity(intent);
             finish();
         });
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle state) {
+        state.putStringArrayList("dates", new ArrayList<>(selectedDates));
+        state.putStringArrayList("times", new ArrayList<>(selectedTimes));
+        state.putStringArrayList("excluded", new ArrayList<>(excludedDates));
+        super.onSaveInstanceState(state);
     }
 
     private int dp(int value) {
