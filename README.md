@@ -59,6 +59,8 @@ Activity와 레이아웃의 표시 문구는 `strings.xml`에서 관리합니다
 
 ## 문서
 
+- [현재 구현](docs/CURRENT_IMPLEMENTATION.md)
+- [개발 방향](docs/project-direction.md)
 - [로드맵](docs/roadmap.md)
 - [개발 워크플로우](docs/development-workflow.md)
 - [UI 가이드라인](docs/ui-guidelines.md)
