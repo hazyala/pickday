@@ -1,25 +1,33 @@
 package com.hazyala.pickday.kopo.ac.kr;
 
+import com.hazyala.pickday.kopo.ac.kr.model.AvailableDate;
+import com.hazyala.pickday.kopo.ac.kr.model.MainMeetup;
+import com.hazyala.pickday.kopo.ac.kr.model.MyMeetupRoom;
+import com.hazyala.pickday.kopo.ac.kr.model.User;
+
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.FrameLayout;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import android.content.Intent;
 import androidx.appcompat.widget.AppCompatButton;
 
-import androidx.appcompat.app.AppCompatActivity;
+import com.hazyala.pickday.kopo.ac.kr.ui.PickDayActivity;
 import androidx.core.content.ContextCompat;
 
-import com.hazyala.pickday.kopo.ac.kr.data.DummyDataSource;
+import com.hazyala.pickday.kopo.ac.kr.data.LocalMeetupRepository;
 
 import java.util.List;
 
-public class HomeActivity extends AppCompatActivity {
+public class HomeActivity extends PickDayActivity {
+
+    private static final int ROOM_PREVIEW_LIMIT = 5;
 
     private TextView tvGreeting;
     private TextView tvMainTitle;
@@ -27,6 +35,7 @@ public class HomeActivity extends AppCompatActivity {
     private TextView tvMainDday;
     private TextView tvBestDate;
     private TextView tvBestCount;
+    private String mainRoomId = LocalMeetupRepository.DEFAULT_ROOM_ID;
 
     private LinearLayout layoutDateContainer;
     private LinearLayout layoutRoomContainer;
@@ -34,6 +43,12 @@ public class HomeActivity extends AppCompatActivity {
     private AppCompatButton btnDetail;
     private AppCompatButton btnFab;
     private AppCompatButton btnCreateSmall;
+    private AppCompatButton btnViewAllDates;
+    private AppCompatButton btnViewAllRooms;
+    private ImageView btnNotification;
+    private LinearLayout tabCalendar;
+    private LinearLayout tabChat;
+    private LinearLayout tabMy;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,6 +64,16 @@ public class HomeActivity extends AppCompatActivity {
         loadMeetupRooms();
 
         setListeners();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        layoutDateContainer.removeAllViews();
+        layoutRoomContainer.removeAllViews();
+        setMainMeetupData();
+        loadAvailableDates();
+        loadMeetupRooms();
     }
 
     private void initViews() {
@@ -67,25 +92,33 @@ public class HomeActivity extends AppCompatActivity {
         btnDetail = findViewById(R.id.btnDetail);
         btnFab = findViewById(R.id.btnFab);
         btnCreateSmall = findViewById(R.id.btnCreateSmall);
+        btnViewAllDates = findViewById(R.id.btnViewAllDates);
+        btnViewAllRooms = findViewById(R.id.btnViewAllRooms);
+        btnNotification = findViewById(R.id.btnNotification);
+        tabCalendar = findViewById(R.id.tabCalendar);
+        tabChat = findViewById(R.id.tabChat);
+        tabMy = findViewById(R.id.tabMy);
     }
 
     private void setMainMeetupData() {
 
-        DummyDataSource.User user =
-                DummyDataSource.getCurrentUser();
+        User user =
+                LocalMeetupRepository.getCurrentUser();
 
-        DummyDataSource.MainMeetup meetup =
-                DummyDataSource.getMainMeetup();
+        MainMeetup meetup =
+                LocalMeetupRepository.getMainMeetup();
 
-        tvGreeting.setText(
-                "안녕하세요, " + user.name + "님!"
-        );
+        ((TextView) findViewById(R.id.tvScheduleLabel)).setText(
+                LocalMeetupRepository.getMeetupRoomById(meetup.roomId).confirmedDateIso.isEmpty()
+                        ? R.string.home_label_text : R.string.schedule_confirmed_label);
+        mainRoomId = meetup.roomId;
+        ((TextView) findViewById(R.id.tvMainStatus)).setText(meetup.statusLabel);
+
+        tvGreeting.setText(getString(R.string.home_greeting, user.name));
 
         tvMainTitle.setText(meetup.title);
 
-        tvMainParticipants.setText(
-                "참여자 " + meetup.participantCount + "명"
-        );
+        tvMainParticipants.setText(getString(R.string.participants_count, meetup.participantCount));
         setStartIcon(
                 tvMainParticipants,
                 R.drawable.icon_group,
@@ -94,7 +127,7 @@ public class HomeActivity extends AppCompatActivity {
         );
 
         tvMainDday.setText(
-                "마감까지 " + meetup.dDay
+                LocalMeetupRepository.isDeadlinePassed(LocalMeetupRepository.getMeetupRoomById(meetup.roomId)) ? getString(R.string.home_set_main_meetup_data_text) : getString(R.string.home_deadline_remaining, meetup.dDay)
         );
         setStartIcon(
                 tvMainDday,
@@ -105,9 +138,7 @@ public class HomeActivity extends AppCompatActivity {
 
         tvBestDate.setText(meetup.bestDateTime);
 
-        tvBestCount.setText(
-                meetup.availableCount + "명 가능"
-        );
+        tvBestCount.setText(getString(R.string.available_people_count, meetup.availableCount));
         setStartIcon(
                 tvBestCount,
                 R.drawable.icon_group,
@@ -118,12 +149,12 @@ public class HomeActivity extends AppCompatActivity {
 
     private void loadAvailableDates() {
 
-        List<DummyDataSource.AvailableDate> dates =
-                DummyDataSource.getAvailableDates();
+        List<AvailableDate> dates =
+                LocalMeetupRepository.getAvailableDates();
 
         LayoutInflater inflater = LayoutInflater.from(this);
 
-        for (DummyDataSource.AvailableDate date : dates) {
+        for (AvailableDate date : dates) {
 
             View view = inflater.inflate(
                     R.layout.item_available_date,
@@ -153,11 +184,13 @@ public class HomeActivity extends AppCompatActivity {
 
             tvDate.setText(date.date);
 
-            tvDayOfWeek.setText("(" + date.dayOfWeek + ")");
+            tvDayOfWeek.setText(getString(R.string.home_tv_day_of_week_format, date.dayOfWeek));
 
-            tvAvailableCount.setText(
-                    date.availableCount + "명"
-            );
+            if (date.hasMeetupStatus) {
+                tvAvailableCount.setText(getString(R.string.people_count, date.availableCount));
+            } else {
+                tvAvailableCount.setVisibility(View.INVISIBLE);
+            }
 
             if (date.selected) {
 
@@ -171,17 +204,21 @@ public class HomeActivity extends AppCompatActivity {
 
                 tvDateLabel.setTextColor(Color.WHITE);
 
-                tvAvailableCount.setTextColor(Color.WHITE);
+                if (date.hasMeetupStatus) {
+                    tvAvailableCount.setTextColor(Color.WHITE);
+                }
             }
 
-            setStartIcon(
-                    tvAvailableCount,
-                    R.drawable.icon_group,
-                    9,
-                    tvAvailableCount.getCurrentTextColor()
-            );
+            if (date.hasMeetupStatus) {
+                setStartIcon(
+                        tvAvailableCount,
+                        R.drawable.icon_group,
+                        9,
+                        tvAvailableCount.getCurrentTextColor()
+                );
+            }
 
-            if (date.best) {
+            if (date.hasMeetupStatus && date.best) {
 
                 tvDateBest.setVisibility(View.VISIBLE);
             }
@@ -192,12 +229,15 @@ public class HomeActivity extends AppCompatActivity {
 
     private void loadMeetupRooms() {
 
-        List<DummyDataSource.MyMeetupRoom> rooms =
-                DummyDataSource.getMyMeetupRooms();
+        List<MyMeetupRoom> rooms =
+                LocalMeetupRepository.getMyMeetupRooms();
 
         LayoutInflater inflater = LayoutInflater.from(this);
 
-        for (DummyDataSource.MyMeetupRoom room : rooms) {
+        int visibleRoomCount = Math.min(ROOM_PREVIEW_LIMIT, rooms.size());
+
+        for (int index = 0; index < visibleRoomCount; index++) {
+            MyMeetupRoom room = rooms.get(index);
 
             View view = inflater.inflate(
                     R.layout.item_meetup_room,
@@ -219,35 +259,40 @@ public class HomeActivity extends AppCompatActivity {
 
             tvRoomTitle.setText(room.title);
 
-            tvRoomInfo.setText(
-                    "참여자 " +
-                            room.participantCount +
-                            "명 · 마감까지 " +
-                            room.dDay
-            );
+            tvRoomInfo.setText(getString(R.string.room_participants_deadline, room.participantCount, room.dDay));
 
             tvRoomRate.setText(
-                    room.responseRate + "%"
+                    getString(R.string.percent_value, room.responseRate)
             );
 
             switch (room.iconType) {
 
                 case "group":
-                    tvRoomIcon.setText("팀");
+                    tvRoomIcon.setText(getString(R.string.room_badge_team));
                     break;
 
                 case "cake":
-                    tvRoomIcon.setText("생");
+                    tvRoomIcon.setText(getString(R.string.room_badge_birthday));
                     break;
 
                 case "camp":
-                    tvRoomIcon.setText("동");
+                    tvRoomIcon.setText(getString(R.string.room_badge_club));
                     break;
 
                 default:
-                    tvRoomIcon.setText("일");
+                    tvRoomIcon.setText(getString(R.string.room_badge_default));
                     break;
             }
+
+            view.setOnClickListener(v -> {
+                Intent intent = new Intent(
+                        HomeActivity.this,
+                        RoomDetailActivity.class
+                );
+                intent.putExtra(RoomDetailActivity.EXTRA_ROOM_ID, room.roomId);
+                intent.putExtra(RoomDetailActivity.EXTRA_ROOM_TITLE, room.title);
+                startActivity(intent);
+            });
 
             layoutRoomContainer.addView(view);
         }
@@ -263,6 +308,7 @@ public class HomeActivity extends AppCompatActivity {
                             RoomDetailActivity.class
                     );
 
+            intent.putExtra(RoomDetailActivity.EXTRA_ROOM_ID, mainRoomId);
             startActivity(intent);
         });
 
@@ -283,6 +329,69 @@ public class HomeActivity extends AppCompatActivity {
                     new Intent(
                             HomeActivity.this,
                             CreateMeetupActivity.class
+                    );
+
+            startActivity(intent);
+        });
+
+        btnNotification.setOnClickListener(v -> {
+
+            Intent intent =
+                    new Intent(
+                            HomeActivity.this,
+                            NotificationActivity.class
+                    );
+
+            startActivity(intent);
+        });
+
+        btnViewAllDates.setOnClickListener(v -> {
+            Intent intent =
+                    new Intent(
+                            HomeActivity.this,
+                            CalendarActivity.class
+                    );
+
+            startActivity(intent);
+        });
+
+        btnViewAllRooms.setOnClickListener(v -> {
+            Intent intent =
+                    new Intent(
+                            HomeActivity.this,
+                            AllMeetupRoomsActivity.class
+                    );
+
+            startActivity(intent);
+        });
+
+        tabCalendar.setOnClickListener(v -> {
+            Intent intent =
+                    new Intent(
+                            HomeActivity.this,
+                            CalendarActivity.class
+                    );
+
+            startActivity(intent);
+        });
+
+        tabChat.setOnClickListener(v -> {
+
+            Intent intent =
+                    new Intent(
+                            HomeActivity.this,
+                            ChatActivity.class
+                    );
+
+            startActivity(intent);
+        });
+
+        tabMy.setOnClickListener(v -> {
+
+            Intent intent =
+                    new Intent(
+                            HomeActivity.this,
+                            MyPageActivity.class
                     );
 
             startActivity(intent);

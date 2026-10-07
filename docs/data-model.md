@@ -1,221 +1,102 @@
-> 설계·목표와 테스트 절차를 정리한 문서다. `main`의 현재 구현은 [CURRENT_IMPLEMENTATION.md](CURRENT_IMPLEMENTATION.md)에 정리되어 있다.
-
 # 데이터 모델
 
-이 문서는 백엔드 연동 전 Android 앱에서 사용할 로컬 모델 방향을 정의합니다.
+## 현재 구조
 
-앱은 Activity 내부에 직접 박힌 더미 문자열에서 벗어나 Repository 기반 데이터 구조로 이동해야 합니다. 첫 구현은 Java model class와 메모리/SharedPreferences/로컬 JSON 저장으로 시작할 수 있고, 이후 Retrofit DTO 매핑으로 교체합니다.
+`LocalMeetupRepository`는 화면이 호출하는 조회·검증·상태 변경 진입점입니다. `MeetupMemoryStore`는 메모리 컬렉션을, `SampleMeetupData`는 샘플 초기화를 담당합니다. 모델 13개는 `model` 패키지의 독립 클래스로 정의합니다. `ScheduleCalculator`는 날짜·시간 집계와 추천 후보 계산을 담당합니다. 저장소 인터페이스와 데이터베이스는 없습니다.
 
-현재 UI는 유지하되 기능 데이터만 실제 구조로 바꿉니다. 예를 들어 달력의 `2025년 5월`, 방 상세의 참여자 수, 응답률, 시간 선호도, Home의 BEST 날짜는 하드코딩하지 않고 모델과 계산 결과에서 렌더링합니다.
+파일별 책임과 의존 관계는 [코드 구조](code-structure.md)를 참고합니다.
 
-## 핵심 모델
+방, 응답, 작성 중 선택, 메시지는 `roomId`로 구분합니다. 기본 샘플 방은 고정 ID를 사용하고 생성 방은 UUID를 사용합니다. 같은 제목의 방도 데이터가 섞이지 않습니다. 알 수 없는 ID 조회는 `null` 또는 빈 목록을 반환하고, 상태 변경은 오류를 알립니다.
 
-### User
+## 주요 모델
 
-- `id`
-- `displayName`
-- `profileImageUrl`
-- `isGuest`
+| 모델 | 주요 필드 | 역할 |
+| --- | --- | --- |
+| `User` | `name`, `role`, `profileImageName` | 로컬 사용자 표시 정보 |
+| `MyMeetupRoom` | `roomId`, `title`, `description`, `hostName` | 방 식별과 기본 정보 |
+| `MyMeetupRoom` | `maxParticipants`, `participantCount` | 정원과 실제 등록 인원 |
+| `MyMeetupRoom` | `deadlineDateIso`, `deadlineTimeText` | 응답 마감 날짜와 시간 |
+| `MyMeetupRoom` | `candidateDateIsos`, `allowedTimeSlotCodes`, `hostExcludedDateIsos` | 공개된 후보와 제약 |
+| `MyMeetupRoom` | `confirmedDateIso`, `confirmedTimeText`, `notifyOnJoin` | 확정 일정과 참여 알림 설정 |
+| `AvailabilityResponse` | `roomId`, `participantName`, `submitted` | 참여자와 제출 상태 |
+| `AvailabilityResponse` | `availableDateIsos`, `selectedTimeSlotCodes`, `excludedDateIsos` | 날짜·시간 응답 |
+| `HostSelectionDraft` | `dates`, `times`, `excluded` | 방장 작성 중 선택 |
+| `TimeSlot` | `code`, `label`, `timeRange` | 시간대 코드와 표시값 |
+| `MainMeetup`, `RoomAvailabilitySummary` | 응답률, 추천 일정, 가능 인원 | 홈과 상세 표시용 집계 |
+| `AvailableDate`, `CalendarMeetup` | 날짜, 방 ID, 인원, 표시 상태 | 주간·월간 일정 표시 |
+| `ChatMessage`, `ChatRoomStatus` | 방 ID, 메시지, 방 현황 | 채팅과 공지 표시 |
+| `UserRoomStats` | `activeRooms`, `submittedRooms`, `confirmedRooms`, `totalRooms` | 현재 사용자 기준 방 현황 |
+| `Notification` | 방 ID, 섹션, 제목, 문구, 시간 | 로컬 이벤트와 샘플 요약 |
 
-프로필 placeholder는 이모지가 아니라 이니셜 또는 중립 UI를 사용합니다.
+참여자 등록은 방별 `AvailabilityResponse` 목록으로 관리합니다. 아직 제출하지 않은 참여자도 목록에 포함됩니다. 이름은 방 안에서 유일하며, 사용자 ID 기반 인증은 없습니다.
 
-### MeetupRoom
+## 상태 변경 규칙
 
-- `id`
-- `title`
-- `description`
-- `hostUserId`
-- `deadlineDateTime`
-- `minParticipants`
-- `maxParticipants`
-- `visibility`
-- `notifyOnJoin`
-- `status`
-- `inviteCode`
-- `createdAt`
-- `confirmedScheduleId`
+### 방 생성과 수정
 
-권장 상태:
+- 제목은 공백 제거 후 1~30자, 설명은 100자 이하, 정원은 2~20명입니다.
+- 마감 날짜·시간은 현재 이후여야 합니다. 새 방은 방장 1명으로 시작합니다.
+- 작성 중 수정은 같은 ID를 유지합니다. 응답이 제출되었거나 확정된 방은 수정할 수 없습니다.
+- 응답이 없는 작성 중 방은 마감이 지나도 새 마감일로 수정할 수 있습니다.
+- 마감일 변경 시 그 날짜와 이전 날짜의 후보 및 작성 중 선택을 제거합니다.
 
-- `DRAFT`
-- `INVITING`
-- `COLLECTING_RESPONSES`
-- `READY_TO_CONFIRM`
-- `CONFIRMED`
-- `CLOSED`
+### 방장 후보
 
-### Participant
+- 후보는 응답 마감일 다음날부터 1~10개를 선택합니다.
+- 제외 날짜와 겹치는 후보는 제거합니다. 허용 시간대는 하나 이상 필요합니다.
+- 방장이 `상관없음`을 선택하면 모든 기본 시간대를 허용합니다.
+- 작성 중 선택은 `HostSelectionDraft`에 따로 보관합니다. 다음 단계 완료 시 방 후보로 반영합니다.
+- 제출된 응답이 있으면 후보 날짜와 허용 시간을 변경할 수 없습니다.
 
-- `id`
-- `roomId`
-- `userId`
-- `displayName`
-- `role`
-- `responseStatus`
-- `joinedAt`
-- `respondedAt`
+### 참여자 응답
 
-권장 역할:
+- 이름은 공백 제거 후 1~20자이며 중복 이름과 정원 초과를 허용하지 않습니다.
+- 응답은 방 ID와 참여자 이름으로 조회합니다. 수정 제출은 기존 응답을 교체합니다.
+- 가능한 날짜와 제외 날짜는 방 후보 안에 있어야 하며 서로 겹칠 수 없습니다.
+- 가능한 날짜가 있으면 허용된 시간대 하나 이상을 선택합니다.
+- `ANYTIME`과 개별 시간대는 함께 저장하지 않습니다.
+- 모든 후보를 제외하면 시간대 없이 참여 불가 응답을 제출할 수 있습니다.
+- 마감 이후와 확정 이후에는 참여자 추가와 응답 수정을 차단합니다.
 
-- `HOST`
-- `MEMBER`
+### 일정 확정
 
-권장 응답 상태:
+- 방장만 확정할 수 있으며 가능 인원이 있는 날짜·시간 조합을 선택합니다.
+- 과거 날짜와 시작 시간이 지난 시간대는 후보에서 제외합니다.
+- 미응답자가 있으면 화면에서 확인 문구를 표시합니다.
+- 마감 이후에도 수집된 응답으로 확정할 수 있습니다.
+- 확정 후 응답과 참여자는 수정할 수 없습니다.
 
-- `NOT_STARTED`
-- `IN_PROGRESS`
-- `SUBMITTED`
+## 일정 계산
 
-### CandidateDate
+`ScheduleCalculator.dates()`는 날짜별 가능 인원과 전원 가능 여부를 계산합니다. 제출한 응답 중 해당 날짜가 가능하고 제외 목록에 없는 참여자만 셉니다. 전원 가능 여부는 등록 인원 전체를 기준으로 합니다.
 
-- `id`
-- `roomId`
-- `date`
-- `label`
-- `isHostPreferred`
+`times()`는 시간대별 가능 인원을 계산합니다. 날짜를 지정하면 그 날짜에 가능한 참여자만 집계합니다. `ANYTIME`은 방장이 허용한 각 시간대에 한 표씩 반영합니다.
 
-### TimeSlot
+`options()`는 가능한 날짜·시간 조합을 다음 순서로 정렬합니다.
 
-- `id`
-- `code`
-- `label`
-- `startTime`
-- `endTime`
+1. 같은 날짜와 시간에 가능한 인원 내림차순
+2. 해당 날짜에 가능한 인원 내림차순
+3. 날짜 오름차순
+4. 시간대 시작 순서
 
-초기 시간대 code:
+날짜 집계 순위와 최종 추천 순위는 다를 수 있습니다. 예를 들어 한 날짜의 4명이 시간대별로 2명씩 나뉘고 다른 날짜의 3명이 같은 시간에 가능하면, 3명이 모일 수 있는 조합을 추천합니다. 희망 날짜 가산점은 사용하지 않습니다.
 
-- `MORNING`
-- `AFTERNOON`
-- `LATE_AFTERNOON`
-- `EVENING`
-- `LATE_EVENING`
-- `ANYTIME`
+- 응답률 = 제출 완료 인원 / 등록 인원 × 100
+- 미응답 인원 = 등록 인원 − 제출 완료 인원
+- 모든 후보 참여 불가 응답도 제출 완료 인원에는 포함합니다.
+- 제출 0건은 `집계 대기`, 제출이 있어도 가능한 조합이 없으면 `가능한 일정 없음`을 표시합니다.
+- 확정 가능 인원은 확정 날짜·시간의 응답에서 계산합니다. 홈과 캘린더도 이 값을 사용합니다.
 
-### AvailabilityResponse
+## 달력과 메모리 수명
 
-- `id`
-- `roomId`
-- `participantId`
-- `availableDateIds`
-- `preferredDateIds`
-- `selectedTimeSlotCodes`
-- `excludedDateIds`
-- `submittedAt`
+`PickDayDatePicker`는 표시 월의 6주 × 7일, 42칸을 만듭니다. 이전·다음 월 이동을 지원하며 화면별 선택 가능 날짜를 적용합니다. 데이터의 날짜 형식은 `yyyy-MM-dd`, 화면 표시 형식은 용도에 따라 변환합니다.
 
-### ScheduleResult
+프로세스가 살아 있으면 방과 채팅, 제출한 응답, 방장 작성 중 선택이 유지됩니다. 주요 작성 화면은 회전 시 임시 선택도 복원합니다. 프로세스 종료 후 생성 데이터는 복원하지 않습니다. 로그아웃 메뉴는 시작 화면으로 이동하며 메모리 데이터를 초기화하지 않습니다.
 
-- `roomId`
-- `dateCandidates`
-- `timeCandidates`
-- `computedAt`
+## 서버 연동 시 변경할 구조
 
-### DateCandidateResult
-
-- `date`
-- `availableParticipantCount`
-- `preferredParticipantCount`
-- `score`
-- `isFullIntersection`
-- `participantIds`
-
-날짜 점수 규칙:
-
-- 가능한 날짜: 1점
-- 희망 날짜: 추가 1점
-- 전원 교집합: 일반 점수 정렬보다 먼저 우선 후보로 표시
-
-### TimeCandidateResult
-
-- `slotCode`
-- `participantCount`
-- `score`
-
-### ConfirmedSchedule
-
-- `id`
-- `roomId`
-- `date`
-- `timeSlotCode`
-- `confirmedByUserId`
-- `confirmedAt`
-
-### NotificationItem
-
-- `id`
-- `roomId`
-- `type`
-- `title`
-- `message`
-- `isRead`
-- `createdAt`
-
-초기 type:
-
-- `ROOM_JOINED`
-- `RESPONSE_SUBMITTED`
-- `DEADLINE_SOON`
-- `SCHEDULE_CONFIRMED`
-
-### UserSettings
-
-- `userId`
-- `notifyOnJoin`
-- `notifyOnDeadline`
-- `notifyOnConfirmed`
-
-### CalendarViewState
-
-- `visibleYearMonth`
-- `minSelectableDate`
-- `maxSelectableDate`
-- `candidateDates`
-- `selectedDates`
-- `excludedDates`
-
-달력 렌더링 규칙:
-
-- 특정 월을 XML에 고정하지 않습니다.
-- 현재 월, 사용자가 이동한 월, 방 후보 날짜 범위를 기준으로 날짜 셀을 만듭니다.
-- 선택 가능/선택됨/제외/비활성 상태는 `CalendarViewState`에서 계산합니다.
-
-## Repository 방향
-
-실제 API 연동 전 Repository interface를 먼저 정의합니다.
-
-- `UserRepository`
-- `MeetupRepository`
-- `InviteRepository`
-- `ResponseRepository`
-- `ScheduleRepository`
-- `NotificationRepository`
-
-초기 구현:
-
-- In-memory Repository 또는 로컬 JSON/SharedPreferences
-
-백엔드 구현:
-
-- Retrofit Repository에서 API DTO를 앱 모델로 매핑
-
-## 화면 렌더링 규칙
-
-화면은 하드코딩된 문자열이 아니라 모델 상태를 기반으로 렌더링합니다.
-
-통계 렌더링:
-
-- 참여 완료율 = 제출 완료 참여자 수 / 전체 참여자 수
-- 미응답 인원 = 전체 참여자 수 - 제출 완료 참여자 수
-- BEST 날짜 = `ScheduleResult.dateCandidates`의 우선순위 1위
-- 시간 선호도 = `AvailabilityResponse.selectedTimeSlotCodes` 집계 결과
-- 마감 D-day = 현재 날짜/시간과 `MeetupRoom.deadlineDateTime` 차이
-
-허용:
-
-- Repository 계층의 fixture 데이터
-- 명확히 demo/fixture로 분리된 샘플 데이터
-
-지양:
-
-- Activity 내부의 임시 더미 문자열
-- 모델 값으로 사용하는 이모지
-- 장식용 이모지를 선택하기 위한 방 카테고리 문자열
+- 사용자와 참여자에 안정적인 ID를 부여합니다.
+- 방 상태와 생성·응답·확정 시각을 명시적인 필드로 관리합니다.
+- 저장소 인터페이스와 메모리·네트워크 구현체를 분리합니다.
+- API 요청·응답 모델과 화면 모델 사이에 변환 계층을 둡니다.
+- 알림 읽음 상태와 사용자 설정 모델은 해당 기능 구현 시 추가합니다.

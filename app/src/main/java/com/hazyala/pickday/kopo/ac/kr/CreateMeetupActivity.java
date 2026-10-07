@@ -2,35 +2,34 @@ package com.hazyala.pickday.kopo.ac.kr;
 
 import android.app.TimePickerDialog;
 import android.content.Intent;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.appcompat.app.AppCompatActivity;
+import com.hazyala.pickday.kopo.ac.kr.ui.PickDayActivity;
 
-public class CreateMeetupActivity extends AppCompatActivity {
+import com.hazyala.pickday.kopo.ac.kr.data.LocalMeetupRepository;
+import com.hazyala.pickday.kopo.ac.kr.ui.PickDayDatePicker;
+
+import java.util.Calendar;
+import java.util.Locale;
+
+public class CreateMeetupActivity extends PickDayActivity {
 
     private TextView tvNameCount;
     private TextView tvDescCount;
     private TextView tvDeadlineDate;
     private TextView tvDeadlineTime;
     private TextView tvPeopleCount;
+    private TextView edtMeetupName;
 
+    private String draftRoomId;
     private int peopleCount = 2;
-    private TextView selectedDayView = null;
-
-    private final int[] dayIds = {
-            R.id.day1, R.id.day2, R.id.day3, R.id.day4, R.id.day5,
-            R.id.day6, R.id.day7, R.id.day8, R.id.day9, R.id.day10,
-            R.id.day11, R.id.day12, R.id.day13, R.id.day14, R.id.day15,
-            R.id.day16, R.id.day17, R.id.day18, R.id.day19, R.id.day20,
-            R.id.day21, R.id.day22, R.id.day23, R.id.day24, R.id.day25,
-            R.id.day26, R.id.day27, R.id.day28, R.id.day29, R.id.day30,
-            R.id.day31
-    };
+    private Calendar selectedDeadlineDate;
+    private PickDayDatePicker.CalendarController deadlineCalendarController;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,6 +41,7 @@ public class CreateMeetupActivity extends AppCompatActivity {
         tvDeadlineDate = findViewById(R.id.tvDeadlineDate);
         tvDeadlineTime = findViewById(R.id.tvDeadlineTime);
         tvPeopleCount = findViewById(R.id.tvPeopleCount);
+        edtMeetupName = findViewById(R.id.edtMeetupName);
 
         setupTextCounters();
         setupBackButton();
@@ -49,10 +49,27 @@ public class CreateMeetupActivity extends AppCompatActivity {
         setupTimePicker();
         setupPeopleButtons();
         setupCalendar();
+        if (savedInstanceState != null) {
+            draftRoomId = savedInstanceState.getString("draftRoomId");
+            peopleCount = savedInstanceState.getInt("peopleCount", 2);
+            tvDeadlineTime.setText(savedInstanceState.getString("deadlineTime", getString(R.string.create_meet_up_deadline_time_text)));
+            selectedDeadlineDate = PickDayDatePicker.parseIsoDate(savedInstanceState.getString("deadlineDate"));
+            updateDeadlineDateText();
+            deadlineCalendarController.moveTo(selectedDeadlineDate);
+        }
+        updatePeopleText();
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle state) {
+        state.putString("draftRoomId", draftRoomId);
+        state.putInt("peopleCount", peopleCount);
+        state.putString("deadlineTime", tvDeadlineTime.getText().toString());
+        state.putString("deadlineDate", PickDayDatePicker.formatIsoDate(selectedDeadlineDate));
+        super.onSaveInstanceState(state);
     }
 
     private void setupTextCounters() {
-        TextView edtMeetupName = findViewById(R.id.edtMeetupName);
         TextView edtMeetupDesc = findViewById(R.id.edtMeetupDesc);
 
         edtMeetupName.addTextChangedListener(new TextWatcher() {
@@ -61,7 +78,7 @@ public class CreateMeetupActivity extends AppCompatActivity {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                tvNameCount.setText(s.length() + "/30");
+                tvNameCount.setText(getString(R.string.create_meetup_tv_name_count_format, s.length()));
             }
 
             @Override
@@ -74,7 +91,7 @@ public class CreateMeetupActivity extends AppCompatActivity {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                tvDescCount.setText(s.length() + "/100");
+                tvDescCount.setText(getString(R.string.create_meetup_tv_desc_count_format, s.length()));
             }
 
             @Override
@@ -92,7 +109,26 @@ public class CreateMeetupActivity extends AppCompatActivity {
 
     private void setupNextButton() {
         findViewById(R.id.btnNext).setOnClickListener(v -> {
+            String meetupTitle = edtMeetupName.getText().toString().trim();
+
+            if (meetupTitle.isEmpty()) {
+                Toast.makeText(this, getString(R.string.create_meetup_setup_next_button_text), Toast.LENGTH_SHORT).show();
+                return;
+            }
+
+            String roomId;
+            try {
+                roomId = LocalMeetupRepository.saveRoomDraft(draftRoomId, meetupTitle, peopleCount,
+                        PickDayDatePicker.formatIsoDate(selectedDeadlineDate), tvDeadlineTime.getText().toString(),
+                        ((TextView) findViewById(R.id.edtMeetupDesc)).getText().toString());
+                draftRoomId = roomId;
+            } catch (IllegalArgumentException error) {
+                Toast.makeText(this, error.getMessage(), Toast.LENGTH_SHORT).show();
+                return;
+            }
+
             Intent intent = new Intent(CreateMeetupActivity.this, SelectionActivity.class);
+            intent.putExtra(SelectionActivity.EXTRA_ROOM_ID, roomId);
             startActivity(intent);
         });
     }
@@ -102,14 +138,15 @@ public class CreateMeetupActivity extends AppCompatActivity {
             TimePickerDialog dialog = new TimePickerDialog(
                     CreateMeetupActivity.this,
                     (view, hourOfDay, minute) -> {
-                        String amPm = hourOfDay < 12 ? "오전" : "오후";
+                        String amPm = hourOfDay < 12 ? getString(R.string.time_morning) : getString(R.string.time_afternoon);
                         int hour = hourOfDay % 12;
 
                         if (hour == 0) {
                             hour = 12;
                         }
 
-                        tvDeadlineTime.setText(String.format("%s %d:%02d", amPm, hour, minute));
+                        tvDeadlineTime.setText(String.format(Locale.KOREAN,
+                                getString(R.string.time_clock_format), amPm, hour, minute));
                     },
                     23,
                     59,
@@ -126,7 +163,7 @@ public class CreateMeetupActivity extends AppCompatActivity {
                 peopleCount--;
                 updatePeopleText();
             } else {
-                Toast.makeText(this, "최소 인원은 2명입니다", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, getString(R.string.create_meetup_setup_people_buttons_text), Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -135,44 +172,56 @@ public class CreateMeetupActivity extends AppCompatActivity {
                 peopleCount++;
                 updatePeopleText();
             } else {
-                Toast.makeText(this, "최대 인원은 20명입니다", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, getString(R.string.create_meetup_setup_people_buttons_text_2), Toast.LENGTH_SHORT).show();
             }
         });
     }
 
     private void updatePeopleText() {
-        tvPeopleCount.setText(peopleCount + "명");
+        tvPeopleCount.setText(getString(R.string.room_capacity_count, peopleCount));
     }
 
     private void setupCalendar() {
-        for (int i = 0; i < dayIds.length; i++) {
-            final int day = i + 1;
-            TextView dayView = findViewById(dayIds[i]);
-
-            dayView.setOnClickListener(v -> {
-                tvDeadlineDate.setText(String.format("2025.05.%02d", day));
-                updateSelectedDay(dayView);
-            });
-
-            if (day == 27) {
-                tvDeadlineDate.setText("2025.05.27");
-                updateSelectedDay(dayView);
-            }
-        }
+        selectedDeadlineDate = PickDayDatePicker.today();
+        updateDeadlineDateText();
 
         findViewById(R.id.btnDatePicker).setOnClickListener(v -> {
-            Toast.makeText(this, "아래 달력에서 날짜를 선택해 주세요", Toast.LENGTH_SHORT).show();
+            PickDayDatePicker.show(this, selectedDeadlineDate, (selectedDate, displayText, summaryText) -> {
+                if (PickDayDatePicker.isBeforeToday(selectedDate)) {
+                    Toast.makeText(this, getString(R.string.create_meetup_setup_calendar_text), Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
+                selectedDeadlineDate = selectedDate;
+                updateDeadlineDateText();
+                deadlineCalendarController.moveTo(selectedDeadlineDate);
+            });
         });
+
+        View deadlineCalendar = findViewById(R.id.deadlineCalendar);
+        deadlineCalendarController = PickDayDatePicker.attachCalendar(
+                deadlineCalendar,
+                selectedDeadlineDate,
+                new PickDayDatePicker.CalendarDateRule() {
+                    @Override
+                    public boolean isEnabled(Calendar date) {
+                        return !PickDayDatePicker.isBeforeToday(date);
+                    }
+
+                    @Override
+                    public boolean isSelected(Calendar date) {
+                        return PickDayDatePicker.isSameDate(date, selectedDeadlineDate);
+                    }
+                },
+                selectedDate -> {
+                    selectedDeadlineDate = selectedDate;
+                    updateDeadlineDateText();
+                }
+        );
     }
 
-    private void updateSelectedDay(TextView newSelectedDayView) {
-        if (selectedDayView != null) {
-            selectedDayView.setBackgroundColor(Color.TRANSPARENT);
-            selectedDayView.setTextColor(Color.parseColor("#252538"));
-        }
-
-        selectedDayView = newSelectedDayView;
-        selectedDayView.setBackgroundResource(R.drawable.pickday_selected);
-        selectedDayView.setTextColor(Color.parseColor("#6A4DFF"));
+    private void updateDeadlineDateText() {
+        tvDeadlineDate.setText(PickDayDatePicker.formatDeadlineDate(selectedDeadlineDate));
     }
+
 }

@@ -1,74 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/dateRoot"
-    android:layout_width="50dp"
-    android:layout_height="70dp"
-    android:layout_marginEnd="7dp"
-    android:background="@drawable/pickday_card_white">
-
-    <TextView
-        android:id="@+id/tvDateBest"
-        android:layout_width="34dp"
-        android:layout_height="14dp"
-        android:layout_gravity="top|center_horizontal"
-        android:layout_marginTop="0dp"
-        android:background="@drawable/pickday_button_primary"
-        android:gravity="center"
-        android:text="BEST"
-        android:textColor="#FFFFFF"
-        android:textSize="7sp"
-        android:textStyle="bold"
-        android:includeFontPadding="false"
-        android:visibility="gone" />
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:gravity="center"
-        android:orientation="vertical"
-        android:paddingTop="5dp"
-        android:paddingBottom="5dp">
-
-        <TextView
-            android:id="@+id/tvDateLabel"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="오늘"
-            android:textColor="#59566F"
-            android:textSize="8sp"
-            android:includeFontPadding="false" />
-
-        <TextView
-            android:id="@+id/tvDate"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="2dp"
-            android:text="5.21"
-            android:textColor="#252538"
-            android:textSize="13sp"
-            android:textStyle="bold"
-            android:includeFontPadding="false" />
-
-        <TextView
-            android:id="@+id/tvDayOfWeek"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="(수)"
-            android:textColor="#252538"
-            android:textSize="9sp"
-            android:textStyle="bold"
-            android:includeFontPadding="false" />
-
-        <TextView
-            android:id="@+id/tvAvailableCount"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="4dp"
-            android:text="3명"
-            android:textColor="#7B5CFF"
-            android:textSize="8sp"
-            android:includeFontPadding="false" />
-
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android" android:id="@+id/dateRoot" android:layout_width="64dp" android:layout_height="wrap_content" android:layout_marginEnd="7dp" android:background="@drawable/pickday_card_white" android:minHeight="116dp">
+    <TextView android:id="@+id/tvDateBest" android:layout_width="48dp" android:layout_height="wrap_content" android:layout_gravity="top|center_horizontal" android:layout_marginTop="0dp" android:background="@drawable/pickday_button_primary" android:gravity="center" android:text="@string/available_date_date_best_text" android:textColor="#FFFFFF" android:textSize="12sp" android:textStyle="bold" android:includeFontPadding="false" android:visibility="gone" android:minHeight="14dp" />
+    <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:gravity="center" android:orientation="vertical" android:paddingTop="24dp" android:paddingBottom="12dp">
+        <TextView android:id="@+id/tvDateLabel" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/date_today" android:textColor="#59566F" android:textSize="12sp" android:includeFontPadding="false" />
+        <TextView android:id="@+id/tvDate" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="2dp" android:text="@string/invite_members_invite_room_title_text" android:textColor="#252538" android:textSize="13sp" android:textStyle="bold" android:includeFontPadding="false" />
+        <TextView android:id="@+id/tvDayOfWeek" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/available_date_day_of_week_text" android:textColor="#252538" android:textSize="12sp" android:textStyle="bold" android:includeFontPadding="false" />
+        <TextView android:id="@+id/tvAvailableCount" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="4dp" android:text="@string/available_date_available_count_text" android:textColor="#7B5CFF" android:textSize="12sp" android:includeFontPadding="false" />
     </LinearLayout>
-
 </FrameLayout>

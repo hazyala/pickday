@@ -1,542 +1,79 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="#F8F7FF">
-
-    <ScrollView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:fillViewport="true"
-        android:clipToPadding="false"
-        >
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:paddingStart="22dp"
-            android:paddingTop="10dp"
-            android:paddingEnd="10dp"
-            android:paddingBottom="10dp">
-
-            <!-- 상단 프로필 -->
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="72dp"
-                android:layout_marginTop="20dp"
-                android:gravity="center_vertical"
-                android:orientation="horizontal">
-
-                <ImageView
-                    android:id="@+id/imgProfile"
-                    android:layout_width="66dp"
-                    android:layout_height="66dp"
-                    android:scaleY="1.2"
-                    android:scaleX="1.2"
-                    android:src="@drawable/home_profile"
-                    android:scaleType="centerCrop" />
-
-                <LinearLayout
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="16dp"
-                    android:layout_weight="1"
-                    android:orientation="vertical">
-
-                    <TextView
-                        android:id="@+id/tvGreeting"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="안녕하세요, 해민님!"
-                        android:textColor="#7A7892"
-                        android:textSize="10sp"
-                        android:includeFontPadding="false"/>
-
-                    <TextView
-                        android:id="@+id/tvHomeTitle"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="5dp"
-                        android:text="오늘도 픽데이로 쉽게 약속 잡아봐요"
-                        android:textColor="#202033"
-                        android:textSize="15sp"
-                        android:textStyle="bold"
-                        android:lineSpacingExtra="2dp"
-                        android:includeFontPadding="false"/>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android" xmlns:app="http://schemas.android.com/apk/res-auto" android:layout_width="match_parent" android:layout_height="match_parent" android:background="#F8F7FF">
+    <ScrollView android:layout_width="match_parent" android:layout_height="match_parent" android:fillViewport="true" android:clipToPadding="false">
+        <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical" android:paddingStart="22dp" android:paddingTop="10dp" android:paddingEnd="22dp" android:paddingBottom="108dp">
+            <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="20dp" android:gravity="center_vertical" android:orientation="horizontal" android:minHeight="72dp">
+                <ImageView android:id="@+id/imgProfile" android:layout_width="66dp" android:layout_height="66dp" android:scaleY="1.2" android:scaleX="1.2" android:src="@drawable/home_profile" android:scaleType="centerCrop" />
+                <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_marginStart="16dp" android:layout_weight="1" android:orientation="vertical">
+                    <TextView android:id="@+id/tvGreeting" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/home_greeting_text" android:textColor="#7A7892" android:textSize="12sp" android:includeFontPadding="false" />
+                    <TextView android:id="@+id/tvHomeTitle" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="5dp" android:text="@string/home_home_title_text" android:textColor="#202033" android:textSize="15sp" android:textStyle="bold" android:lineSpacingExtra="2dp" android:includeFontPadding="false" />
                 </LinearLayout>
-
-                <ImageView
-                    android:id="@+id/btnNotification"
-                    android:layout_width="40dp"
-                android:layout_height="40dp"
-                android:padding="8dp"
-                android:src="@drawable/icon_notification"
-                android:tint="#252538"
-                android:scaleType="centerInside" />
+                <ImageView android:id="@+id/btnNotification" android:layout_width="48dp" android:layout_height="48dp" android:padding="8dp" android:src="@drawable/icon_notification" app:tint="#252538" android:scaleType="centerInside" android:contentDescription="@string/notifications_open" />
             </LinearLayout>
-
-            <!-- 진행 중인 약속 카드 -->
-            <LinearLayout
-                android:id="@+id/cardMainMeetup"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="5dp"
-                android:background="@drawable/pickday_card_glass"
-                android:orientation="vertical"
-                android:padding="10dp">
-
-                <TextView
-                    android:id="@+id/tvMainStatus"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="진행 중인 약속"
-                    android:includeFontPadding="false"
-                    android:textColor="#5B4CDB"
-                    android:textSize="14sp"
-                    android:textStyle="bold"
-                    android:layout_marginLeft="10dp"/>
-
-                <TextView
-                    android:id="@+id/tvMainTitle"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp"
-                    android:text="세미콜론 동아리 모임"
-                    android:textColor="#252538"
-                    android:textSize="15sp"
-                    android:includeFontPadding="false"
-                    android:textStyle="bold"
-                    android:layout_marginLeft="10dp"/>
-
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="3dp"
-                    android:orientation="horizontal">
-
-                    <TextView
-                        android:id="@+id/tvMainParticipants"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="참여자 6명"
-                        android:textColor="#8A88A0"
-                        android:textSize="8sp"
-                        android:includeFontPadding="false"
-                        android:layout_marginLeft="10dp"/>
-
-                    <TextView
-                        android:id="@+id/tvMainDday"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="16dp"
-                        android:text="마감까지 D-2"
-                        android:textColor="#8A88A0"
-                        android:textSize="8sp"
-                        android:includeFontPadding="false"/>
+            <LinearLayout android:id="@+id/cardMainMeetup" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="5dp" android:background="@drawable/pickday_card_glass" android:orientation="vertical" android:padding="10dp">
+                <TextView android:id="@+id/tvMainStatus" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/home_main_status_text" android:includeFontPadding="false" android:textColor="#5B4CDB" android:textSize="14sp" android:textStyle="bold" android:layout_marginLeft="10dp" />
+                <TextView android:id="@+id/tvMainTitle" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="10dp" android:text="@string/home_main_title_text" android:textColor="#252538" android:textSize="15sp" android:includeFontPadding="false" android:textStyle="bold" android:layout_marginLeft="10dp" />
+                <LinearLayout android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="3dp" android:orientation="horizontal">
+                    <TextView android:id="@+id/tvMainParticipants" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/home_main_participants_text" android:textColor="#716C87" android:textSize="12sp" android:includeFontPadding="false" android:layout_marginLeft="10dp" />
+                    <TextView android:id="@+id/tvMainDday" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginStart="16dp" android:text="@string/home_main_dday_text" android:textColor="#716C87" android:textSize="12sp" android:includeFontPadding="false" />
                 </LinearLayout>
-
-                <FrameLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="120dp"
-                    >
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="96dp"
-                        android:layout_gravity="bottom"
-                        android:background="@drawable/pickday_card_white"
-                        android:orientation="vertical"
-                        android:paddingStart="18dp"
-                        android:paddingTop="10dp"
-                        android:paddingEnd="120dp">
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:background="@drawable/pickday_card_glass"
-                            android:paddingStart="3dp"
-                            android:paddingEnd="3dp"
-                            android:paddingBottom="1dp"
-                            android:text="1순위 날짜"
-                            android:textColor="#7B5CFF"
-                            android:textSize="9sp"
-                            android:textStyle="bold" />
-
-                        <TextView
-                            android:id="@+id/tvBestDate"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="4dp"
-                            android:text="5월 24일 (토) 오후 12시"
-                            android:textColor="#242438"
-                            android:textSize="12sp"
-                            android:textStyle="bold"
-                            android:includeFontPadding="false"/>
-
-                        <TextView
-                            android:id="@+id/tvBestCount"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="3dp"
-                            android:text="6명 가능"
-                            android:textColor="#8A76FF"
-                            android:textSize="8sp" />
+                <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical" android:background="@drawable/pickday_card_white" android:padding="16dp" android:layout_marginTop="16dp">
+                    <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal" android:gravity="center_vertical">
+                        <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:orientation="vertical">
+                            <TextView android:layout_width="match_parent" android:layout_height="wrap_content" android:text="@string/home_label_text" android:textSize="12sp" android:textColor="#5B4CDB" android:includeFontPadding="true" android:id="@+id/tvScheduleLabel" android:textStyle="bold" />
+                            <TextView android:id="@+id/tvBestDate" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="8dp" android:text="@string/home_best_date_text" android:textColor="#242438" android:textSize="16sp" android:textStyle="bold" android:includeFontPadding="false" />
+                            <TextView android:id="@+id/tvBestCount" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="8dp" android:text="@string/home_best_count_text" android:textColor="#8A76FF" android:textSize="14sp" />
+                        </LinearLayout>
+                        <ImageView android:id="@+id/imgHomeCharacter" android:layout_width="88dp" android:layout_height="104dp" android:src="@drawable/splash_character" android:scaleType="fitCenter" android:importantForAccessibility="no" />
                     </LinearLayout>
-
-                    <ImageView
-                        android:id="@+id/imgHomeCharacter"
-                        android:layout_width="170dp"
-                        android:layout_height="150dp"
-                        android:scaleX="2"
-                        android:scaleY="2"
-                        android:translationY="60dp"
-                        android:layout_gravity="end|bottom"
-                        android:layout_marginRight="35dp"
-                        android:src="@drawable/splash_character"
-                        android:scaleType="fitCenter" />
-
-                    <androidx.appcompat.widget.AppCompatButton
-                        android:id="@+id/btnDetail"
-                        android:layout_width="100dp"
-                        android:layout_height="30dp"
-                        android:layout_gravity="end|bottom"
-                        android:layout_marginRight="15dp"
-                        android:layout_marginBottom="2dp"
-                        android:background="@drawable/pickday_card_glass"
-                        android:gravity="center"
-                        android:text="상세 보기  →"
-                        android:textColor="#6A4DFF"
-                        android:textSize="12sp"
-                        android:textStyle="bold"
-                        android:textAllCaps="false"
-                        android:minWidth="0dp"
-                        android:minHeight="0dp"
-                        android:padding="0dp"
-                        android:includeFontPadding="false"/>
-                </FrameLayout>
-            </LinearLayout>
-
-            <!-- 이번 주 가능한 날 -->
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="5dp"
-                android:gravity="center_vertical"
-                android:orientation="horizontal">
-
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="이번 주 가능한 날 ?"
-                    android:textColor="#242438"
-                    android:textSize="13sp"
-                    android:textStyle="bold" />
-
-                <androidx.appcompat.widget.AppCompatButton
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:background="@android:color/transparent"
-                    android:text="전체 보기  ›"
-                    android:textColor="#6A4DFF"
-                    android:textSize="10sp"
-                    android:textStyle="bold"
-                    android:textAllCaps="false"
-                    android:minWidth="0dp"
-                    android:minHeight="0dp"
-                    android:padding="0dp"
-                    android:layout_marginRight="10dp"/>
-            </LinearLayout>
-
-            <HorizontalScrollView
-                android:layout_width="match_parent"
-                android:layout_height="82dp"
-                android:layout_marginTop="12dp"
-                android:scrollbars="none">
-
-                <LinearLayout
-                    android:id="@+id/layoutDateContainer"
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:orientation="horizontal" />
-            </HorizontalScrollView>
-
-            <!-- 범례 -->
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="20dp"
-                android:layout_marginTop="8dp"
-                android:orientation="horizontal">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="●  7명 이상"
-                    android:textColor="#5B4CDB"
-                    android:textSize="8sp" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="14dp"
-                    android:text="●  4~6명"
-                    android:textColor="#55AFFF"
-                    android:textSize="8sp" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="14dp"
-                    android:text="●  1~3명"
-                    android:textColor="#B9B6D8"
-                    android:textSize="8sp" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="14dp"
-                    android:text="●  0명"
-                    android:textColor="#D7D7E5"
-                    android:textSize="8sp" />
-            </LinearLayout>
-
-            <!-- 내 약속 방 -->
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="1dp"
-                android:gravity="center_vertical"
-                android:orientation="horizontal">
-
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="내 약속 방"
-                    android:textColor="#242438"
-                    android:textSize="13sp"
-                    android:textStyle="bold" />
-
-                <androidx.appcompat.widget.AppCompatButton
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:background="@android:color/transparent"
-                    android:text="전체 보기  ›"
-                    android:textColor="#6A4DFF"
-                    android:textSize="10sp"
-                    android:textStyle="bold"
-                    android:textAllCaps="false"
-                    android:minWidth="0dp"
-                    android:minHeight="0dp"
-                    android:padding="0dp"
-                    android:layout_marginRight="10dp"/>
-            </LinearLayout>
-
-            <LinearLayout
-                android:id="@+id/layoutRoomContainer"
-                android:layout_width="match_parent"
-                android:layout_height="59dp"
-                android:layout_marginTop="11dp"
-                android:orientation="vertical" />
-
-            <!-- 새 약속 만들기 -->
-            <LinearLayout
-                android:id="@+id/cardCreateMeetup"
-                android:layout_width="match_parent"
-                android:layout_height="78dp"
-                android:layout_marginTop="10dp"
-                android:background="@drawable/pickday_card_glass"
-                android:gravity="center_vertical"
-                android:orientation="horizontal">
-
-                <ImageView
-                    android:layout_width="94dp"
-                    android:layout_height="94dp"
-                    android:layout_marginStart="4dp"
-                    android:layout_marginBottom="-14dp"
-                    android:scaleX="2"
-                    android:scaleY="2"
-                    android:translationX="10dp"
-                    android:src="@drawable/home_character"
-                    android:scaleType="fitCenter" />
-
-                <LinearLayout
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:orientation="vertical"
-                    android:paddingStart="4dp">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="새로운 약속 방을 만들어보세요"
-                        android:textColor="#252538"
-                        android:textSize="15sp"
-                        android:textStyle="bold"
-                        android:includeFontPadding="false"/>
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="5dp"
-                        android:text="여러 사람의 일정을 한 번에 픽!"
-                        android:textColor="#77748E"
-                        android:textSize="12sp"
-                        android:includeFontPadding="false"/>
+                    <androidx.appcompat.widget.AppCompatButton android:id="@+id/btnDetail" android:layout_width="match_parent" android:layout_height="48dp" android:background="@drawable/pickday_card_glass" android:gravity="center" android:text="@string/home_detail_text" android:textColor="#6A4DFF" android:textSize="12sp" android:textStyle="bold" android:textAllCaps="false" android:minWidth="0dp" android:minHeight="48dp" android:padding="0dp" android:includeFontPadding="false" android:layout_marginTop="12dp" />
                 </LinearLayout>
-
-                <androidx.appcompat.widget.AppCompatButton
-                    android:id="@+id/btnCreateSmall"
-                    android:layout_width="35dp"
-                    android:layout_height="35dp"
-                    android:layout_marginEnd="18dp"
-                    android:background="@drawable/bg_fab_circle"
-                    android:gravity="center"
-                    android:text="+"
-                    android:textColor="#FFFFFF"
-                    android:textSize="20sp"
-                    android:textAllCaps="false"
-                    android:minWidth="0dp"
-                    android:minHeight="0dp"
-                    android:padding="0dp"
-                    android:includeFontPadding="false"/>
             </LinearLayout>
-
+            <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="5dp" android:gravity="center_vertical" android:orientation="horizontal">
+                <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="@string/home_label_text_2" android:textColor="#242438" android:textSize="13sp" android:textStyle="bold" />
+                <androidx.appcompat.widget.AppCompatButton android:id="@+id/btnViewAllDates" android:layout_width="wrap_content" android:layout_height="wrap_content" android:background="@android:color/transparent" android:text="@string/home_view_all_dates_text" android:textColor="#6A4DFF" android:textSize="12sp" android:textStyle="bold" android:textAllCaps="false" android:minWidth="0dp" android:minHeight="48dp" android:padding="0dp" android:layout_marginRight="10dp" />
+            </LinearLayout>
+            <HorizontalScrollView android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="12dp" android:scrollbars="none" android:minHeight="112dp">
+                <LinearLayout android:id="@+id/layoutDateContainer" android:layout_width="wrap_content" android:layout_height="match_parent" android:orientation="horizontal" />
+            </HorizontalScrollView>
+            <LinearLayout android:layout_width="match_parent" android:layout_height="20dp" android:layout_marginTop="8dp" android:orientation="horizontal">
+                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/home_label_text_3" android:textColor="#5B4CDB" android:textSize="12sp" />
+                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginStart="14dp" android:text="@string/home_label_text_4" android:textColor="#55AFFF" android:textSize="12sp" />
+                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginStart="14dp" android:text="@string/home_label_text_5" android:textColor="#B9B6D8" android:textSize="12sp" />
+                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginStart="14dp" android:text="@string/home_label_text_6" android:textColor="#D7D7E5" android:textSize="12sp" />
+            </LinearLayout>
+            <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="1dp" android:gravity="center_vertical" android:orientation="horizontal">
+                <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="@string/all_meetup_rooms_label_text" android:textColor="#242438" android:textSize="13sp" android:textStyle="bold" />
+                <androidx.appcompat.widget.AppCompatButton android:id="@+id/btnViewAllRooms" android:layout_width="wrap_content" android:layout_height="wrap_content" android:background="@android:color/transparent" android:text="@string/home_view_all_dates_text" android:textColor="#6A4DFF" android:textSize="12sp" android:textStyle="bold" android:textAllCaps="false" android:minWidth="0dp" android:minHeight="48dp" android:padding="0dp" android:layout_marginRight="10dp" />
+            </LinearLayout>
+            <LinearLayout android:id="@+id/layoutRoomContainer" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="11dp" android:orientation="vertical" />
+            <LinearLayout android:id="@+id/cardCreateMeetup" android:layout_width="match_parent" android:layout_height="78dp" android:layout_marginTop="10dp" android:background="@drawable/pickday_card_glass" android:gravity="center_vertical" android:orientation="horizontal">
+                <ImageView android:layout_width="94dp" android:layout_height="94dp" android:layout_marginStart="4dp" android:layout_marginBottom="-14dp" android:scaleX="2" android:scaleY="2" android:translationX="10dp" android:src="@drawable/home_character" android:scaleType="fitCenter" />
+                <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:orientation="vertical" android:paddingStart="4dp">
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/home_label_text_7" android:textColor="#252538" android:textSize="15sp" android:textStyle="bold" android:includeFontPadding="false" />
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="5dp" android:text="@string/home_label_text_8" android:textColor="#77748E" android:textSize="12sp" android:includeFontPadding="false" />
+                </LinearLayout>
+                <androidx.appcompat.widget.AppCompatButton android:id="@+id/btnCreateSmall" android:layout_width="35dp" android:layout_height="48dp" android:layout_marginEnd="18dp" android:background="@drawable/bg_fab_circle" android:gravity="center" android:text="@string/calendar_fab_text" android:textColor="#FFFFFF" android:textSize="20sp" android:textAllCaps="false" android:minWidth="0dp" android:minHeight="48dp" android:padding="0dp" android:includeFontPadding="false" />
+            </LinearLayout>
         </LinearLayout>
     </ScrollView>
-
-    <!-- 하단 탭바 -->
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="60dp"
-        android:layout_gravity="bottom"
-        android:layout_marginStart="14dp"
-        android:layout_marginEnd="14dp"
-        android:layout_marginBottom="10dp"
-        android:background="@drawable/bg_bottom_nav"
-        android:gravity="center"
-        android:orientation="horizontal"
-        android:paddingStart="16dp"
-        android:paddingEnd="16dp">
-
-        <LinearLayout
-            android:id="@+id/tabHome"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:gravity="center"
-            android:orientation="vertical">
-
-            <ImageView
-                android:layout_width="20dp"
-                android:layout_height="20dp"
-                android:src="@drawable/icon_home"
-                android:tint="#5B4CDB"
-                android:scaleType="centerInside" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="2dp"
-                android:includeFontPadding="false"
-                android:text="홈"
-                android:textColor="#5B4CDB"
-                android:textSize="10sp"
-                android:textStyle="bold" />
+    <LinearLayout android:layout_width="match_parent" android:layout_height="72dp" android:layout_gravity="bottom" android:layout_marginStart="14dp" android:layout_marginEnd="14dp" android:layout_marginBottom="10dp" android:background="@drawable/bg_bottom_nav" android:gravity="center" android:orientation="horizontal" android:paddingStart="16dp" android:paddingEnd="16dp">
+        <LinearLayout android:id="@+id/tabHome" android:layout_width="0dp" android:layout_height="match_parent" android:layout_weight="1" android:gravity="center" android:orientation="vertical">
+            <ImageView android:layout_width="20dp" android:layout_height="20dp" android:src="@drawable/icon_home" app:tint="#5B4CDB" android:scaleType="centerInside" />
+            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="2dp" android:includeFontPadding="false" android:text="@string/calendar_label_text_11" android:textColor="#5B4CDB" android:textSize="12sp" android:textStyle="bold" />
         </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/tabCalendar"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:gravity="center"
-            android:orientation="vertical">
-
-            <ImageView
-                android:layout_width="20dp"
-                android:layout_height="20dp"
-                android:src="@drawable/icon_calendars"
-                android:tint="#8A88A0"
-                android:scaleType="centerInside" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="2dp"
-                android:includeFontPadding="false"
-                android:text="캘린더"
-                android:textColor="#8A88A0"
-                android:textSize="10sp" />
+        <LinearLayout android:id="@+id/tabCalendar" android:layout_width="0dp" android:layout_height="match_parent" android:layout_weight="1" android:gravity="center" android:orientation="vertical">
+            <ImageView android:layout_width="20dp" android:layout_height="20dp" android:src="@drawable/icon_calendars" app:tint="#716C87" android:scaleType="centerInside" />
+            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="2dp" android:includeFontPadding="false" android:text="@string/calendar_label_text" android:textColor="#716C87" android:textSize="12sp" />
         </LinearLayout>
-
-        <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/btnFab"
-            android:layout_width="53dp"
-            android:layout_height="53dp"
-            android:background="@drawable/bg_fab_circle"
-            android:gravity="center"
-            android:text="+"
-            android:textColor="#FFFFFF"
-            android:textSize="38sp"
-            android:textAllCaps="false"
-            android:minWidth="0dp"
-            android:minHeight="0dp"
-            android:padding="0dp"
-            android:includeFontPadding="false"/>
-
-        <LinearLayout
-            android:id="@+id/tabAlarm"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:gravity="center"
-            android:orientation="vertical">
-
-            <ImageView
-                android:layout_width="20dp"
-                android:layout_height="20dp"
-                android:src="@drawable/icon_notification"
-                android:tint="#8A88A0"
-                android:scaleType="centerInside" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="2dp"
-                android:includeFontPadding="false"
-                android:text="알림"
-                android:textColor="#8A88A0"
-                android:textSize="10sp" />
+        <androidx.appcompat.widget.AppCompatButton android:id="@+id/btnFab" android:layout_width="53dp" android:layout_height="53dp" android:background="@drawable/bg_fab_circle" android:gravity="center" android:text="@string/calendar_fab_text" android:textColor="#FFFFFF" android:textSize="38sp" android:textAllCaps="false" android:minWidth="0dp" android:minHeight="48dp" android:padding="0dp" android:includeFontPadding="false" />
+        <LinearLayout android:id="@+id/tabChat" android:layout_width="0dp" android:layout_height="match_parent" android:layout_weight="1" android:gravity="center" android:orientation="vertical">
+            <ImageView android:layout_width="20dp" android:layout_height="20dp" android:src="@drawable/icon_message" app:tint="#716C87" android:scaleType="centerInside" />
+            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="2dp" android:includeFontPadding="false" android:text="@string/calendar_label_text_12" android:textColor="#716C87" android:textSize="12sp" />
         </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/tabMy"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:gravity="center"
-            android:orientation="vertical">
-
-            <ImageView
-                android:layout_width="20dp"
-                android:layout_height="20dp"
-                android:src="@drawable/icon_person"
-                android:tint="#8A88A0"
-                android:scaleType="centerInside" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="2dp"
-                android:includeFontPadding="false"
-                android:text="내 정보"
-                android:textColor="#8A88A0"
-                android:textSize="10sp" />
+        <LinearLayout android:id="@+id/tabMy" android:layout_width="0dp" android:layout_height="match_parent" android:layout_weight="1" android:gravity="center" android:orientation="vertical">
+            <ImageView android:layout_width="20dp" android:layout_height="20dp" android:src="@drawable/icon_person" app:tint="#716C87" android:scaleType="centerInside" />
+            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="2dp" android:includeFontPadding="false" android:text="@string/calendar_label_text_13" android:textColor="#716C87" android:textSize="12sp" />
         </LinearLayout>
-
     </LinearLayout>
-
 </FrameLayout>

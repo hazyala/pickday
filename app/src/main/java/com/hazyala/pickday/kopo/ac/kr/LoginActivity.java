@@ -2,26 +2,37 @@ package com.hazyala.pickday.kopo.ac.kr;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.widget.Button;
+import android.widget.TextView;
 
-import androidx.appcompat.app.AppCompatActivity;
+import com.hazyala.pickday.kopo.ac.kr.ui.PickDayActivity;
+import androidx.appcompat.widget.AppCompatButton;
 
-public class LoginActivity extends AppCompatActivity {
+public class LoginActivity extends PickDayActivity {
 
-    Button btnStart;
+    private AppCompatButton btnLogin;
+    private TextView tvSignup;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
-        // 버튼 연결
-        btnStart = findViewById(R.id.btnStart);
+        btnLogin = findViewById(R.id.btnLogin);
+        tvSignup = findViewById(R.id.tvSignup);
+        findViewById(R.id.etEmail).setEnabled(false);
+        findViewById(R.id.etPassword).setEnabled(false);
 
-        // 버튼 클릭 이벤트
-        btnStart.setOnClickListener(v -> {
+        btnLogin.setOnClickListener(v -> {
 
             Intent intent = new Intent(LoginActivity.this, HomeActivity.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            startActivity(intent);
+
+        });
+
+        tvSignup.setOnClickListener(v -> {
+
+            Intent intent = new Intent(LoginActivity.this, SignupActivity.class);
             startActivity(intent);
 
         });

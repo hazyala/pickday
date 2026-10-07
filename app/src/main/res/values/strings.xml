@@ -1,3 +1,394 @@
 <resources>
-    <string name="app_name">PickDay</string>
+    <string name="app_name" formatted="false">"PickDay"</string>
+    <string name="all_meetup_rooms_back_text" formatted="false">"←"</string>
+    <string name="all_meetup_rooms_label_text" formatted="false">"내 약속 방"</string>
+    <string name="all_meetup_rooms_room_count_text" formatted="false">"전체 0개"</string>
+    <string name="all_meetup_rooms_create_room_text" formatted="false">"새 약속 만들기        →"</string>
+    <string name="calendar_label_text" formatted="false">"캘린더"</string>
+    <string name="calendar_prev_month_text" formatted="false">"‹"</string>
+    <string name="calendar_month_title_text" formatted="false">"2026년 6월"</string>
+    <string name="calendar_next_month_text" formatted="false">"›"</string>
+    <string name="room_badge_default" formatted="false">"일"</string>
+    <string name="calendar_label_text_2" formatted="false">"월"</string>
+    <string name="calendar_label_text_3" formatted="false">"화"</string>
+    <string name="calendar_label_text_4" formatted="false">"수"</string>
+    <string name="calendar_label_text_5" formatted="false">"목"</string>
+    <string name="calendar_label_text_6" formatted="false">"금"</string>
+    <string name="calendar_label_text_7" formatted="false">"토"</string>
+    <string name="calendar_label_text_8" formatted="false">"●  응답 마감일"</string>
+    <string name="calendar_label_text_9" formatted="false">"●  확정된 약속일"</string>
+    <string name="calendar_schedule_title_text" formatted="false">"이번 달 일정"</string>
+    <string name="calendar_label_text_10" formatted="false">"최신순  ˅"</string>
+    <string name="calendar_label_text_11" formatted="false">"홈"</string>
+    <string name="calendar_fab_text" formatted="false">"+"</string>
+    <string name="calendar_label_text_12" formatted="false">"방 채팅"</string>
+    <string name="calendar_label_text_13" formatted="false">"내 정보"</string>
+    <string name="chat_label_text" formatted="false">"참여 중인 약속 방에서 대화를 나눠보세요"</string>
+    <string name="chat_active_room_tab_text" formatted="false">"참여 중인 방"</string>
+    <string name="chat_closed_room_tab_text" formatted="false">"종료된 방"</string>
+    <string name="chat_chat_room_count_text" formatted="false">"3"</string>
+    <string name="chat_label_text_2" formatted="false">"종료된 방이 없습니다"</string>
+    <string name="chat_label_text_3" formatted="false">"완료된 약속 방은 이곳에 표시됩니다"</string>
+    <string name="chat_detail_chat_detail_title_text" formatted="false">"채팅"</string>
+    <string name="chat_detail_chat_notice_title_text" formatted="false">"현재 방 현황"</string>
+    <string name="chat_detail_chat_notice_meta_text" formatted="false">"마감 -"</string>
+    <string name="chat_detail_chat_empty_state_text" formatted="false">"아직 채팅이 없습니다"</string>
+    <string name="chat_detail_et_message_input_hint" formatted="false">"메시지를 입력하세요"</string>
+    <string name="chat_detail_send_message_text" formatted="false">"전송"</string>
+    <string name="create_meet_up_label_text" formatted="false">"방 만들기 🎉"</string>
+    <string name="create_meet_up_label_text_2" formatted="false">"모두가 가능한 최고의 날을 찾아보세요"</string>
+    <string name="create_meet_up_label_text_3" formatted="false">"모임명 *"</string>
+    <string name="create_meet_up_edt_meetup_name_hint" formatted="false">"예) 동아리 MT, 팀플 회의"</string>
+    <string name="create_meet_up_name_count_text" formatted="false">"0/30"</string>
+    <string name="create_meet_up_label_text_4" formatted="false">"모임 설명 (선택)"</string>
+    <string name="create_meet_up_edt_meetup_desc_hint" formatted="false">"모임에 대해 간단히 설명해 주세요"</string>
+    <string name="create_meet_up_desc_count_text" formatted="false">"0/100"</string>
+    <string name="create_meet_up_label_text_5" formatted="false">"응답 마감일 *"</string>
+    <string name="create_meet_up_label_text_6" formatted="false">"마감일 이후에는 응답을 받지 않아요"</string>
+    <string name="create_meet_up_label_text_7" formatted="false">"▣"</string>
+    <string name="create_meet_up_deadline_date_text" formatted="false">"마감일 선택"</string>
+    <string name="create_meet_up_deadline_time_text" formatted="false">"오후 11:59"</string>
+    <string name="create_meet_up_label_text_8" formatted="false">"⌄"</string>
+    <string name="create_meet_up_label_text_9" formatted="false">"인원 *"</string>
+    <string name="create_meet_up_minus_people_text" formatted="false">"−"</string>
+    <string name="create_meet_up_people_count_text" formatted="false">"2명 ~ 20명"</string>
+    <string name="create_meet_up_next_text" formatted="false">"다음: 후보 날짜 &amp; 시간 선택   →"</string>
+    <string name="home_greeting_text" formatted="false">"안녕하세요, 해민님!"</string>
+    <string name="home_home_title_text" formatted="false">"오늘도 픽데이로 쉽게 약속 잡아봐요"</string>
+    <string name="home_main_status_text" formatted="false">"진행 중인 약속"</string>
+    <string name="home_main_title_text" formatted="false">"세미콜론 동아리 모임"</string>
+    <string name="home_main_participants_text" formatted="false">"참여자 6명"</string>
+    <string name="home_main_dday_text" formatted="false">"마감까지 D-2"</string>
+    <string name="home_label_text" formatted="false">"1순위 날짜"</string>
+    <string name="home_best_date_text" formatted="false">"5월 24일 (토) 오후 12시"</string>
+    <string name="home_best_count_text" formatted="false">"6명 가능"</string>
+    <string name="home_detail_text" formatted="false">"상세 보기  →"</string>
+    <string name="home_label_text_2" formatted="false">"이번주 약속 현황"</string>
+    <string name="home_view_all_dates_text" formatted="false">"전체 보기  ›"</string>
+    <string name="home_label_text_3" formatted="false">"●  7명 이상"</string>
+    <string name="home_label_text_4" formatted="false">"●  4~6명"</string>
+    <string name="home_label_text_5" formatted="false">"●  1~3명"</string>
+    <string name="home_label_text_6" formatted="false">"●  0명"</string>
+    <string name="home_label_text_7" formatted="false">"새로운 약속 방을 만들어보세요"</string>
+    <string name="home_label_text_8" formatted="false">"여러 사람의 일정을 한 번에 픽!"</string>
+    <string name="invite_members_label_text" formatted="false">"●──●──●"</string>
+    <string name="invite_members_label_text_2" formatted="false">"방이 만들어졌어요! 🎉"</string>
+    <string name="invite_members_label_text_3" formatted="false">"이제 멤버들을 초대하고 가능한\n날을 함께 정해보세요."</string>
+    <string name="room_badge_club" formatted="false">"동"</string>
+    <string name="invite_members_invite_room_title_text" formatted="false">"-"</string>
+    <string name="invite_members_label_text_4" formatted="false">"방 생성 완료"</string>
+    <string name="invite_members_invite_deadline_text" formatted="false">"마감일 -"</string>
+    <string name="invite_members_invite_participants_text" formatted="false">"인원 -"</string>
+    <string name="invite_members_room_info_text" formatted="false">"방 정보 보기  ›"</string>
+    <string name="invite_members_label_text_5" formatted="false">"초대 방법"</string>
+    <string name="invite_members_label_text_6" formatted="false">"데모 초대 링크"</string>
+    <string name="invite_members_label_text_7" formatted="false">"다른 기기에서 링크로 참여하는 기능은 준비 중이에요"</string>
+    <string name="invite_members_copy_text" formatted="false">"복사하기"</string>
+    <string name="invite_members_label_text_8" formatted="false">"TALK"</string>
+    <string name="invite_members_label_text_9" formatted="false">"초대 정보 공유"</string>
+    <string name="invite_members_label_text_10" formatted="false">"공유할 앱을 선택할 수 있어요"</string>
+    <string name="invite_members_label_text_11" formatted="false">"공유하기  ›"</string>
+    <string name="invite_members_label_text_12" formatted="false">"참여 현황"</string>
+    <string name="invite_members_label_text_13" formatted="false">"현재 참여자"</string>
+    <string name="invite_members_invite_current_count_text" formatted="false">"0명"</string>
+    <string name="invite_members_invite_current_summary_text" formatted="false">"참여 인원을 확인해요"</string>
+    <string name="invite_members_label_text_14" formatted="false">"참여자 전체 보기에서\n로컬 멤버를 추가해요"</string>
+    <string name="invite_members_label_text_15" formatted="false">"참여자 알림"</string>
+    <string name="invite_members_label_text_16" formatted="false">"새 참여자의 로컬 알림을 표시해요"</string>
+    <string name="invite_members_invite_done_text" formatted="false">"초대 완료    ✓"</string>
+    <string name="login_label_text" formatted="false">"Pick"</string>
+    <string name="login_label_text_2" formatted="false">"Day"</string>
+    <string name="login_label_text_3" formatted="false">"우리의 약속 더 쉽게"</string>
+    <string name="login_label_text_4" formatted="false">"게스트 데모"</string>
+    <string name="login_label_text_5" formatted="false">"인증 없이 약속 조율 기능을 체험할 수 있어요."</string>
+    <string name="login_label_text_6" formatted="false">"이메일"</string>
+    <string name="login_et_email_hint" formatted="false">"pickday@example.com"</string>
+    <string name="login_label_text_7" formatted="false">"비밀번호"</string>
+    <string name="login_et_password_hint" formatted="false">"비밀번호를 입력해주세요"</string>
+    <string name="login_login_text" formatted="false">"게스트로 시작"</string>
+    <string name="login_signup_text" formatted="false">"회원가입 화면 미리보기 · 준비 중"</string>
+    <string name="my_page_settings_text" formatted="false">"설정"</string>
+    <string name="my_page_label_text" formatted="false">"픽데이 사용자"</string>
+    <string name="my_page_user_name_text" formatted="false">"김해민님"</string>
+    <string name="my_page_user_summary_text" formatted="false">"PickDay로 약속 3개를 조율 중이에요!"</string>
+    <string name="my_page_profile_edit_text" formatted="false">"프로필 편집 · 준비 중"</string>
+    <string name="my_page_label_text_2" formatted="false">"3개"</string>
+    <string name="response_completed" formatted="false">"응답 완료"</string>
+    <string name="my_page_label_text_3" formatted="false">"4개"</string>
+    <string name="my_page_label_text_4" formatted="false">"내가 응답한 약속"</string>
+    <string name="my_page_label_text_5" formatted="false">"확정된 일정"</string>
+    <string name="my_page_label_text_6" formatted="false">"1개"</string>
+    <string name="my_page_label_text_7" formatted="false">"최종 확정된 약속"</string>
+    <string name="my_page_label_text_8" formatted="false">"총 참여"</string>
+    <string name="my_page_label_text_9" formatted="false">"8회"</string>
+    <string name="my_page_label_text_10" formatted="false">"전체 참여 횟수"</string>
+    <string name="my_page_label_text_11" formatted="false">"내 약속 관리"</string>
+    <string name="my_page_label_text_12" formatted="false">"앱 설정"</string>
+    <string name="my_page_label_text_13" formatted="false">"계정"</string>
+    <string name="my_page_label_text_14" formatted="false">"PickDay v1.0.0"</string>
+    <string name="my_page_label_text_15" formatted="false">"알림"</string>
+    <string name="my_page_action_back_text" formatted="false">"&lt;"</string>
+    <string name="my_page_action_action_title_text" formatted="false">"상세 화면"</string>
+    <string name="my_page_action_action_subtitle_text" formatted="false">"설명"</string>
+    <string name="my_page_action_action_body_text" formatted="false">"본문"</string>
+    <string name="my_page_action_label_text" formatted="false">"현재 버전에서는 화면 이동과 기본 안내 정보를 먼저 제공합니다. 이후 서버 데이터가 연결되면 이 영역에 실제 목록과 설정 값을 표시합니다."</string>
+    <string name="notification_label_text" formatted="false">"최근 7일 동안의 알림을 확인해보세요"</string>
+    <string name="participants_title" formatted="false">"참여자"</string>
+    <string name="participant_list_participant_count_text" formatted="false">"전체 0명"</string>
+    <string name="participant_list_add_participant_text" formatted="false">"로컬 참여자 추가"</string>
+    <string name="participant_list_label_text" formatted="false">"참여자를 누르면 해당 참여자의 응답을 입력할 수 있어요."</string>
+    <string name="response_selection_label_text" formatted="false">"가능한 날짜 달력"</string>
+    <string name="response_selection_label_text_2" formatted="false">"가능한 날짜와 시간대를 선택해주세요"</string>
+    <string name="response_selection_label_text_3" formatted="false">"● 선택됨"</string>
+    <string name="response_selection_label_text_4" formatted="false">"● 선택 가능"</string>
+    <string name="response_selection_label_text_5" formatted="false">"● 불가능"</string>
+    <string name="response_selection_date_count_text" formatted="false">"▣ 최대 10개까지 선택할 수 있어요 (0/10)"</string>
+    <string name="response_selection_label_text_6" formatted="false">"선택한 날짜"</string>
+    <string name="response_selection_selected_date_count_text" formatted="false">"0개 선택"</string>
+    <string name="response_selection_label_text_7" formatted="false">"시간 선택  (복수 선택 가능)"</string>
+    <string name="response_selection_time_morning_text" formatted="false">"○ 오전\n09:00~12:00"</string>
+    <string name="response_selection_time_afternoon_text" formatted="false">"○ 오후\n12:00~15:00"</string>
+    <string name="response_selection_time_late_afternoon_text" formatted="false">"○ 늦은 오후\n15:00~18:00"</string>
+    <string name="response_selection_time_evening_text" formatted="false">"○ 저녁\n18:00~21:00"</string>
+    <string name="response_selection_time_late_evening_text" formatted="false">"○ 늦은 저녁\n21:00~24:00"</string>
+    <string name="response_selection_time_any_text" formatted="false">"○ 상관없음\n하루 종일 가능"</string>
+    <string name="response_selection_label_text_8" formatted="false">"TIP\n가능한 시간대를 여러 개 선택하면 약속을 조율하기 쉬워요."</string>
+    <string name="response_selection_label_text_9" formatted="false">"제외할 날짜  (선택)"</string>
+    <string name="response_selection_exclude_count_text" formatted="false">"0개 선택"</string>
+    <string name="response_selection_complete_text" formatted="false">"선택 완료                         →"</string>
+    <string name="room_detail_room_status_text" formatted="false">"진행 중"</string>
+    <string name="room_detail_room_subtitle_text" formatted="false">"모두가 가능한 최고의 날을 찾아봐요!"</string>
+    <string name="room_detail_label_text" formatted="false">"진행 현황"</string>
+    <string name="room_detail_participant_progress_text" formatted="false">"참여자\n-"</string>
+    <string name="room_detail_response_completed_text" formatted="false">"응답 완료\n-"</string>
+    <string name="room_detail_response_waiting_text" formatted="false">"응답 대기\n-"</string>
+    <string name="room_detail_confirmed_schedule_text" formatted="false">"최종 확정\n-"</string>
+    <string name="room_detail_confirm_schedule_text" formatted="false">"최종 일정 확정"</string>
+    <string name="room_detail_label_text_2" formatted="false">"가장 유력한 날짜  ⓘ"</string>
+    <string name="room_detail_label_text_3" formatted="false">"시간 선호도"</string>
+    <string name="room_detail_participant_section_title_text" formatted="false">"참여자 (-)"</string>
+    <string name="room_detail_change_response_text" formatted="false">"나의 응답 선택하기        →"</string>
+    <string name="selection_label_text" formatted="false">"●──●──③"</string>
+    <string name="selection_label_text_2" formatted="false">"후보 날짜 &amp; 시간 선택"</string>
+    <string name="selection_label_text_3" formatted="false">"참가자들이 가능한 시간을 선택해보세요"</string>
+    <string name="selection_label_text_4" formatted="false">"양일 이상을 선택할수록\n더 좋은 날짜를 찾을 확률이 높아져요!"</string>
+    <string name="selection_label_text_5" formatted="false">"날짜 선택"</string>
+    <string name="selection_date_count_text" formatted="false">"✓ 최대 10개까지 선택할 수 있어요 (2/10)"</string>
+    <string name="selection_label_text_6" formatted="false">"시간대 선택  "</string>
+    <string name="selection_time_morning_text" formatted="false">"○  오전\n(09:00~12:00)"</string>
+    <string name="selection_time_afternoon_text" formatted="false">"○  오후\n(12:00~15:00)"</string>
+    <string name="selection_time_late_afternoon_text" formatted="false">"○  늦은 오후\n(15:00~18:00)"</string>
+    <string name="selection_time_evening_text" formatted="false">"○  저녁\n(18:00~21:00)"</string>
+    <string name="selection_time_late_evening_text" formatted="false">"○  늦은 저녁\n(21:00~24:00)"</string>
+    <string name="selection_time_any_text" formatted="false">"○  상관없음"</string>
+    <string name="selection_label_text_7" formatted="false">"✦  TIP\n가능한 시간대를 여러 개 선택하면 약속을 조율하기 쉬워요."</string>
+    <string name="selection_label_text_8" formatted="false">"제외할 날짜 (선택)"</string>
+    <string name="selection_exclude_count_text" formatted="false">"0개 선택"</string>
+    <string name="selection_label_text_9" formatted="false">"모임이 어려운 날짜가 있다면 선택해주세요"</string>
+    <string name="selection_next_text" formatted="false">"다음: 미리 보기   →"</string>
+    <string name="signup_label_text" formatted="false">"회원가입 미리보기"</string>
+    <string name="signup_label_text_2" formatted="false">"현재 계정 생성은 준비 중이며, 입력 내용은 저장하지 않아요."</string>
+    <string name="signup_label_text_3" formatted="false">"이름"</string>
+    <string name="signup_et_name_hint" formatted="false">"이름을 입력해주세요"</string>
+    <string name="signup_label_text_4" formatted="false">"비밀번호 확인"</string>
+    <string name="signup_et_password_confirm_hint" formatted="false">"비밀번호를 한 번 더 입력해주세요"</string>
+    <string name="signup_signup_text" formatted="false">"게스트 데모 체험"</string>
+    <string name="signup_login_text" formatted="false">"게스트 시작 화면으로 돌아가기"</string>
+    <string name="splash_logo_image_content_description" formatted="false">"PickDay Logo"</string>
+    <string name="splash_sub_text_text" formatted="false">"약속 잡기가 쉬워지는 날, 픽데이"</string>
+    <string name="splash_character_image_content_description" formatted="false">"Splash Character"</string>
+    <string name="available_date_date_best_text" formatted="false">"BEST"</string>
+    <string name="date_today" formatted="false">"오늘"</string>
+    <string name="available_date_day_of_week_text" formatted="false">"(수)"</string>
+    <string name="available_date_available_count_text" formatted="false">"3명"</string>
+    <string name="chat_message_sender_name_text" formatted="false">"김해민"</string>
+    <string name="chat_message_left_avatar_text" formatted="false">"김"</string>
+    <string name="chat_message_bubble_text" formatted="false">"채팅 메시지"</string>
+    <string name="chat_message_message_time_text" formatted="false">"오후 6:10"</string>
+    <string name="room_badge_team" formatted="false">"팀"</string>
+    <string name="chat_room_chat_room_message_text" formatted="false">"약속 방에서 대화를 시작해보세요"</string>
+    <string name="chat_room_chat_room_info_text" formatted="false">"참여자 -  |  마감 -"</string>
+    <string name="chat_room_label_text" formatted="false">"응답률"</string>
+    <string name="meetup_room_room_info_text" formatted="false">"참여자 - · 마감 -"</string>
+    <string name="my_page_row_row_title_text" formatted="false">"메뉴"</string>
+    <string name="my_page_row_label_text" formatted="false">"&gt;"</string>
+    <string name="notification_notification_dot_text" formatted="false">"●"</string>
+    <string name="notification_notification_title_text" formatted="false">"현우님이 응답했어요"</string>
+    <string name="notification_notification_room_text" formatted="false">"동아리 MT 일정 정하기"</string>
+    <string name="notification_notification_message_text" formatted="false">"응답하지 않은 2명이 있어요"</string>
+    <string name="notification_notification_time_text" formatted="false">"방금 전"</string>
+    <string name="view_pickday_calendar_calendar_title_text" formatted="false">"달력"</string>
+    <string name="view_pickday_calendar_day1_text" formatted="false">"1"</string>
+    <string name="view_pickday_calendar_day2_text" formatted="false">"2"</string>
+    <string name="view_pickday_calendar_day4_text" formatted="false">"4"</string>
+    <string name="view_pickday_calendar_day5_text" formatted="false">"5"</string>
+    <string name="view_pickday_calendar_day6_text" formatted="false">"6"</string>
+    <string name="view_pickday_calendar_day7_text" formatted="false">"7"</string>
+    <string name="view_pickday_calendar_day8_text" formatted="false">"8"</string>
+    <string name="view_pickday_calendar_day9_text" formatted="false">"9"</string>
+    <string name="view_pickday_calendar_day10_text" formatted="false">"10"</string>
+    <string name="view_pickday_calendar_day11_text" formatted="false">"11"</string>
+    <string name="view_pickday_calendar_day12_text" formatted="false">"12"</string>
+    <string name="view_pickday_calendar_day13_text" formatted="false">"13"</string>
+    <string name="view_pickday_calendar_day14_text" formatted="false">"14"</string>
+    <string name="view_pickday_calendar_day15_text" formatted="false">"15"</string>
+    <string name="view_pickday_calendar_day16_text" formatted="false">"16"</string>
+    <string name="view_pickday_calendar_day17_text" formatted="false">"17"</string>
+    <string name="view_pickday_calendar_day18_text" formatted="false">"18"</string>
+    <string name="view_pickday_calendar_day19_text" formatted="false">"19"</string>
+    <string name="view_pickday_calendar_day20_text" formatted="false">"20"</string>
+    <string name="view_pickday_calendar_day21_text" formatted="false">"21"</string>
+    <string name="view_pickday_calendar_day22_text" formatted="false">"22"</string>
+    <string name="view_pickday_calendar_day23_text" formatted="false">"23"</string>
+    <string name="view_pickday_calendar_day24_text" formatted="false">"24"</string>
+    <string name="view_pickday_calendar_day25_text" formatted="false">"25"</string>
+    <string name="view_pickday_calendar_day26_text" formatted="false">"26"</string>
+    <string name="view_pickday_calendar_day27_text" formatted="false">"27"</string>
+    <string name="view_pickday_calendar_day28_text" formatted="false">"28"</string>
+    <string name="view_pickday_calendar_day29_text" formatted="false">"29"</string>
+    <string name="view_pickday_calendar_day30_text" formatted="false">"30"</string>
+    <string name="view_pickday_calendar_day31_text" formatted="false">"31"</string>
+    <string name="room_participants_deadline">"참여자 %1$d명 · 마감까지 %2$s"</string>
+    <string name="room_total_count">"전체 %1$d개"</string>
+    <string name="room_badge_birthday" formatted="false">"생"</string>
+    <string name="all_meetup_rooms_create_empty_view_text" formatted="false">"아직 만들어진 약속 방이 없어요"</string>
+    <string name="participants_count">"참여자 %1$d명"</string>
+    <string name="calendar_render_month_schedules_text" formatted="false">"이번 달에 등록된 약속이 없어요"</string>
+    <string name="calendar_format_month_title_text" formatted="false">"yyyy년 M월"</string>
+    <string name="calendar_format_schedule_title_text" formatted="false">"M월 일정"</string>
+    <string name="calendar_format_schedule_date_text" formatted="false">"M월 d일 (E)"</string>
+    <string name="chat_chat_room_info_format">"참여자 %1$d명  |  마감 %2$s %3$s"</string>
+    <string name="schedule_undecided" formatted="false">"미정"</string>
+    <string name="chat_detail_chat_notice_meta_format">"마감 %1$s %2$s"</string>
+    <string name="chat_detail_chat_notice_title_format">"현재 방 현황: 참여자 %1$d명 · 응답률 %2$d%%"</string>
+    <string name="error_room_not_found" formatted="false">"방을 찾을 수 없어요"</string>
+    <string name="room_capacity_count">"최대 %1$d명"</string>
+    <string name="create_meetup_setup_next_button_text" formatted="false">"모임명을 입력해주세요"</string>
+    <string name="time_morning" formatted="false">"오전"</string>
+    <string name="time_afternoon" formatted="false">"오후"</string>
+    <string name="create_meetup_setup_people_buttons_text" formatted="false">"최소 인원은 2명입니다"</string>
+    <string name="create_meetup_setup_people_buttons_text_2" formatted="false">"최대 인원은 20명입니다"</string>
+    <string name="create_meetup_setup_calendar_text" formatted="false">"오늘 이후 날짜를 선택해주세요"</string>
+    <string name="people_count">"%1$d명"</string>
+    <string name="available_people_count">"%1$d명 가능"</string>
+    <string name="home_greeting">"안녕하세요, %1$s님!"</string>
+    <string name="home_set_main_meetup_data_text" formatted="false">"응답 마감"</string>
+    <string name="room_participants_capacity">"참여 %1$d명 / 정원 %2$d명"</string>
+    <string name="room_deadline_datetime">"마감일 %1$s %2$s"</string>
+    <string name="invite_members_set_listener_text" formatted="false">"초대 링크가 복사되었어요!"</string>
+    <string name="action_share" formatted="false">"공유하기"</string>
+    <string name="invite_members_set_listener_text_4" formatted="false">"참여자 알림이 켜졌어요"</string>
+    <string name="invite_members_set_listener_text_5" formatted="false">"참여자 알림이 꺼졌어요"</string>
+    <string name="my_page_user_summary_format">"PickDay로 약속 %1$d개를 조율 중이에요!"</string>
+    <string name="my_page_user_name_format">"%1$s님"</string>
+    <string name="my_page_bind_rows_text" formatted="false">"내가 만든 방"</string>
+    <string name="my_page_bind_rows_text_2" formatted="false">"내가 만든 약속 방 목록을 확인해요"</string>
+    <string name="my_page_bind_rows_text_3" formatted="false">"참여한 방"</string>
+    <string name="my_page_bind_rows_text_4" formatted="false">"내가 참여 중인 약속 방 목록이에요"</string>
+    <string name="my_page_bind_rows_text_5" formatted="false">"최종 확정된 일정들을 모아봤어요"</string>
+    <string name="my_page_bind_rows_text_6" formatted="false">"알림 설정"</string>
+    <string name="my_page_bind_rows_text_7" formatted="false">"푸시 알림 연동 준비 중"</string>
+    <string name="my_page_bind_rows_text_8" formatted="false">"테마 설정"</string>
+    <string name="my_page_bind_rows_text_9" formatted="false">"테마 설정 준비 중"</string>
+    <string name="my_page_bind_rows_text_10" formatted="false">"서비스 소개"</string>
+    <string name="my_page_bind_rows_text_11" formatted="false">"픽데이에 대해 더 알아봐요"</string>
+    <string name="my_page_bind_rows_text_12" formatted="false">"로그아웃"</string>
+    <string name="my_page_bind_rows_text_13" formatted="false">"계정에서 로그아웃해요"</string>
+    <string name="my_page_set_listeners_text" formatted="false">"이름과 프로필 이미지를 수정해요."</string>
+    <string name="my_page_set_listeners_text_2" formatted="false">"프로필 사진, 표시 이름, 소개 문구를 변경하는 화면입니다."</string>
+    <string name="my_page_set_listeners_text_3" formatted="false">"PickDay 사용 환경을 관리해요."</string>
+    <string name="my_page_set_listeners_text_4" formatted="false">"알림, 테마, 계정 설정을 한 곳에서 조정할 수 있어요."</string>
+    <string name="my_page_set_listeners_text_5" formatted="false">"내가 참여 중인 약속 방 목록이에요."</string>
+    <string name="my_page_set_listeners_text_6" formatted="false">"초대받아 참여한 약속과 아직 응답하지 않은 방을 확인할 수 있어요."</string>
+    <string name="my_page_set_listeners_text_7" formatted="false">"푸시 알림 연동 준비 중."</string>
+    <string name="my_page_set_listeners_text_8" formatted="false">"초대, 마감 임박, 일정 확정 알림을 켜고 끄는 화면입니다."</string>
+    <string name="my_page_set_listeners_text_9" formatted="false">"테마 설정 준비 중."</string>
+    <string name="my_page_set_listeners_text_10" formatted="false">"PickDay의 기본 보라색 테마와 밝은 화면 설정을 관리합니다."</string>
+    <string name="my_page_set_listeners_text_11" formatted="false">"PickDay에 대해 더 알아봐요."</string>
+    <string name="my_page_set_listeners_text_12" formatted="false">"여러 사람의 가능한 시간을 모아 가장 좋은 약속 시간을 고르는 서비스입니다."</string>
+    <string name="participant_response_description">"%1$s 로컬 응답 입력"</string>
+    <string name="participant_list_create_participant_row_text" formatted="false">"미응답"</string>
+    <string name="participant_list_create_participant_row_text_2" formatted="false">"응답 수정 ›"</string>
+    <string name="participant_list_create_participant_row_text_3" formatted="false">"응답 입력 ›"</string>
+    <string name="participant_list_create_participant_row_text_4" formatted="false">"확정된 방에서는 응답을 변경할 수 없어요"</string>
+    <string name="participant_list_show_add_participant_text" formatted="false">"참여자 이름"</string>
+    <string name="participant_list_show_add_participant_text_2" formatted="false">"이 기기에서 참여자별 응답을 입력할 수 있어요."</string>
+    <string name="action_cancel" formatted="false">"취소"</string>
+    <string name="action_add" formatted="false">"추가"</string>
+    <string name="participant_list_create_empty_view_text" formatted="false">"응답 정보 없음\n아직 제출된 참여자 응답이 없어요"</string>
+    <string name="response_selection_exclude_count_format">"%1$d개 선택"</string>
+    <string name="excluded_date_description">"%1$s 제외 날짜"</string>
+    <string name="response_selection_selected_date_count_format">"%1$d개 선택"</string>
+    <string name="response_selection_date_count_format">"▣ 최대 10개까지 선택할 수 있어요 (%1$d/10)"</string>
+    <string name="response_selection_toggle_date_text" formatted="false">"최대 10개까지 선택할 수 있어요"</string>
+    <string name="response_selection_update_time_state_text" formatted="false">"오전\n09:00~12:00"</string>
+    <string name="response_selection_update_time_state_text_2" formatted="false">"오후\n12:00~15:00"</string>
+    <string name="response_selection_update_time_state_text_3" formatted="false">"늦은 오후\n15:00~18:00"</string>
+    <string name="response_selection_update_time_state_text_4" formatted="false">"저녁\n18:00~21:00"</string>
+    <string name="response_selection_update_time_state_text_5" formatted="false">"늦은 저녁\n21:00~24:00"</string>
+    <string name="response_selection_update_time_state_text_6" formatted="false">"상관없음\n허용 시간 모두 가능"</string>
+    <string name="response_selection_set_listeners_text" formatted="false">"가능한 날짜를 선택하거나 모든 후보를 제외해주세요"</string>
+    <string name="response_selection_set_listeners_text_2" formatted="false">"가능한 시간대를 1개 이상 선택해주세요"</string>
+    <string name="response_selection_set_listeners_text_3" formatted="false">"응답이 반영되었습니다"</string>
+    <string name="room_detail_view_format">"%1$s (%2$s)    %3$s  %4$d명"</string>
+    <string name="room_detail_view_format_2">"%1$s%2$s\n%3$d명 가능\n%4$d%%\n%5$s"</string>
+    <string name="room_detail_participant_section_title_format">"참여자 (%1$d명)"</string>
+    <string name="room_detail_confirmed_schedule_format">"최종 확정\n%1$s"</string>
+    <string name="room_detail_response_waiting_format">"응답 대기\n%1$d명 (%2$d%%)"</string>
+    <string name="room_detail_response_completed_format">"응답 완료\n%1$d명 (%2$d%%)"</string>
+    <string name="room_detail_participant_progress_format">"참여자\n%1$d명"</string>
+    <string name="room_detail_render_room_data_text" formatted="false">"아직 제출된 응답이 없어요"</string>
+    <string name="room_detail_render_room_data_text_2" formatted="false">"현재 응답 기준으로 집계했어요"</string>
+    <string name="room_detail_render_room_data_text_3" formatted="false">"일정이 확정되었어요"</string>
+    <string name="room_detail_render_room_data_text_4" formatted="false">"응답 수집이 마감되었어요"</string>
+    <string name="room_detail_render_room_data_text_5" formatted="false">"후보 날짜 설정"</string>
+    <string name="room_detail_render_room_data_text_6" formatted="false">"내 응답 수정"</string>
+    <string name="room_detail_render_room_data_text_7" formatted="false">"내 응답 입력"</string>
+    <string name="room_detail_render_room_data_text_8" formatted="false">"일정 확정 완료"</string>
+    <string name="action_confirm" formatted="false">"확정"</string>
+    <string name="room_detail_get_subtitle_text_text" formatted="false">"확정된 약속 일정을 확인해요"</string>
+    <string name="room_detail_render_candidate_dates_text" formatted="false">"   전원 가능"</string>
+    <string name="room_detail_render_candidate_dates_text_2" formatted="false">"   추천"</string>
+    <string name="room_detail_render_participants_text" formatted="false">"참여자 정보 없음"</string>
+    <string name="room_detail_render_participants_text_2" formatted="false">"대기"</string>
+    <string name="response_pending" formatted="false">"응답 대기"</string>
+    <string name="room_detail_show_schedule_confirmation_text_2" formatted="false">"확정할 일정을 선택해주세요"</string>
+    <string name="room_detail_show_schedule_confirmation_text_6" formatted="false">"이 일정으로 확정할까요?"</string>
+    <string name="selection_exclude_count_format">"%1$d개 선택"</string>
+    <string name="selection_date_count_format">"✓ 최대 10개까지 선택할 수 있어요 (%1$d/10)"</string>
+    <string name="selection_init_buttons_text" formatted="false">"후보 날짜를 1개 이상 선택해주세요"</string>
+    <string name="selection_init_buttons_text_2" formatted="false">"시간대를 1개 이상 선택해주세요"</string>
+    <string name="date_tomorrow" formatted="false">"내일"</string>
+    <string name="home_deadline_remaining">"마감까지 %1$s"</string>
+    <string name="invite_share_message">"PickDay 로컬 데모 초대 정보\n%1$s\n다른 기기에서 링크로 참여하는 기능은 준비 중이에요."</string>
+    <string name="schedule_option_summary">"%1$s %2$s %3$s · %4$d명 가능"</string>
+    <string name="schedule_unanswered_notice">"\n미응답 참여자 %1$d명이 있어요."</string>
+    <string name="schedule_confirm_message">"%1$s%2$s\n확정 후에는 응답을 수정할 수 없어요."</string>
+    <string name="feature_unavailable_body">"아직 제공하지 않는 기능이에요.\n\n%1$s"</string>
+    <string name="percent_value">"%1$d%%"</string>
+    <string name="time_clock_format">%1$s %2$d:%3$02d</string>
+    <string name="create_meetup_tv_desc_count_format">"%1$d/100"</string>
+    <string name="create_meetup_tv_name_count_format">"%1$d/30"</string>
+    <string name="response_selection_view_format">"%1$s\n✓"</string>
+    <string name="response_selection_view_format_2">"○ %1$s"</string>
+    <string name="response_selection_view_format_3">"● %1$s"</string>
+    <string name="response_selection_chip_format">"%1$s\n%2$s\n×"</string>
+    <string name="selection_time_view_format">"○  %1$s"</string>
+    <string name="selection_time_view_format_2">"✓  %1$s"</string>
+    <string name="room_detail_text_view_format">"%1$s\n%2$s\n%3$s"</string>
+    <string name="home_tv_day_of_week_format">"(%1$s)"</string>
+    <string name="calendar_time_format">"%1$s %2$s"</string>
+    <string name="response_submitted_count">"%1$d명이 응답했어요"</string>
+    <string name="response_submit_named">"%1$s · 응답 제출"</string>
+    <string name="action_back">뒤로가기</string>
+    <string name="notifications_open">알림 보기</string>
+    <string name="calendar_previous_month">이전 달</string>
+    <string name="calendar_following_month">다음 달</string>
+    <string name="total_rooms_title">전체 약속 방</string>
+    <string name="total_rooms_subtitle">내가 참여한 방</string>
+    <string name="rooms_count">%1$d개</string>
+    <string name="schedule_confirmed_label">확정 일정</string>
+    <string name="participants_closed_help">응답 수집이 종료되어 참여자와 응답 상태를 확인할 수 있어요.</string>
+    <string name="participants_edit_help">참여자를 누르면 해당 참여자의 응답을 입력할 수 있어요.</string>
+    <string name="calendar_order_label">날짜순</string>
 </resources>

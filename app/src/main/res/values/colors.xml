@@ -1,34 +1,34 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <!-- Main Purple -->
+    <!-- 주요 퍼플 색상 -->
     <color name="pickday_purple">#5B2DFF</color>
     <color name="pickday_purple_dark">#3F18D8</color>
     <color name="pickday_purple_light">#EEE8FF</color>
     <color name="pickday_lavender">#F6F1FF</color>
 
-    <!-- Accent -->
+    <!-- 강조 색상 -->
     <color name="pickday_pink">#FF75A8</color>
     <color name="pickday_yellow">#FFE07D</color>
     <color name="pickday_mint">#BDF4D0</color>
     <color name="pickday_blue">#7DD7FF</color>
 
-    <!-- Background / Surface -->
+    <!-- 배경과 표면 -->
     <color name="pickday_background">#FAF9FF</color>
     <color name="pickday_surface">#FFFFFF</color>
     <color name="pickday_surface_soft">#F8F6FF</color>
 
-    <!-- Text -->
+    <!-- 텍스트 -->
     <color name="pickday_text_primary">#20213B</color>
     <color name="pickday_text_secondary">#8B8DAA</color>
     <color name="pickday_text_hint">#B7B8CC</color>
     <color name="pickday_text_white">#FFFFFF</color>
 
-    <!-- Line / Border -->
+    <!-- 구분선과 테두리 -->
     <color name="pickday_border">#E9E5F7</color>
     <color name="pickday_divider">#F0EEF8</color>
 
-    <!-- State -->
+    <!-- 상태 -->
     <color name="pickday_success">#6DD58C</color>
     <color name="pickday_warning">#FFB84D</color>
     <color name="pickday_danger">#FF6B6B</color>
