@@ -169,7 +169,7 @@ public class LocalMeetupFlowInstrumentedTest {
     @Test public void chatCanSendWhileKeyboardIsOpen() {
         String id = room(2);
         try (ActivityScenario<ChatDetailActivity> scenario = ActivityScenario.launch(intent(ChatDetailActivity.class, id))) {
-            onView(withId(R.id.etMessageInput)).perform(click(), typeText("KeyboardCheck"));
+            onView(withId(R.id.etMessageInput)).perform(click(), replaceText("KeyboardCheck"));
             onView(withId(R.id.btnSendMessage)).check(matches(isDisplayed())).perform(click());
             assertEquals("KeyboardCheck", LocalMeetupRepository.getChatMessagesByRoomId(id).get(0).message);
         }
