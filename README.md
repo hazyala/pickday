@@ -2,6 +2,45 @@
 
 여러 사람이 가능한 날짜와 시간을 모아 약속 일정을 정하는 Android 앱입니다. 방 생성부터 참여자 응답, 일정 추천과 확정까지 한 기기에서 실행할 수 있습니다.
 
+## 디자인과 실행 화면
+
+[Figma 디자인 보기](https://www.figma.com/design/kdHvPDj4Ac85weMBIb6tyF/%ED%94%BD-%EB%8D%B0%EC%9D%B4--PickDay-?node-id=3-467&t=yp0hg0gAGQNN4oUJ-1)
+
+Android 17(API 37) 에뮬레이터의 1080×2400 화면과 기본 글꼴에서 캡처했습니다. 샘플 데이터와 직접 입력한 로컬 데이터를 사용하며, 방 생성·응답 제출·일정 확정·채팅은 앱 실행 중 메모리에서 동작합니다.
+
+<table>
+  <tr>
+    <th>홈</th>
+    <th>방 생성</th>
+    <th>후보 날짜·시간</th>
+  </tr>
+  <tr>
+    <td><img src="docs/screenshots/main/home.png" alt="대표 일정과 약속 방을 보여주는 홈" width="230" /></td>
+    <td><img src="docs/screenshots/main/create.png" alt="모임명·설명·마감·정원을 입력하는 방 생성 화면" width="230" /></td>
+    <td><img src="docs/screenshots/main/selection.png" alt="방장이 후보 날짜와 시간대를 선택하는 화면" width="230" /></td>
+  </tr>
+  <tr>
+    <th>초대</th>
+    <th>방 상세</th>
+    <th>참여자 응답</th>
+  </tr>
+  <tr>
+    <td><img src="docs/screenshots/main/invite.png" alt="초대 정보와 참여 현황을 보여주는 화면" width="230" /></td>
+    <td><img src="docs/screenshots/main/detail.png" alt="응답 현황과 추천 일정을 보여주는 방 상세" width="230" /></td>
+    <td><img src="docs/screenshots/main/response.png" alt="참여자가 가능한 날짜와 시간대를 선택하는 화면" width="230" /></td>
+  </tr>
+  <tr>
+    <th>캘린더</th>
+    <th>방 채팅</th>
+    <th>내 정보</th>
+  </tr>
+  <tr>
+    <td><img src="docs/screenshots/main/calendar.png" alt="응답 마감일과 확정 약속을 표시하는 월간 캘린더" width="230" /></td>
+    <td><img src="docs/screenshots/main/chat.png" alt="방별 메시지를 주고받는 채팅 화면" width="230" /></td>
+    <td><img src="docs/screenshots/main/mypage.png" alt="참여·응답·확정 현황을 표시하는 내 정보" width="230" /></td>
+  </tr>
+</table>
+
 ## 주요 기능
 
 - 약속 방 생성과 작성 중 정보 수정: 제목, 설명, 응답 마감, 정원 설정
