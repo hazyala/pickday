@@ -5,7 +5,7 @@ PickDay 개발은 기능 단위 브랜치와 PR 기반 병합을 원칙으로 �
 ## 브랜치 규칙
 
 - 모든 작업은 `dev`에서 시작합니다.
-- `main`은 MVP 브랜치이므로 직접 개발 커밋을 넣지 않습니다.
+- `main`은 검토와 검증을 마친 배포 기준 브랜치입니다. 직접 개발 커밋을 넣지 않습니다.
 - `dev` 병합은 반드시 Pull Request로 진행합니다.
 - 서로 관련 없는 기능을 하나의 브랜치에 섞지 않습니다.
 
@@ -25,7 +25,7 @@ PickDay 개발은 기능 단위 브랜치와 PR 기반 병합을 원칙으로 �
 - `feat/schedule-calculator`
 - `fix/home-room-list-state`
 - `refactor/repository-layer`
-- `docs/server-ready-roadmap`
+- `docs/development-roadmap`
 - `style/room-detail-cards`
 
 ## 커밋 규칙
@@ -66,6 +66,8 @@ Conventional Commit 형태를 사용하되, 메시지 본문은 간단한 한국
 - 코드 주석은 한국어로 작성합니다.
 - 주석은 복잡한 의도, 예외 처리, 화면/도메인 규칙을 설명해야 할 때만 추가합니다.
 - 단순히 코드가 하는 일을 반복하는 주석은 작성하지 않습니다.
+- 주석과 문서는 현재 동작, 처리 이유, 제약을 설명합니다. 대화 내용이나 변경 전후의 작업 서술은 PR 설명에 남깁니다.
+- 외부 도구의 자동 생성 파일과 라이선스 고지는 원문을 유지합니다.
 - 변수명, 함수명, 클래스명은 기존 Android/Java 관례에 맞춰 영어로 작성합니다.
 - 사용자에게 노출되는 문구는 자연스러운 한국어를 우선합니다.
 
@@ -91,3 +93,13 @@ Conventional Commit 형태를 사용하되, 메시지 본문은 간단한 한국
 - 문서가 업데이트되어 있는가
 - 빌드가 통과하는가
 - 관련 없는 생성 파일이 포함되지 않았는가
+
+## 검증 명령
+
+```sh
+./gradlew :app:assembleDebug :app:testDebugUnitTest :app:lintDebug
+# 기기 또는 에뮬레이터 연결 후 실행
+./gradlew :app:connectedDebugAndroidTest
+```
+
+빌드 결과와 테스트 결과, lint 오류·경고를 구분해 기록합니다. 화면을 바꿨다면 기기 크기와 글자 크기를 포함한 수동 점검 결과를 남깁니다. `main` 병합 기준은 [로드맵](roadmap.md)을 따릅니다.
